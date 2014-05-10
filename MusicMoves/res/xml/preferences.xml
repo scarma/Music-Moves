@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" android:title="@string/title_activity_ui5">
+    <PreferenceCategory android:title="@string/default_axes" android:key="default_axes">
+    <CheckBoxPreference
+        android:key="x"
+        android:title="@string/x"
+        android:defaultValue="true" android:summary="Enable/disable X axe"/>
+    
+    <CheckBoxPreference android:key="y" android:title="@string/y" android:defaultValue="true" android:summary="Enable/disable Y axe"/>
+    <CheckBoxPreference android:key="z" android:title="@string/z" android:defaultValue="true" android:summary="Enable/disable Z axe"/>
+    </PreferenceCategory>   <PreferenceCategory android:summary="sss" android:title="asd">
+    </PreferenceCategory>
+</PreferenceScreen>
