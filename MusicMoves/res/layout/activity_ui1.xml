@@ -3,7 +3,7 @@
     android:layout_width="fill_parent" android:layout_height="fill_parent">
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textViewNewRecName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -18,8 +18,9 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_above="@+id/testbutton"
-        android:layout_below="@+id/textView1"
-        >
+        android:layout_below="@+id/textViewNewRecName"
+        android:clickable="true"
+        android:longClickable="true" >
 
     </ListView>
 

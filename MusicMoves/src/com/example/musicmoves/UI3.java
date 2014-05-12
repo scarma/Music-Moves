@@ -1,5 +1,7 @@
 package com.example.musicmoves;
 
+import java.util.Calendar;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,7 +9,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
-import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.view.LayoutInflater;
@@ -16,7 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class UI3 extends ActionBarActivity {
 
@@ -52,35 +55,50 @@ public class UI3 extends ActionBarActivity {
 				
 				value = input.getText().toString().toLowerCase();
 				
-				
+				int recCounter = 0; //da rendere globale
 				try {value = value.substring(0,1).toUpperCase() + value.substring(1).toLowerCase();}
-				catch(java.lang.StringIndexOutOfBoundsException e){ value = "Rec01";}
-			    TextView textView = new TextView(getApplicationContext());
-			    textView.setTextSize(40);
+				catch(java.lang.StringIndexOutOfBoundsException e){
+					value = "Rec_"+recCounter;
+					}
+				//Ottengo la data e l'ora corrente
+				Calendar c = Calendar.getInstance();
+				int hour = c.get(Calendar.HOUR_OF_DAY);
+			    int minute = c.get(Calendar.MINUTE);
+			    int second = c.get(Calendar.SECOND);
+			    int date = c.get(Calendar.DATE);
+			    int month = c.get(Calendar.MONTH);
+			    int year = c.get(Calendar.YEAR);
+			    
+				value = value +"\n"+ date +"/"+ month +"/"+ year +" - "+ hour+":"+ minute +":"+ second +"\n" +"Rec "+ recCounter;
+				
+				TextView textView = (TextView) findViewById(R.id.textViewNewRecName);
+			    textView.setTextSize(25);
 			    textView.setText(value);
-			    textView.setTextColor(Color.RED);
-	
-			    // Set the text view as the activity layout
-			    setContentView(textView);
+			    textView.setTextColor(Color.rgb(255, 153, 0));
+			    recCounter++;
+			    
 			  }
 			});
 
 		alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 			  public void onClick(DialogInterface dialog, int whichButton) {
 			    // Canceled.
-				  Intent intent = new Intent(getApplicationContext(), UI1.class);
-				    startActivity(intent);  
+				 onBackPressed();
+				    
 			  }
 			});
-
+		alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			public void onCancel(DialogInterface dialog){onBackPressed();}
+		});
+		
 		alert.show();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ui3);
 
-		if (savedInstanceState == null) {
-			getSupportFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
-		}
+//		if (savedInstanceState == null) {	//duplicava il layout con questo
+//			getSupportFragmentManager().beginTransaction()
+//					.add(R.id.container, new PlaceholderFragment()).commit();
+//		}
 	}
 
 	@Override
@@ -99,14 +117,18 @@ public class UI3 extends ActionBarActivity {
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			Intent settings_intent = new Intent(getApplicationContext(), UI5.class);
-			//settings_intent.putExtras(bundle); //per salvare
 			startActivity(settings_intent);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 	
-	
+	@Override
+	public void onBackPressed() {
+		Intent settings_intent = new Intent(getApplicationContext(), UI1.class);
+		startActivity(settings_intent);
+		finish();
+	}
 
 	/**
 	 * A placeholder fragment containing a simple view.
@@ -125,5 +147,41 @@ public class UI3 extends ActionBarActivity {
 		}
 	}
 	
+	public void Recording(View view) {
+		Toast.makeText(getApplicationContext(), "Recording", Toast.LENGTH_SHORT).show();
+		ImageButton rec = (ImageButton) findViewById(R.id.recButton);
+		ImageButton pause = (ImageButton) findViewById(R.id.pauseButton);
+		ImageButton stopUns = (ImageButton) findViewById(R.id.stop_unselectedButton);
+		ImageButton stopSel = (ImageButton) findViewById(R.id.stop_selectedButton);
+		
+		rec.setVisibility(View.INVISIBLE);
+		pause.setVisibility(View.VISIBLE);
+		stopUns.setVisibility(View.INVISIBLE);
+		stopSel.setVisibility(View.VISIBLE);
+		
+	}
+	
+	public void Paused(View view) {
+		Toast.makeText(getApplicationContext(), "Recording paused", Toast.LENGTH_SHORT).show();	
+		ImageButton rec = (ImageButton) findViewById(R.id.recButton);
+		ImageButton pause = (ImageButton) findViewById(R.id.pauseButton);
+		pause.setVisibility(View.INVISIBLE);
+		rec.setVisibility(View.VISIBLE);
+			
+	}
+	
+	public void Stopped(View view) {
+		Toast.makeText(getApplicationContext(), "Recording stopped", Toast.LENGTH_SHORT).show();
+		ImageButton rec = (ImageButton) findViewById(R.id.recButton);
+		ImageButton pause = (ImageButton) findViewById(R.id.pauseButton);
+		ImageButton stopUns = (ImageButton) findViewById(R.id.stop_unselectedButton);
+		ImageButton stopSel = (ImageButton) findViewById(R.id.stop_selectedButton);
+		
+		rec.setVisibility(View.INVISIBLE);
+		pause.setVisibility(View.INVISIBLE);
+		stopSel.setVisibility(View.INVISIBLE);
+		stopUns.setVisibility(View.VISIBLE);
+				
+	}
 	
 }

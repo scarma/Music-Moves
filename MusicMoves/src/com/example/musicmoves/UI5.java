@@ -1,5 +1,7 @@
 package com.example.musicmoves;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
@@ -28,7 +30,14 @@ public class UI5 extends PreferenceActivity {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
+			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
 			PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
+			SharedPreferences.Editor editor = preferences.edit();
+			editor.clear();
+			editor.commit();
+			Intent intent = new Intent(getApplicationContext(), UI5.class);
+		    startActivity(intent);
+		    finish();
 			};
 			return true;}
 	
