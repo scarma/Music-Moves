@@ -43,7 +43,7 @@ public class UI1 extends ListActivity {
       //da qui inseriamo il codice utile a mostrare un messaggio al click
         ListView listaV = getListView();
         listaV.setTextFilterEnabled(true);
-//        registerForContextMenu(listaV);
+        registerForContextMenu(listaV);
         
         listaV.setOnItemClickListener(new OnItemClickListener() {
             
@@ -58,23 +58,23 @@ public class UI1 extends ListActivity {
                 //Toast.makeText(getApplicationContext(), nomiPaesi[position], Toast.LENGTH_SHORT).show();
             }
         });
-        listaV.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-        	@Override
-        	// Called when the user long-clicks
-    	    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-//    	        if (mActionMode != null) {
-//    	            return false;
-//    	        }
-//        		view.showContextMenu();
-        		Toast.makeText(UI1.this,nomiPaesi[position], Toast.LENGTH_SHORT).show();
-                
-            
-    	        // Start the CAB using the ActionMode.Callback defined above
-    	       // mActionMode = startActionMode(mActionModeCallback);
-    	        view.setSelected(true);
-    	        return true;
-    	    }
-    	});
+//        listaV.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//        	@Override
+//        	// Called when the user long-clicks
+//    	    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+////    	        if (mActionMode != null) {
+////    	            return false;
+////    	        }
+////        		view.showContextMenu();
+//        		Toast.makeText(UI1.this,nomiPaesi[position], Toast.LENGTH_SHORT).show();
+//                
+//            
+//    	        // Start the CAB using the ActionMode.Callback defined above
+//    	       // mActionMode = startActionMode(mActionModeCallback);
+//    	        view.setSelected(true);
+//    	        return true;
+//    	    }
+//    	});
         
     }
 
@@ -140,31 +140,31 @@ public class UI1 extends ListActivity {
 	}
 	
 	
-//	@Override
-//    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-//      super.onCreateContextMenu(menu, v, menuInfo);
-//      MenuInflater inflater = getMenuInflater();
-//      inflater.inflate(R.menu.context_menu, menu);
-//
-////      AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
-////      long itemID = info.position;
-////      menu.setHeaderTitle("lior" + itemID);
-//    }
+	@Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+      super.onCreateContextMenu(menu, v, menuInfo);
+      MenuInflater inflater = getMenuInflater();
+      inflater.inflate(R.menu.context_menu, menu);
+
+//      AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+//      long itemID = info.position;
+//      menu.setHeaderTitle("lior" + itemID);
+    }
 	
-//	@Override
-//	public boolean onContextItemSelected(MenuItem item) {
-//	    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-//	    switch (item.getItemId()) {
-//	        case R.id.rename:
-//	            renameRec(info.id);
-//	            return true;
-//	        case R.id.delete:
-//	            deleteRec(info.id);
-//	            return true;
-//	        default:
-//	            return super.onContextItemSelected(item);
-//	    }
-//	}
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+	    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+	    switch (item.getItemId()) {
+	        case R.id.rename:
+	            renameRec(info.id);
+	            return true;
+	        case R.id.delete:
+	            deleteRec(info.id);
+	            return true;
+	        default:
+	            return super.onContextItemSelected(item);
+	    }
+	}
 
 	private void deleteRec(long id) {
 		// TODO Auto-generated method stub
