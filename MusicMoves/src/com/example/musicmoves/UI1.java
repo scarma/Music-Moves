@@ -57,25 +57,7 @@ public class UI1 extends ListActivity {
             	
                 //Toast.makeText(getApplicationContext(), nomiPaesi[position], Toast.LENGTH_SHORT).show();
             }
-        });
-//        listaV.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//        	@Override
-//        	// Called when the user long-clicks
-//    	    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-////    	        if (mActionMode != null) {
-////    	            return false;
-////    	        }
-////        		view.showContextMenu();
-//        		Toast.makeText(UI1.this,nomiPaesi[position], Toast.LENGTH_SHORT).show();
-//                
-//            
-//    	        // Start the CAB using the ActionMode.Callback defined above
-//    	       // mActionMode = startActionMode(mActionModeCallback);
-//    	        view.setSelected(true);
-//    	        return true;
-//    	    }
-//    	});
-        
+        });  
     }
 
 	@Override
