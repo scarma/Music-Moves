@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class UI5 extends PreferenceActivity {
+	
     @SuppressWarnings("deprecation")
 	@Override
     public void onCreate(Bundle savedInstanceState) {
