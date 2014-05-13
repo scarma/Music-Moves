@@ -6,7 +6,7 @@ Progetto ESP1314 Ehi Team
 
 Membri progetto: Andrea Scarmagnan, Emanuele Fabian, Giovanni Zampieri  
 
-Completamento... DEFAULT  
+*DEFAULT*  
 
 •	Creazione grafica delle 5 UI con pulsanti, liste e seekbar  
 	o	UI1 - Manca database e longpress  
@@ -22,7 +22,7 @@ Completamento... DEFAULT
 •	Riproduzione dei file audio e calibrazione suoni  
 •	Implementazione delle preferenze e salvataggio dello stato  
 
-PLUS  
+*PLUS*  
 •	Implementazione Volume  
 •	Implementazione Velocità  
 •	Implementazione Delay  
