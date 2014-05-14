@@ -67,7 +67,7 @@ public class UI1Adapter extends ArrayAdapter<String> {
 //			}
 //		});
  
-iv.setOnClickListener(new OnClickListener() {
+        iv.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {

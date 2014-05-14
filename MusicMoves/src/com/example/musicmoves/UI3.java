@@ -11,7 +11,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.logging.Logger;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -27,6 +26,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,7 +38,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class UI3 extends ActionBarActivity implements SensorEventListener {
-
+	String filename;
+	String filepath="/sdcard/";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//Pop up dialog
@@ -76,6 +78,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 				catch(java.lang.StringIndexOutOfBoundsException e){
 					value = "Rec_"+recCounter;
 					}
+				filename = value+".txt";
 				//Ottengo la data e l'ora corrente
 				Calendar c = Calendar.getInstance();
 				int hour = c.get(Calendar.HOUR_OF_DAY);
@@ -147,25 +150,25 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		finish();
 	}
 
-//	/**
-//	 * A placeholder fragment containing a simple view.
-//	 */
-//	public static class PlaceholderFragment extends Fragment {
-//
-//		public PlaceholderFragment() {
-//		}
-//
-//		@Override
-//		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//				Bundle savedInstanceState) {
-//			View rootView = inflater.inflate(R.layout.fragment_ui3, container,
-//					false);
-//			return rootView;
-//		}
-//	}
+	/**
+	 * A placeholder fragment containing a simple view.
+	 */
+	public static class PlaceholderFragment extends Fragment {
+
+		public PlaceholderFragment() {
+		}
+
+		@Override
+		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+				Bundle savedInstanceState) {
+			View rootView = inflater.inflate(R.layout.fragment_ui3, container,
+					false);
+			return rootView;
+		}
+	}
 	
 	private SensorManager mSensorManager;
-	private Sensor mAccelerometer;
+	private Sensor mAccelerometer;// = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 	private FileWriter writer;
 	
 	
@@ -180,16 +183,16 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		pause.setVisibility(View.VISIBLE);
 		stopUns.setVisibility(View.INVISIBLE);
 		stopSel.setVisibility(View.VISIBLE);
+		
 		Context context = getApplicationContext();
-       
 		super.onResume();
 	    try {
-			writer = new FileWriter(new File(context.getFilesDir(), "myfile.txt"), true);
+			writer = new FileWriter(new File(filepath, filename), true);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+		mSensorManager.registerListener(this, mAccelerometer , SensorManager.SENSOR_DELAY_NORMAL);
 	}
 	
 	public void Paused(View view) { //Cambia pulsanti visibili, chiude il FileWriter se aperto
@@ -229,18 +232,38 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}	}
-		Toast.makeText(getApplicationContext(), "Recorded\n"+readFileAsString("myfile.txt"), Toast.LENGTH_LONG).show();
-		getApplicationContext().deleteFile("myfile.txt");
+		
+		Toast.makeText(getApplicationContext(), "Maximum range:"+mAccelerometer.getMaximumRange()+
+					   "\n"+readFileAsStringMod(filename), Toast.LENGTH_LONG).show();
+		
+//		getApplicationContext().deleteFile(filepath);
+	}
+	
+	public String accelToFreq(String accel){ //Aggiunge determinati valori a quelli dell'accelerometro
+		String[] coord = accel.split(",");
+		double[] freq = new double[3] ;
+		freq [0] = (Double.parseDouble(coord[0])) + 440.0; //aggiunge freq La
+		freq [1] = Double.parseDouble(coord[1]) + 329.0; //aggiunge freq Mi
+		freq [2] = Double.parseDouble(coord[2]) + 392.0; //agguinge freq Sol
+		
+		String[] s = new String[freq.length];
+		StringBuffer result = new StringBuffer();
+			for (int i = 0; i < s.length; i++){
+			    s[i] = String.valueOf(freq[i]);
+				result.append( s[i] );
+				result.append( " - " );
+			}
+		String doubleTripletString = result.toString();
+		return doubleTripletString;
 	}
 	
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-	
 	}
 	
 	@Override
 	public void onSensorChanged(SensorEvent event) {//Quando l'accel. ascolta scrive su file
-	
+		
 	    float x = event.values[0];
 	    float y = event.values[1];
 	    float z = event.values[2];
@@ -251,22 +274,42 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	
 	}
-	public String readFileAsString(String fileName) {//Legge file come stringa
+
+//	public String readFileAsString(String fileName) {//Legge file come stringa
+//        Context context = getApplicationContext();
+//        StringBuilder stringBuilder = new StringBuilder();
+//        String line;
+//        BufferedReader in = null;
+//
+//        try {
+//            in = new BufferedReader(new FileReader(new File(context.getFilesDir(), fileName)));
+//            while ((line = in.readLine()) != null) stringBuilder.append(line+"\n");
+//            in.close();
+//        } catch (FileNotFoundException e) {
+//           
+//        } catch (IOException e) {
+//            
+//        } 
+//        
+//        return stringBuilder.toString();
+//    }
+	
+	public String readFileAsStringMod(String fileName) {//Legge file come stringa e modifica dato accel
+													 //aggiungendo una certa frequenza 
         Context context = getApplicationContext();
         StringBuilder stringBuilder = new StringBuilder();
         String line;
         BufferedReader in = null;
 
         try {
-            in = new BufferedReader(new FileReader(new File(context.getFilesDir(), fileName)));
-            while ((line = in.readLine()) != null) stringBuilder.append(line+"\n");
+            in = new BufferedReader(new FileReader(new File(filepath, fileName)));
+            while ((line = in.readLine()) != null) stringBuilder.append(accelToFreq(line)+"\n");
             in.close();
         } catch (FileNotFoundException e) {
            
         } catch (IOException e) {
-            
+        	
         } 
         
         return stringBuilder.toString();
