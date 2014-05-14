@@ -9,6 +9,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
@@ -23,12 +24,14 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.Toast;
-
-
 
 public class UI1 extends ListActivity {
+	
 	public final static String EXTRA_MESSAGE = "com.example.MusicMoves.MESSAGE";
+	//access to database
+	/*DBMusicMoves mDbHelper = new DBMusicMoves(getBaseContext());
+	SQLiteDatabase db = mDbHelper.getWritableDatabase();*/
+	
 	//ActionMode mActionMode;
 	@SuppressLint("Recycle")
 	@Override
