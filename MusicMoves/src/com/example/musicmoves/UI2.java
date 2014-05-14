@@ -18,22 +18,23 @@ public class UI2 extends ActionBarActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ui2);
-		 // Get the message from the intent
-	    Intent intent = getIntent();
-	    String message = intent.getStringExtra(UI1.EXTRA_MESSAGE);
-		// Create the text view
-	    TextView textView = new TextView(this);
-	    textView.setTextSize(30);
-	    textView.setTextColor(Color.rgb(255, 153, 0));
-	    textView.setText("Il file si chiama "+message+""+"\nChe bel nome!"+ "\n<3 "+message+ " <3"
-	    		+ "\n<3 "+message+ " <3"+ "\n<3 "+message+ " <3"+ "\n<3 "+message+ " <3");
-
-	    // Set the text view as the activity layout
-	    setContentView(textView);
 //		if (savedInstanceState == null) {
 //			getSupportFragmentManager().beginTransaction()
 //					.add(R.id.container, new PlaceholderFragment()).commit();
 //		}
+		
+	}
+	
+	@Override
+	protected void onStart() {
+		super.onStart();
+		// Get the message from the intent
+		Intent intent = getIntent();
+	    String message = intent.getStringExtra(UI1.EXTRA_MESSAGE);
+		//Modifica campo textView
+		TextView textView = (TextView) findViewById(R.id.textView1);
+	    textView.setTextColor(Color.rgb(255, 153, 0));
+	    textView.setText(message+ "\n<3 "+message+ " <3"+ "\n<3 "+message+ " <3"+ "\n<3 "+message+ " <3");
 	}
 
 	@Override

@@ -1,11 +1,27 @@
 package com.example.musicmoves;
 
+
+
+
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.logging.Logger;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -21,7 +37,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class UI3 extends ActionBarActivity {
+public class UI3 extends ActionBarActivity implements SensorEventListener {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +110,8 @@ public class UI3 extends ActionBarActivity {
 		alert.show();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ui3);
-
+		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+	    mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 //		if (savedInstanceState == null) {	//duplicava il layout con questo
 //			getSupportFragmentManager().beginTransaction()
 //					.add(R.id.container, new PlaceholderFragment()).commit();
@@ -130,24 +147,29 @@ public class UI3 extends ActionBarActivity {
 		finish();
 	}
 
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_ui3, container,
-					false);
-			return rootView;
-		}
-	}
+//	/**
+//	 * A placeholder fragment containing a simple view.
+//	 */
+//	public static class PlaceholderFragment extends Fragment {
+//
+//		public PlaceholderFragment() {
+//		}
+//
+//		@Override
+//		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//				Bundle savedInstanceState) {
+//			View rootView = inflater.inflate(R.layout.fragment_ui3, container,
+//					false);
+//			return rootView;
+//		}
+//	}
 	
-	public void Recording(View view) {
+	private SensorManager mSensorManager;
+	private Sensor mAccelerometer;
+	private FileWriter writer;
+	
+	
+	public void Recording(View view) { //Cambia pulsanti visibili, crea il FileWriter, ascolta i dati accelerometro
 		Toast.makeText(getApplicationContext(), "Recording", Toast.LENGTH_SHORT).show();
 		ImageButton rec = (ImageButton) findViewById(R.id.recButton);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseButton);
@@ -158,20 +180,38 @@ public class UI3 extends ActionBarActivity {
 		pause.setVisibility(View.VISIBLE);
 		stopUns.setVisibility(View.INVISIBLE);
 		stopSel.setVisibility(View.VISIBLE);
-		
+		Context context = getApplicationContext();
+       
+		super.onResume();
+	    try {
+			writer = new FileWriter(new File(context.getFilesDir(), "myfile.txt"), true);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 	}
 	
-	public void Paused(View view) {
+	public void Paused(View view) { //Cambia pulsanti visibili, chiude il FileWriter se aperto
 		Toast.makeText(getApplicationContext(), "Recording paused", Toast.LENGTH_SHORT).show();	
 		ImageButton rec = (ImageButton) findViewById(R.id.recButton);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseButton);
 		pause.setVisibility(View.INVISIBLE);
 		rec.setVisibility(View.VISIBLE);
-			
+		super.onPause();
+		
+	    if(writer != null) {
+	       try {
+			writer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	}
 	}
 	
-	public void Stopped(View view) {
-		Toast.makeText(getApplicationContext(), "Recording stopped", Toast.LENGTH_SHORT).show();
+	public void Stopped(View view) { //Cambia pulsanti visibili, chiude il FileWriter se aperto,
+									 //mostra dati registrati e cancella il file
+		
 		ImageButton rec = (ImageButton) findViewById(R.id.recButton);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseButton);
 		ImageButton stopUns = (ImageButton) findViewById(R.id.stop_unselectedButton);
@@ -181,7 +221,54 @@ public class UI3 extends ActionBarActivity {
 		pause.setVisibility(View.INVISIBLE);
 		stopSel.setVisibility(View.INVISIBLE);
 		stopUns.setVisibility(View.VISIBLE);
-				
+		mSensorManager.unregisterListener(this);
+		if(writer != null) {
+		       try {
+				writer.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	}
+		Toast.makeText(getApplicationContext(), "Recorded\n"+readFileAsString("myfile.txt"), Toast.LENGTH_LONG).show();
+		getApplicationContext().deleteFile("myfile.txt");
 	}
 	
+	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+	
+	}
+	
+	@Override
+	public void onSensorChanged(SensorEvent event) {//Quando l'accel. ascolta scrive su file
+	
+	    float x = event.values[0];
+	    float y = event.values[1];
+	    float z = event.values[2];
+	    try {
+			writer.write(x+", "+y+", "+z+"\n");
+		} 
+	    catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+	}
+	public String readFileAsString(String fileName) {//Legge file come stringa
+        Context context = getApplicationContext();
+        StringBuilder stringBuilder = new StringBuilder();
+        String line;
+        BufferedReader in = null;
+
+        try {
+            in = new BufferedReader(new FileReader(new File(context.getFilesDir(), fileName)));
+            while ((line = in.readLine()) != null) stringBuilder.append(line+"\n");
+            in.close();
+        } catch (FileNotFoundException e) {
+           
+        } catch (IOException e) {
+            
+        } 
+        
+        return stringBuilder.toString();
+    }
 }
