@@ -32,7 +32,7 @@ public class UI2 extends ActionBarActivity {
 		Intent intent = getIntent();
 	    String message = intent.getStringExtra(UI1.EXTRA_MESSAGE);
 		//Modifica campo textView
-		TextView textView = (TextView) findViewById(R.id.textView1);
+		TextView textView = (TextView) findViewById(R.id.textViewFileName);
 	    textView.setTextColor(Color.rgb(255, 153, 0));
 	    textView.setText(message+ "\n<3 "+message+ " <3"+ "\n<3 "+message+ " <3"+ "\n<3 "+message+ " <3");
 	}

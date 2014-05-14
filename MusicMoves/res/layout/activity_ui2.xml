@@ -2,98 +2,107 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
+    <SeekBar
+        android:id="@+id/seekBarUpsampling"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/checkX"
+        android:layout_alignRight="@+id/checkZ"
+        android:layout_centerVertical="true" />
+
+    <TextView
+        android:id="@+id/textViewRename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewAxes"
+        android:layout_below="@+id/seekBarUpsampling"
+        android:layout_marginTop="48dp"
+        android:text="Rename" />
+
+    <Button
+        android:id="@+id/buttonRename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/editTextRename"
+        android:layout_toRightOf="@+id/editTextRename"
+        android:text="Ok" />
+
+    <CheckBox
+        android:id="@+id/checkX"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/imageButtonPlay"
+        android:layout_below="@+id/textViewAxes"
+        android:checked="true"
+        android:text="x" />
+
+    <CheckBox
+        android:id="@+id/checkY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/checkX"
+        android:layout_alignBottom="@+id/checkX"
+        android:layout_centerHorizontal="true"
+        android:checked="true"
+        android:text="y" />
+
+    <CheckBox
+        android:id="@+id/checkZ"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/checkY"
+        android:layout_alignBottom="@+id/checkY"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="25dp"
+        android:checked="true"
+        android:text="z" />
+
     <ImageButton
-        android:id="@+id/imageButton1"
+        android:id="@+id/imageButtonPlay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="34dp"
-        android:layout_marginTop="38dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="25dp"
         android:src="@drawable/ic_m_play_unselected" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textViewUpsampling"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/imageButton1"
-        android:layout_marginLeft="76dp"
-        android:layout_toRightOf="@+id/imageButton1"
-         />
-
-    <CheckBox
-        android:id="@+id/checkBox1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView2"
-        android:layout_below="@+id/textView2"
-        android:text="x" />
-
-    <CheckBox
-        android:id="@+id/checkBox3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView2"
-        android:layout_marginRight="21dp"
-        android:text="z" />
-
-    <CheckBox
-        android:id="@+id/checkBox2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/checkBox3"
-        android:layout_alignBottom="@+id/checkBox3"
-        android:layout_centerHorizontal="true"
-        android:text="y" />
-
-    <SeekBar
-        android:id="@+id/seekBar1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/checkBox1"
-        android:layout_centerVertical="true" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/seekBar1"
-        android:layout_alignLeft="@+id/seekBar1"
+        android:layout_above="@+id/seekBarUpsampling"
+        android:layout_alignLeft="@+id/seekBarUpsampling"
+        android:layout_marginBottom="15dp"
         android:text="Upsampling" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textViewAxes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/imageButton1"
-        android:layout_below="@+id/imageButton1"
-        android:layout_marginTop="40dp"
+        android:layout_alignLeft="@+id/textViewUpsampling"
+        android:layout_below="@+id/imageButtonPlay"
+        android:layout_marginTop="20dp"
         android:text="Axes" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_below="@+id/seekBar1"
-        android:layout_marginTop="48dp"
-        android:text="Rename" />
-
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/editTextRename"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView4"
-        android:layout_below="@+id/textView4"
-        android:ems="10" />
+        android:layout_alignLeft="@+id/textViewRename"
+        android:layout_below="@+id/textViewRename"
+        android:layout_marginTop="15dp"
+        android:ems="10" >
 
-    <Button
-        android:id="@+id/button1"
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:id="@+id/textViewFileName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/editText1"
-        android:layout_toRightOf="@+id/editText1"
-        android:text="Ok" />
+        android:layout_alignTop="@+id/imageButtonPlay"
+        android:layout_centerHorizontal="true"
+        android:text="l" />
 
 </RelativeLayout>
