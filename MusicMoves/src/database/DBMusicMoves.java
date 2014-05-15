@@ -1,7 +1,6 @@
-package com.example.musicmoves;
+package database;
 
-import com.example.musicmoves.FeedReaderContract.FeedEntry;
-
+import database.FeedReaderContract.FeedEntry;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -16,7 +15,7 @@ public class DBMusicMoves extends SQLiteOpenHelper {
 
 	private static final String SQL_CREATE_ENTRIES =
 	    "CREATE TABLE " + FeedEntry.TABLE_NAME + " (" +
-	    FeedEntry.COLUMN_NAME_ID + " INTEGER PRIMARY KEY," +
+	    FeedEntry._ID + " INTEGER PRIMARY KEY" + COMMA_SEP +
 	    FeedEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
 	    FeedEntry.COLUMN_NAME_LOCATION + TEXT_TYPE + COMMA_SEP +
 	    FeedEntry.COLUMN_NAME_DATE_CREATION + TEXT_TYPE + COMMA_SEP +

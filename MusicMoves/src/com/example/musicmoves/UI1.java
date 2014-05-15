@@ -1,5 +1,6 @@
 package com.example.musicmoves;
 
+import database.FeedReaderContract.FeedEntry;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -9,6 +10,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -29,8 +31,8 @@ public class UI1 extends ListActivity {
 	
 	public final static String EXTRA_MESSAGE = "com.example.MusicMoves.MESSAGE";
 	//access to database
-	/*DBMusicMoves mDbHelper = new DBMusicMoves(getBaseContext());
-	SQLiteDatabase db = mDbHelper.getWritableDatabase();*/
+	//DBMusicMoves mDbHelper = new DBMusicMoves(getBaseContext());
+	//SQLiteDatabase db = mDbHelper.getReadableDatabase();
 	
 	//ActionMode mActionMode;
 	@SuppressLint("Recycle")
@@ -40,10 +42,24 @@ public class UI1 extends ListActivity {
 		setContentView(R.layout.activity_ui1);
 		Context ctx = getApplicationContext();
         Resources res = ctx.getResources();
+        
+        /*String query = "SELECT " + FeedEntry.COLUMN_NAME_TITLE + "FROM " + FeedEntry.TABLE_NAME;		
+		Cursor cursor = null;		
+		cursor = db.rawQuery(query, null);
+		int count = cursor.getCount();
+		String[] prova = null;
+		int i = 0;
+		
+		while (cursor.moveToNext()) {
+			prova[i] = cursor.getString(1);
+			System.out.println(prova[i]);
+			i++;
+		}*/
+        
         final String[] nomiPaesi = res.getStringArray(R.array.paesi);
         TypedArray immagini = res.obtainTypedArray(R.array.immagini);
         setListAdapter(new UI1Adapter(ctx, R.layout.riga_lista, nomiPaesi, immagini));
-      //da qui inseriamo il codice utile a mostrare un messaggio al click
+        //da qui inseriamo il codice utile a mostrare un messaggio al click
         ListView listaV = getListView();
         listaV.setTextFilterEnabled(true);
         registerForContextMenu(listaV);

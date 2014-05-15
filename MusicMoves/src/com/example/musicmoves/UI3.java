@@ -1,9 +1,5 @@
 package com.example.musicmoves;
 
-
-
-
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,10 +9,12 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.logging.Logger;
 
+import database.DBAdapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -39,6 +37,20 @@ import android.widget.Toast;
 
 public class UI3 extends ActionBarActivity implements SensorEventListener {
 
+	private String SESSION_NAME = "";
+	private SensorManager mSensorManager;
+	private Sensor mAccelerometer;
+	private FileWriter writer;
+	private int hour = 0;
+	private int minute = 0;
+	private int second = 0;
+	private int day = 0;
+	private int month = 0;
+	private int year = 0;
+	private String date = null;
+	DBAdapter dbHelper;
+	//Cursor cursor;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//Pop up dialog
@@ -70,6 +82,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 				String value="";
 				
 				value = input.getText().toString().toLowerCase();
+				SESSION_NAME = value;
 				
 				int recCounter = 0; //da rendere globale
 				try {value = value.substring(0,1).toUpperCase() + value.substring(1).toLowerCase();}
@@ -78,14 +91,15 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 					}
 				//Ottengo la data e l'ora corrente
 				Calendar c = Calendar.getInstance();
-				int hour = c.get(Calendar.HOUR_OF_DAY);
-			    int minute = c.get(Calendar.MINUTE);
-			    int second = c.get(Calendar.SECOND);
-			    int date = c.get(Calendar.DATE);
-			    int month = c.get(Calendar.MONTH);
-			    int year = c.get(Calendar.YEAR);
+				hour = c.get(Calendar.HOUR_OF_DAY);
+			    minute = c.get(Calendar.MINUTE);
+			    second = c.get(Calendar.SECOND);
+			    day = c.get(Calendar.DATE);
+			    month = c.get(Calendar.MONTH);
+			    year = c.get(Calendar.YEAR);
 			    
-				value = value +"\n"+ date +"/"+ month +"/"+ year +" - "+ hour+":"+ minute +":"+ second +"\n" +"Rec "+ recCounter;
+			    date = day +"/"+ month+"/"+ year +" - "+ hour+":"+ minute +":"+ second;
+				value = value +"\n"+ day +"/"+ month +"/"+ year +" - "+ hour+":"+ minute +":"+ second +"\n" +"Rec "+ recCounter;
 				
 				TextView textView = (TextView) findViewById(R.id.textViewNewRecName);
 			    textView.setTextSize(25);
@@ -112,6 +126,10 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		setContentView(R.layout.activity_ui3);
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 	    mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+	    
+	    dbHelper = new DBAdapter(this);
+		dbHelper.open();
+	    
 //		if (savedInstanceState == null) {	//duplicava il layout con questo
 //			getSupportFragmentManager().beginTransaction()
 //					.add(R.id.container, new PlaceholderFragment()).commit();
@@ -164,11 +182,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 //		}
 //	}
 	
-	private SensorManager mSensorManager;
-	private Sensor mAccelerometer;
-	private FileWriter writer;
-	
-	
 	public void Recording(View view) { //Cambia pulsanti visibili, crea il FileWriter, ascolta i dati accelerometro
 		Toast.makeText(getApplicationContext(), "Recording", Toast.LENGTH_SHORT).show();
 		ImageButton rec = (ImageButton) findViewById(R.id.recButton);
@@ -184,7 +197,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
        
 		super.onResume();
 	    try {
-			writer = new FileWriter(new File(context.getFilesDir(), "myfile.txt"), true);
+			writer = new FileWriter(new File(context.getFilesDir(), SESSION_NAME+".txt"), true);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -229,8 +242,22 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}	}
-		Toast.makeText(getApplicationContext(), "Recorded\n"+readFileAsString("myfile.txt"), Toast.LENGTH_LONG).show();
-		getApplicationContext().deleteFile("myfile.txt");
+		
+		//Ottengo la data e l'ora corrente
+		Calendar c = Calendar.getInstance();
+		int hour_m = c.get(Calendar.HOUR_OF_DAY);
+	    int minute_m = c.get(Calendar.MINUTE);
+	    int second_m = c.get(Calendar.SECOND);
+	    int day_m = c.get(Calendar.DATE);
+	    int month_m = c.get(Calendar.MONTH);
+	    int year_m = c.get(Calendar.YEAR);
+	    String date_m = day_m +"/"+ month_m +"/"+ year_m +" - "+ hour_m+":"+ minute_m +":"+ second_m; 
+		Toast.makeText(getApplicationContext(), "Recorded\n"+readFileAsString(SESSION_NAME+".txt")+"\n"+date_m, Toast.LENGTH_LONG).show();
+		//getApplicationContext().deleteFile(SESSION_NAME+".txt");
+		//Inserimento dati nel database
+		//cursor = dbHelper;
+		dbHelper.createSession(SESSION_NAME, null, date, date_m, null);
+		dbHelper.close();
 	}
 	
 	@Override
