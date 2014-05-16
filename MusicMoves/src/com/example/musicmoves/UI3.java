@@ -48,8 +48,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private int month = 0;
 	private int year = 0;
 	private String date = null;
-	DBAdapter dbHelper;
-	//Cursor cursor;
+	private DBAdapter databaseHelper;
+	//private Cursor cursor;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -126,10 +126,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		setContentView(R.layout.activity_ui3);
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 	    mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-	    
-	    dbHelper = new DBAdapter(this);
-		dbHelper.open();
-	    
+	        
 //		if (savedInstanceState == null) {	//duplicava il layout con questo
 //			getSupportFragmentManager().beginTransaction()
 //					.add(R.id.container, new PlaceholderFragment()).commit();
@@ -255,9 +252,10 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		Toast.makeText(getApplicationContext(), "Recorded\n"+readFileAsString(SESSION_NAME+".txt")+"\n"+date_m, Toast.LENGTH_LONG).show();
 		//getApplicationContext().deleteFile(SESSION_NAME+".txt");
 		//Inserimento dati nel database
-		//cursor = dbHelper;
-		dbHelper.createSession(SESSION_NAME, null, date, date_m, null);
-		dbHelper.close();
+		databaseHelper = new DBAdapter(getApplicationContext());
+		databaseHelper.open();
+		databaseHelper.createSession(SESSION_NAME, null, date, date_m, null);
+		databaseHelper.close();
 	}
 	
 	@Override

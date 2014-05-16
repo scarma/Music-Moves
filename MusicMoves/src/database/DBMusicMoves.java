@@ -15,12 +15,12 @@ public class DBMusicMoves extends SQLiteOpenHelper {
 
 	private static final String SQL_CREATE_ENTRIES =
 	    "CREATE TABLE " + FeedEntry.TABLE_NAME + " (" +
-	    FeedEntry._ID + " INTEGER PRIMARY KEY" + COMMA_SEP +
+	    FeedEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + COMMA_SEP +
 	    FeedEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
 	    FeedEntry.COLUMN_NAME_LOCATION + TEXT_TYPE + COMMA_SEP +
 	    FeedEntry.COLUMN_NAME_DATE_CREATION + TEXT_TYPE + COMMA_SEP +
 	    FeedEntry.COLUMN_NAME_LAST_MODIFY + TEXT_TYPE + COMMA_SEP +
-	    FeedEntry.COLUMN_NAME_SIGNATURE + TEXT_TYPE +
+	    FeedEntry.COLUMN_NAME_SIGNATURE + TEXT_TYPE + COMMA_SEP + 
 	    "UNIQUE (" + FeedEntry.COLUMN_NAME_TITLE + COMMA_SEP + 
 	    FeedEntry.COLUMN_NAME_LOCATION + COMMA_SEP + 
 	    FeedEntry.COLUMN_NAME_SIGNATURE + ")" +
