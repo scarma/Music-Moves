@@ -10,12 +10,17 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -26,7 +31,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
 import android.text.Spanned;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,6 +72,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 
 		alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
+				LockScreenRotation();
 				 // Do something with value!   
 				String value="";
 				
@@ -236,6 +241,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		Toast.makeText(getApplicationContext(), "Maximum range:"+mAccelerometer.getMaximumRange()+
 					   "\n"+readFileAsStringMod(filename), Toast.LENGTH_LONG).show();
 		
+		
+		UnlockScreenRotation();
 //		getApplicationContext().deleteFile(filepath);
 	}
 	
@@ -314,4 +321,39 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
         
         return stringBuilder.toString();
     }
+	
+	private void LockScreenRotation() { // Sets screen rotation as fixed to current rotation setting
+		switch (this.getResources().getConfiguration().orientation)
+		{   case Configuration.ORIENTATION_PORTRAIT:     
+				this.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+				break;   
+			case Configuration.ORIENTATION_LANDSCAPE:
+				this.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+				break;
+		} 
+	}
+	
+	private void UnlockScreenRotation(){ // allow screen rotations
+		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+	}
+	
+//	private void ThumbnailFromDateCreator(int date, int month, int year, int hour, int minute, int second){
+//		Bitmap _buffer;
+//        ArrayList<GraphicObject> _graphics = new ArrayList<GraphicObject>();
+//        int width = 40;
+//        int height = 40; 
+//		int colors[] = new int[width*height];
+//         for (int x = 0; x<width ; x++) {
+//             for (int y = 0; y<height ; y++){
+//                 int r = ((date/31)-(hour/24))*255;
+//                 int b = ((month/12-(minute/60))*255;
+//                 int g = ((year/1900-(second/60))*255;
+//                 int a = 255;
+//                 colors[x + y * width] = (a << 24) | (r << 16) | (g << 8) | b;
+//             }
+//         }
+//         Canvas canvas=_surfaceHolder.lockCanvas(null);
+//         _buffer = Bitmap.createBitmap(colors, width, height, Bitmap.Config.RGB_565);
+//         canvas.drawBitmap(_buffer, 0, 0, null);
+//	}
 }
