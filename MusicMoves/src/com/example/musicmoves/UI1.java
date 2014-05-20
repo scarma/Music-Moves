@@ -32,10 +32,10 @@ import android.widget.ListView;
 public class UI1 extends ListActivity {
 	
 	public final static String EXTRA_MESSAGE = "com.example.MusicMoves.MESSAGE";
-	//private DBAdapter databaseHelper;
-	//private Cursor cursor;
+	private DBAdapter databaseHelper;
+	private Cursor cursor;
+	private String[] list_music;
 	
-	//ActionMode mActionMode;
 	@SuppressLint("Recycle")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,40 +43,34 @@ public class UI1 extends ListActivity {
 		setContentView(R.layout.activity_ui1);
 		Context ctx = getApplicationContext();
         Resources res = ctx.getResources();
-        
-        /*databaseHelper = new DBAdapter(getApplicationContext());
+//        final String[] list_music =new String[100];//res.getStringArray(R.array.paesi);
+                
+        databaseHelper = new DBAdapter(getApplicationContext());
 		databaseHelper.open();
 		
 		cursor = databaseHelper.fetchAllSession();
-				
+		
+		
+		cursor.moveToFirst();
+        list_music =new String[cursor.getCount()];
+		for (int i = 0; i < cursor.getCount(); i++) {
+			if (cursor.isAfterLast())
+				break;
+			list_music[i] = cursor.getString(1);
+			cursor.moveToNext();
+
+		}
+		
+//		while(cursor.moveToNext())  {
+//			list_music[i]=cursor.getString(cursor.getColumnIndex(FeedEntry._ID));
+//			i++;
+//		}	
+//		
 		databaseHelper.close();
+		cursor.close();
         
-		extracted();
-		
-		while(cursor.moveToNext())  {
-			//String contactID = cursor.getString( cursor.getColumnIndex(DbAdapter.KEY_CONTACTID) );
-		    //Log.debug(TAG, "contact id = " + contactID);
-			String musicID = cursor.getString(cursor.getColumnIndex(FeedEntry._ID));
-			Log.debug(TAG, "music id = " + musicID);
-		}	
-		
-		cursor.close();*/
-		/*String query = "SELECT " + FeedEntry.COLUMN_NAME_TITLE + "FROM " + FeedEntry.TABLE_NAME;		
-		Cursor cursor = null;		
-		cursor = db.rawQuery(query, null);
-		int count = cursor.getCount();
-		String[] prova = null;
-		int i = 0;
-		
-		while (cursor.moveToNext()) {
-			prova[i] = cursor.getString(1);
-			System.out.println(prova[i]);
-			i++;
-		}*/
-        
-        final String[] nomiPaesi = res.getStringArray(R.array.paesi);
         TypedArray immagini = res.obtainTypedArray(R.array.immagini);
-        setListAdapter(new UI1Adapter(ctx, R.layout.riga_lista, nomiPaesi, immagini));
+        setListAdapter(new UI1Adapter(ctx, R.layout.riga_lista, list_music, immagini));
         //da qui inseriamo il codice utile a mostrare un messaggio al click
         ListView listaV = getListView();
         listaV.setTextFilterEnabled(true);
@@ -89,16 +83,12 @@ public class UI1 extends ListActivity {
                 // mostro il testo dell’oggetto cliccato, attenzione a recuperare il testo
                         // dall'oggetto giusto
         		Intent intent = new Intent(UI1.this, UI2.class);
-        	    intent.putExtra(EXTRA_MESSAGE, nomiPaesi[position]);
+        	    intent.putExtra(EXTRA_MESSAGE, list_music[position]);
         	    startActivity(intent);
             	
             }
         });  
     }
-
-	/*private void extracted() {
-		startManagingCursor(cursor);
-	}*/
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

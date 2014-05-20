@@ -63,8 +63,9 @@ public class DBAdapter {
 
 	  //fetch all music sessions
 	  public Cursor fetchAllSession() {
-	    return database.query(FeedEntry.TABLE_NAME, new String[] {FeedEntry._ID, FeedEntry.COLUMN_NAME_TITLE, FeedEntry.COLUMN_NAME_LOCATION, 
-	    		FeedEntry.COLUMN_NAME_DATE_CREATION, FeedEntry.COLUMN_NAME_LAST_MODIFY, FeedEntry.COLUMN_NAME_IMAGE}, null, null, null, null, null);
+		  return database.query("music", null ,null, null, null, null, null);
+//	    return database.query(FeedEntry.TABLE_NAME, new String[] {FeedEntry._ID, FeedEntry.COLUMN_NAME_TITLE, FeedEntry.COLUMN_NAME_LOCATION, 
+//	    		FeedEntry.COLUMN_NAME_DATE_CREATION, FeedEntry.COLUMN_NAME_LAST_MODIFY, FeedEntry.COLUMN_NAME_IMAGE, FeedEntry.COLUMN_NAME_X, FeedEntry.COLUMN_NAME_Y, FeedEntry.COLUMN_NAME_Z}, null, null, null, null, null);
 	  }
 	  
 	  //fetch music sessions filter by a string
