@@ -1,5 +1,6 @@
 package com.example.musicmoves;
 
+import database.DBAdapter;
 import database.FeedReaderContract.FeedEntry;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -14,6 +15,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -30,9 +32,8 @@ import android.widget.ListView;
 public class UI1 extends ListActivity {
 	
 	public final static String EXTRA_MESSAGE = "com.example.MusicMoves.MESSAGE";
-	//access to database
-	//DBMusicMoves mDbHelper = new DBMusicMoves(getBaseContext());
-	//SQLiteDatabase db = mDbHelper.getReadableDatabase();
+	//private DBAdapter databaseHelper;
+	//private Cursor cursor;
 	
 	//ActionMode mActionMode;
 	@SuppressLint("Recycle")
@@ -43,7 +44,24 @@ public class UI1 extends ListActivity {
 		Context ctx = getApplicationContext();
         Resources res = ctx.getResources();
         
-        /*String query = "SELECT " + FeedEntry.COLUMN_NAME_TITLE + "FROM " + FeedEntry.TABLE_NAME;		
+        /*databaseHelper = new DBAdapter(getApplicationContext());
+		databaseHelper.open();
+		
+		cursor = databaseHelper.fetchAllSession();
+				
+		databaseHelper.close();
+        
+		extracted();
+		
+		while(cursor.moveToNext())  {
+			//String contactID = cursor.getString( cursor.getColumnIndex(DbAdapter.KEY_CONTACTID) );
+		    //Log.debug(TAG, "contact id = " + contactID);
+			String musicID = cursor.getString(cursor.getColumnIndex(FeedEntry._ID));
+			Log.debug(TAG, "music id = " + musicID);
+		}	
+		
+		cursor.close();*/
+		/*String query = "SELECT " + FeedEntry.COLUMN_NAME_TITLE + "FROM " + FeedEntry.TABLE_NAME;		
 		Cursor cursor = null;		
 		cursor = db.rawQuery(query, null);
 		int count = cursor.getCount();
@@ -78,6 +96,10 @@ public class UI1 extends ListActivity {
             }
         });  
     }
+
+	/*private void extracted() {
+		startManagingCursor(cursor);
+	}*/
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

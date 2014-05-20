@@ -248,13 +248,15 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    int day_m = c.get(Calendar.DATE);
 	    int month_m = c.get(Calendar.MONTH);
 	    int year_m = c.get(Calendar.YEAR);
-	    String date_m = day_m +"/"+ month_m +"/"+ year_m +" - "+ hour_m+":"+ minute_m +":"+ second_m; 
-		Toast.makeText(getApplicationContext(), "Recorded\n"+readFileAsString(SESSION_NAME+".txt")+"\n"+date_m, Toast.LENGTH_LONG).show();
+	    String date_m = day_m +"/"+ month_m +"/"+ year_m +" - "+ hour_m+":"+ minute_m +":"+ second_m;
+	    Context context = getApplicationContext();
+	    String location = context.getFilesDir().getPath();
+		Toast.makeText(getApplicationContext(), "Recorded\n"+readFileAsString(SESSION_NAME+".txt")+"\n"+date_m + location, Toast.LENGTH_LONG).show();
 		//getApplicationContext().deleteFile(SESSION_NAME+".txt");
 		//Inserimento dati nel database
 		databaseHelper = new DBAdapter(getApplicationContext());
 		databaseHelper.open();
-		databaseHelper.createSession(SESSION_NAME, null, date, date_m, null);
+		databaseHelper.createSession(SESSION_NAME, location, date, date_m, "ls", 1, 1, 1);
 		databaseHelper.close();
 	}
 	
