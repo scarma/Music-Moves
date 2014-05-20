@@ -1,5 +1,7 @@
 package com.example.musicmoves;
 
+import database.DBAdapter;
+import database.FeedReaderContract.FeedEntry;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -9,9 +11,11 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -28,9 +32,8 @@ import android.widget.ListView;
 public class UI1 extends ListActivity {
 	
 	public final static String EXTRA_MESSAGE = "com.example.MusicMoves.MESSAGE";
-	//access to database
-	/*DBMusicMoves mDbHelper = new DBMusicMoves(getBaseContext());
-	SQLiteDatabase db = mDbHelper.getWritableDatabase();*/
+	//private DBAdapter databaseHelper;
+	//private Cursor cursor;
 	
 	//ActionMode mActionMode;
 	@SuppressLint("Recycle")
@@ -40,10 +43,41 @@ public class UI1 extends ListActivity {
 		setContentView(R.layout.activity_ui1);
 		Context ctx = getApplicationContext();
         Resources res = ctx.getResources();
+        
+        /*databaseHelper = new DBAdapter(getApplicationContext());
+		databaseHelper.open();
+		
+		cursor = databaseHelper.fetchAllSession();
+				
+		databaseHelper.close();
+        
+		extracted();
+		
+		while(cursor.moveToNext())  {
+			//String contactID = cursor.getString( cursor.getColumnIndex(DbAdapter.KEY_CONTACTID) );
+		    //Log.debug(TAG, "contact id = " + contactID);
+			String musicID = cursor.getString(cursor.getColumnIndex(FeedEntry._ID));
+			Log.debug(TAG, "music id = " + musicID);
+		}	
+		
+		cursor.close();*/
+		/*String query = "SELECT " + FeedEntry.COLUMN_NAME_TITLE + "FROM " + FeedEntry.TABLE_NAME;		
+		Cursor cursor = null;		
+		cursor = db.rawQuery(query, null);
+		int count = cursor.getCount();
+		String[] prova = null;
+		int i = 0;
+		
+		while (cursor.moveToNext()) {
+			prova[i] = cursor.getString(1);
+			System.out.println(prova[i]);
+			i++;
+		}*/
+        
         final String[] nomiPaesi = res.getStringArray(R.array.paesi);
         TypedArray immagini = res.obtainTypedArray(R.array.immagini);
         setListAdapter(new UI1Adapter(ctx, R.layout.riga_lista, nomiPaesi, immagini));
-      //da qui inseriamo il codice utile a mostrare un messaggio al click
+        //da qui inseriamo il codice utile a mostrare un messaggio al click
         ListView listaV = getListView();
         listaV.setTextFilterEnabled(true);
         registerForContextMenu(listaV);
@@ -58,10 +92,13 @@ public class UI1 extends ListActivity {
         	    intent.putExtra(EXTRA_MESSAGE, nomiPaesi[position]);
         	    startActivity(intent);
             	
-                //Toast.makeText(getApplicationContext(), nomiPaesi[position], Toast.LENGTH_SHORT).show();
             }
         });  
     }
+
+	/*private void extracted() {
+		startManagingCursor(cursor);
+	}*/
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -140,15 +177,26 @@ public class UI1 extends ListActivity {
 	public boolean onContextItemSelected(MenuItem item) {
 	    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 	    switch (item.getItemId()) {
-	        case R.id.rename:
-	            renameRec(info.id);
+	        case R.id.play:
+	            playRec(info.id);
 	            return true;
 	        case R.id.delete:
 	            deleteRec(info.id);
 	            return true;
+	        case R.id.clone:
+	            cloneRec(info.id);
+	        case R.id.rename:
+	            renameRec(info.id);
+	        case R.id.details:
+	            detailsRec(info.id);
 	        default:
 	            return super.onContextItemSelected(item);
 	    }
+	}
+
+	private void cloneRec(long id) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	private void deleteRec(long id) {
@@ -160,51 +208,18 @@ public class UI1 extends ListActivity {
 		// TODO Auto-generated method stub
 		
 	}
-//	
-//	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-//
-//	    // Called when the action mode is created; startActionMode() was called
-//	    @Override
-//	    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-//	        // Inflate a menu resource providing context menu items
-//	        MenuInflater inflater = getMenuInflater();
-//	        inflater.inflate(R.menu.context_menu, menu);
-//	        return true;
-//	    }
-//
-//	    // Called each time the action mode is shown. Always called after onCreateActionMode, but
-//	    // may be called multiple times if the mode is invalidated.
-//	    @Override
-//	    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-//	        return false; // Return false if nothing is done
-//	    }
-//
-//	    // Called when the user selects a contextual menu item
-//	    @Override
-//	    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-//	        switch (item.getItemId()) {
-//	            case R.id.play:
-//	                playCurrentItem();
-//	                mode.finish(); // Action picked, so close the CAB
-//	                return true;
-//	            default:
-//	                return false;
-//	        }
-//	    }
-//
-//	   
-//
-//		// Called when the user exits the action mode
-//	    @Override
-//	    public void onDestroyActionMode(ActionMode mode) {
-//	        mActionMode = null;
-//	    }
-//	};
 	
-	 private void playCurrentItem() {
+	private void playRec(long id) {
 			// TODO Auto-generated method stub
 			
-		}
-	 
+	}
+	
+	private void detailsRec(long id) 
+	{
+	    Intent intent = new Intent(getApplicationContext(), UI2.class);
+	    startActivity(intent);
+	    finish();
+	}
+ 
 	
 }

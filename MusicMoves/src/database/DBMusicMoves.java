@@ -1,7 +1,6 @@
-package com.example.musicmoves;
+package database;
 
-import com.example.musicmoves.FeedReaderContract.FeedEntry;
-
+import database.FeedReaderContract.FeedEntry;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -16,15 +15,17 @@ public class DBMusicMoves extends SQLiteOpenHelper {
 
 	private static final String SQL_CREATE_ENTRIES =
 	    "CREATE TABLE " + FeedEntry.TABLE_NAME + " (" +
-	    FeedEntry.COLUMN_NAME_ID + " INTEGER PRIMARY KEY," +
+	    FeedEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + COMMA_SEP +
 	    FeedEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
 	    FeedEntry.COLUMN_NAME_LOCATION + TEXT_TYPE + COMMA_SEP +
 	    FeedEntry.COLUMN_NAME_DATE_CREATION + TEXT_TYPE + COMMA_SEP +
 	    FeedEntry.COLUMN_NAME_LAST_MODIFY + TEXT_TYPE + COMMA_SEP +
-	    FeedEntry.COLUMN_NAME_SIGNATURE + TEXT_TYPE +
-	    "UNIQUE (" + FeedEntry.COLUMN_NAME_TITLE + COMMA_SEP + 
-	    FeedEntry.COLUMN_NAME_LOCATION + COMMA_SEP + 
-	    FeedEntry.COLUMN_NAME_SIGNATURE + ")" +
+	    FeedEntry.COLUMN_NAME_IMAGE + TEXT_TYPE + COMMA_SEP + 
+	    FeedEntry.COLUMN_NAME_X + " INTEGER" + COMMA_SEP +
+	    FeedEntry.COLUMN_NAME_Y + " INTEGER" + COMMA_SEP +
+	    FeedEntry.COLUMN_NAME_Z + " INTEGER" + COMMA_SEP +
+	    "UNIQUE (" + FeedEntry.COLUMN_NAME_TITLE + /*COMMA_SEP + 
+	    FeedEntry.COLUMN_NAME_IMAGE +*/ ")" +
 	    " )";
 	
 	private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + FeedEntry.TABLE_NAME;
