@@ -3,16 +3,16 @@
     <item android:id="@+id/play"
           
           android:title="@string/play"
-          android:showAsAction="ifRoom" android:onClick="@string/play"/>
+          android:showAsAction="ifRoom"/>
     <item android:id="@+id/delete"
           
-          android:title="@string/delete" android:onClick="@string/delete"/>
+          android:title="@string/delete"/>
     <item android:id="@+id/clone"
           
-          android:title="@string/clone" android:onClick="@string/clone"/>
+          android:title="@string/clone"/>
     <item android:id="@+id/rename"
           
-          android:title="@string/rename" android:onClick="@string/rename"/>
+          android:title="@string/rename"/>
     <item android:id="@+id/details"
-          android:title="@string/details" android:onClick="@string/details"/>
+          android:title="@string/details"/>
 </menu>
