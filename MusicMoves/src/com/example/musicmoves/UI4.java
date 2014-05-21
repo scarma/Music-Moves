@@ -80,6 +80,7 @@ public class UI4 extends ActionBarActivity {
 //		
 //		Context context = getApplicationContext();
 //		super.onResume();   
+		
 	}
 	
 	public void PauseMusic(View view) { //Cambia pulsanti visibili, chiude il FileWriter se aperto
@@ -104,5 +105,7 @@ public class UI4 extends ActionBarActivity {
 		stopSel.setVisibility(View.INVISIBLE);
 		stopUns.setVisibility(View.VISIBLE);
 	}
+	
+	
 
 }

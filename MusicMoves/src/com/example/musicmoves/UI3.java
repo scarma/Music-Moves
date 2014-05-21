@@ -6,32 +6,29 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 
-import database.DBAdapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-
-import android.database.Cursor;
-
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioFormat;
+import android.media.AudioManager;
+import android.media.AudioTrack;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,6 +38,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import database.DBAdapter;
 
 public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private String filename;
@@ -269,36 +267,52 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    String date_m = day_m +"/"+ month_m +"/"+ year_m +" - "+ hour_m+":"+ minute_m +":"+ second_m;
 	    Context context = getApplicationContext();
 	    String location = context.getFilesDir().getPath();
-		Toast.makeText(getApplicationContext(), "Recorded\n"+readFileAsStringMod(filename+".txt")+"\n"+date_m + location, Toast.LENGTH_LONG).show();
+		Toast.makeText(getApplicationContext(), "Recorded\n"+readFileAsString(filename+".txt")+"\n"+date_m + location, Toast.LENGTH_LONG).show();
 		
 		//Inserimento dati nel database
 		databaseHelper = new DBAdapter(getApplicationContext());
 		databaseHelper.open();
 		databaseHelper.createSession(filename, location, date, date_m, "ls", 1, 1, 1);
 		databaseHelper.close();
+		proSoundGenerator(filename+".txt");
 		//Permetto rotazione
 		UnlockScreenRotation();
 //		getApplicationContext().deleteFile(filepath);
 	}
-	
-	public String accelToFreq(String accel){ //Aggiunge determinati valori a quelli dell'accelerometro
-		String[] coord = accel.split(",");
-		double[] freq = new double[3] ;
-		freq [0] = (Double.parseDouble(coord[0])) + 440.0; //aggiunge freq La
-		freq [1] = Double.parseDouble(coord[1]) + 329.0; //aggiunge freq Mi
-		freq [2] = Double.parseDouble(coord[2]) + 392.0; //agguinge freq Sol
-		
-		String[] s = new String[freq.length];
-		StringBuffer result = new StringBuffer();
-			for (int i = 0; i < s.length; i++){
-			    s[i] = String.valueOf(freq[i]);
-				result.append( s[i] );
-				result.append( " - " );
-			}
-		String doubleTripletString = result.toString();
-		return doubleTripletString;
 
-	}
+	public void proSoundGenerator(String textFile) {//Legge file come stringa e modifica dato accel
+													 //aggiungendo una certa frequenza 
+        
+        StringBuilder stringBuilder = new StringBuilder();
+        String line="";
+        double[] x;
+        double[] y;
+        double[] z;
+        int cnt = 0;
+        try{
+        	BufferedReader in = new BufferedReader(new FileReader(new File(filepath, textFile)));
+        	while ((line = in.readLine()) != null)
+        	{cnt++;}
+        	x = new double[cnt];
+        	y = new double[cnt];
+        	z = new double[cnt];
+        	in = new BufferedReader(new FileReader(new File(filepath, textFile)));
+        	for(int i=0; i<cnt; i++)
+        		{
+        		line = in.readLine();
+        		String[] coord = line.split(",");
+        		x[i] = (Double.parseDouble(coord[0])*10) + 440.0; //aggiunge freq La
+        		y[i] = Double.parseDouble(coord[1]) + 329.0; //aggiunge freq Mi
+        		z[i] = Double.parseDouble(coord[2]) + 392.0; //agguinge freq Sol
+        	}
+        	playSound(genTone(x,cnt));
+        	in.close();
+        } catch (FileNotFoundException e) {
+        
+        } catch (IOException e) {
+        
+        } 
+    }
 	
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -319,44 +333,75 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		}
 	}
 
-//	public String readFileAsString(String fileName) {//Legge file come stringa
+	public String readFileAsString(String fileName) {//Legge file come stringa
+        StringBuilder stringBuilder = new StringBuilder();
+        String line="";
+        BufferedReader in = null;
+//        try { 
+//        	File text;
+//        	boolean exists = (new File(filepath, fileName)).exists();  
+//        	if (!exists){ 
+//        		text = new File(filepath, fileName);
+//        		text.mkdirs();
+//        	} 
+//        	else { 
+//        		Log.d("Creation text problem","Filename already in use");
+//        		text = new File(filepath, "Gianni.txt");
+//        	}
+//        	in = new BufferedReader(new FileReader(text));
+//        	while ((line = in.readLine()) != null) {
+//        		stringBuilder.append(line+"\n");
+//        	}
+//        	in.close();
+//         
+        try {
+            in = new BufferedReader(new FileReader(new File(filepath, fileName)));
+            while ((line = in.readLine()) != null) stringBuilder.append(line+"\n");
+            in.close();
+        } catch (FileNotFoundException e) {
+           
+        } catch (IOException e) {
+            
+        } 
+        
+        return stringBuilder.toString();
+    }
+	
+//	public String readFileAsStringMod(String fileName) {//Legge file come stringa e modifica dato accel
+//													 //aggiungendo una certa frequenza 
 //        Context context = getApplicationContext();
 //        StringBuilder stringBuilder = new StringBuilder();
 //        String line;
 //        BufferedReader in = null;
 //
-//        try {
-//            in = new BufferedReader(new FileReader(new File(context.getFilesDir(), fileName)));
-//            while ((line = in.readLine()) != null) stringBuilder.append(line+"\n");
-//            in.close();
-//        } catch (FileNotFoundException e) {
-//           
-//        } catch (IOException e) {
-//            
+//        try { 
+//        	File text;
+//        	boolean exists = (new File(filepath, filename)).exists();  
+//        	if (!exists){ 
+//        		text = new File(filepath, filename);
+//        		text.mkdirs();
+//        	} 
+//        	else { 
+//        		Log.d("Creation text problem","Filename already in use");
+//        		text = new File(filepath, "Gianni.txt");
+//        	}
+//        	in = new BufferedReader(new FileReader(text));
+//        	while ((line = in.readLine()) != null) {
+//        		stringBuilder.append(accelToFreq(line)+"\n");
+//        	}
+//        	in.close();
+//        } 
+//        
+//        catch (FileNotFoundException e) {
+//        	Log.d("Creation text problem","File not found");
+//        } 
+//        
+//        catch (IOException e) {
+//        	Log.d("Creation text problem","IOException");
 //        } 
 //        
 //        return stringBuilder.toString();
 //    }
-	
-	public String readFileAsStringMod(String fileName) {//Legge file come stringa e modifica dato accel
-													 //aggiungendo una certa frequenza 
-        Context context = getApplicationContext();
-        StringBuilder stringBuilder = new StringBuilder();
-        String line;
-        BufferedReader in = null;
-
-        try {
-            in = new BufferedReader(new FileReader(new File(filepath, fileName)));
-            while ((line = in.readLine()) != null) stringBuilder.append(accelToFreq(line)+"\n");
-            in.close();
-        } catch (FileNotFoundException e) {
-           
-        } catch (IOException e) {
-        	
-        } 
-        
-        return stringBuilder.toString();
-    }
 	
 	private void LockScreenRotation() { // Sets screen rotation as fixed to current rotation setting
 		switch (this.getResources().getConfiguration().orientation)
@@ -372,6 +417,69 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private void UnlockScreenRotation(){ // allow screen rotations
 		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 	}
+	
+	//MUSIC generation
+//	public int getDuration()	{return duration;}
+//	public int getSampleRate()	{return sampleRate;}
+//	public double getFreqOfTone()	{return freqOfTone;}
+//	public void setDuration(int dur)	{if(dur>=1 && dur<=100) duration=dur; else duration=3;}
+//	public void setSampleRate(int sampleR)	{if(sampleR>=4000 && sampleR<=10000) sampleRate=sampleR; else sampleRate=8000;}
+//	public void setFreq(int freq)	{if(freq>=200 && freq<=3000) freqOfTone=freq; else freqOfTone=440;}
+//    private int duration = 3; // seconds
+//    private int numSamples = duration * sampleRate;
+//    private double sample[] = new double[numSamples];
+    private double freqOfTone; // hz //200-3000 range consigliato
+    private int sampleRate = 8000;
+    private int upsampling = 200;
+    Handler handler = new Handler(); 
+
+    public byte[] genTone(double[] x, int cnt){
+        // fill out the array
+    	int numSamples = 10*cnt*upsampling;
+        double sample[] = new double[numSamples];
+    	for (int i = 0; i < (10*cnt*upsampling); ++i) { 
+        	if ((i%(10*upsampling))==0) //aggiunge dati accel alla frequenza di base
+        		{ freqOfTone = x[i/(10*upsampling)];}
+            sample[i] = Math.sin(2 * Math.PI * i / (sampleRate/freqOfTone));
+        }
+    	byte generatedSnd[] = new byte[2 * 10*cnt*upsampling];
+        // convert to 16 bit pcm sound array
+        // assumes the sample buffer is normalised.
+        int idx = 0;
+        for (final double dVal : sample) {
+            // scale to maximum amplitude
+            final short val = (short) ((dVal * 32767));
+            // in 16 bit wav PCM, first byte is the low order byte
+            generatedSnd[idx++] = (byte) (val & 0x00ff);
+            generatedSnd[idx++] = (byte) ((val & 0xff00) >>> 8);
+        }
+        return generatedSnd;
+    }
+
+	void playSound(byte[] generatedSnd){
+        AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
+                sampleRate, AudioFormat.CHANNEL_OUT_MONO ,
+                AudioFormat.ENCODING_PCM_16BIT, generatedSnd.length,
+                AudioTrack.MODE_STATIC);
+        
+       
+        audioTrack.write(generatedSnd, 0, generatedSnd.length);
+        long time=0;
+        if(audioTrack.getState()==AudioTrack.STATE_INITIALIZED){
+        	audioTrack.play();
+        	time=System.currentTimeMillis();
+        }
+        else{
+        	
+	        Intent intent = new Intent(getApplicationContext(), UI3.class);
+		    startActivity(intent);
+		    finish();
+        }   
+        if((System.currentTimeMillis()-time)>=2){
+        	
+        	audioTrack.release();audioTrack.flush();
+        }
+    }
 	
 //	private void ThumbnailFromDateCreator(int date, int month, int year, int hour, int minute, int second){
 //		Bitmap _buffer;
