@@ -35,6 +35,7 @@ public class UI1 extends ListActivity {
 	private DBAdapter databaseHelper;
 	private Cursor cursor;
 	private String[] list_music;
+	private UI1Adapter adapter;
 	
 	@SuppressLint("Recycle")
 	@Override
@@ -70,7 +71,9 @@ public class UI1 extends ListActivity {
 		cursor.close();
         
         TypedArray immagini = res.obtainTypedArray(R.array.immagini);
-        setListAdapter(new UI1Adapter(ctx, R.layout.riga_lista, list_music, immagini));
+        
+        adapter = new UI1Adapter(ctx, R.layout.riga_lista, list_music, immagini);
+        setListAdapter(adapter);
         //da qui inseriamo il codice utile a mostrare un messaggio al click
         ListView listaV = getListView();
         listaV.setTextFilterEnabled(true);
@@ -80,8 +83,7 @@ public class UI1 extends ListActivity {
             
         	@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // mostro il testo dell’oggetto cliccato, attenzione a recuperare il testo
-                        // dall'oggetto giusto
+                // vado a UI2 toccando elemento della lista
         		Intent intent = new Intent(UI1.this, UI2.class);
         	    intent.putExtra(EXTRA_MESSAGE, list_music[position]);
         	    startActivity(intent);
@@ -158,9 +160,9 @@ public class UI1 extends ListActivity {
       MenuInflater inflater = getMenuInflater();
       inflater.inflate(R.menu.context_menu, menu);
 
-//      AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
-//      long itemID = info.position;
-//      menu.setHeaderTitle("lior" + itemID);
+      AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+      int position = info.position;
+      menu.setHeaderTitle("Recording " + position);
     }
 	
 	@Override
@@ -168,48 +170,53 @@ public class UI1 extends ListActivity {
 	    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 	    switch (item.getItemId()) {
 	        case R.id.play:
-	            playRec(info.id);
+	        	playRec(info.position);
 	            return true;
 	        case R.id.delete:
-	            deleteRec(info.id);
+	            deleteRec(info.position);
 	            return true;
 	        case R.id.clone:
-	            cloneRec(info.id);
+	            cloneRec(info.position);
 	        case R.id.rename:
-	            renameRec(info.id);
+	            renameRec(info.position);
 	        case R.id.details:
-	            detailsRec(info.id);
+	            detailsRec(info.position);
 	        default:
 	            return super.onContextItemSelected(item);
 	    }
 	}
 
-	private void cloneRec(long id) {
+	private void cloneRec(int position) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	private void deleteRec(long id) {
-		// TODO Auto-generated method stub
-		
+	private void deleteRec(int id) { //NON FUNZIONANTE
+//		databaseHelper.open();
+//		databaseHelper.deleteSession(id);
+//		//come si fa a cancellare list_music[id]?
+//		//e a cancellare il file.txt?
+//		UI1.this.adapter.notifyDataSetChanged();
+//		Log.d("Database", "Delete");
+//		databaseHelper.close();
 	}
 
-	private void renameRec(long id) {
+	private void renameRec(int position) {
 		// TODO Auto-generated method stub
 		
 	}
 	
-	private void playRec(long id) {
-			// TODO Auto-generated method stub
-			
-	}
-	
-	private void detailsRec(long id) 
-	{
-	    Intent intent = new Intent(getApplicationContext(), UI2.class);
+	private void playRec(int position) {
+		Intent intent = new Intent(getApplicationContext(), UI4.class);
 	    startActivity(intent);
+	    intent.putExtra(EXTRA_MESSAGE, list_music[position]);
 	    finish();
 	}
- 
+	
+	private void detailsRec(int position) {
+		Intent intent = new Intent(UI1.this, UI2.class);
+	    intent.putExtra(EXTRA_MESSAGE, list_music[position]);
+	    startActivity(intent);	
+	}
 	
 }
