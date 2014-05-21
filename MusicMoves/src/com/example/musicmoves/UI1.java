@@ -43,14 +43,11 @@ public class UI1 extends ListActivity {
 		setContentView(R.layout.activity_ui1);
 		Context ctx = getApplicationContext();
         Resources res = ctx.getResources();
-//        final String[] list_music =new String[100];//res.getStringArray(R.array.paesi);
-                
+
+        //lettura dal database        
         databaseHelper = new DBAdapter(getApplicationContext());
 		databaseHelper.open();
-		
 		cursor = databaseHelper.fetchAllSession();
-		
-		
 		cursor.moveToFirst();
         list_music =new String[cursor.getCount()];
 		for (int i = 0; i < cursor.getCount(); i++) {
@@ -60,12 +57,6 @@ public class UI1 extends ListActivity {
 			cursor.moveToNext();
 
 		}
-		
-//		while(cursor.moveToNext())  {
-//			list_music[i]=cursor.getString(cursor.getColumnIndex(FeedEntry._ID));
-//			i++;
-//		}	
-//		
 		databaseHelper.close();
 		cursor.close();
         
@@ -80,12 +71,9 @@ public class UI1 extends ListActivity {
             
         	@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // mostro il testo dell’oggetto cliccato, attenzione a recuperare il testo
-                        // dall'oggetto giusto
-        		Intent intent = new Intent(UI1.this, UI2.class);
+                Intent intent = new Intent(UI1.this, UI2.class);
         	    intent.putExtra(EXTRA_MESSAGE, list_music[position]);
-        	    startActivity(intent);
-            	
+        	    startActivity(intent);	
             }
         });  
     }
@@ -157,10 +145,6 @@ public class UI1 extends ListActivity {
       super.onCreateContextMenu(menu, v, menuInfo);
       MenuInflater inflater = getMenuInflater();
       inflater.inflate(R.menu.context_menu, menu);
-
-//      AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
-//      long itemID = info.position;
-//      menu.setHeaderTitle("lior" + itemID);
     }
 	
 	@Override
@@ -178,7 +162,7 @@ public class UI1 extends ListActivity {
 	        case R.id.rename:
 	            renameRec(info.id);
 	        case R.id.details:
-	            detailsRec(info.id);
+	            detailsRec(info.position);
 	        default:
 	            return super.onContextItemSelected(item);
 	    }
@@ -204,12 +188,11 @@ public class UI1 extends ListActivity {
 			
 	}
 	
-	private void detailsRec(long id) 
+	private void detailsRec(int position) 
 	{
-	    Intent intent = new Intent(getApplicationContext(), UI2.class);
-	    startActivity(intent);
-	    finish();
-	}
- 
-	
+		Intent intent = new Intent(UI1.this, UI2.class);
+	    intent.putExtra(EXTRA_MESSAGE, list_music[position]);
+	    startActivity(intent);	
+    }
+
 }
