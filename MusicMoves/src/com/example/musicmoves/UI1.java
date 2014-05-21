@@ -1,7 +1,5 @@
 package com.example.musicmoves;
 
-import database.DBAdapter;
-import database.FeedReaderContract.FeedEntry;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -12,10 +10,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -28,6 +24,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import database.DBAdapter;
 
 public class UI1 extends ListActivity {
 	
@@ -44,14 +41,11 @@ public class UI1 extends ListActivity {
 		setContentView(R.layout.activity_ui1);
 		Context ctx = getApplicationContext();
         Resources res = ctx.getResources();
-//        final String[] list_music =new String[100];//res.getStringArray(R.array.paesi);
-                
+
+        //lettura dal database        
         databaseHelper = new DBAdapter(getApplicationContext());
 		databaseHelper.open();
-		
 		cursor = databaseHelper.fetchAllSession();
-		
-		
 		cursor.moveToFirst();
         list_music =new String[cursor.getCount()];
 		for (int i = 0; i < cursor.getCount(); i++) {
@@ -61,12 +55,6 @@ public class UI1 extends ListActivity {
 			cursor.moveToNext();
 
 		}
-		
-//		while(cursor.moveToNext())  {
-//			list_music[i]=cursor.getString(cursor.getColumnIndex(FeedEntry._ID));
-//			i++;
-//		}	
-//		
 		databaseHelper.close();
 		cursor.close();
         
@@ -83,11 +71,10 @@ public class UI1 extends ListActivity {
             
         	@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // vado a UI2 toccando elemento della lista
-        		Intent intent = new Intent(UI1.this, UI2.class);
+        		// vado a UI2 toccando elemento della lista
+                Intent intent = new Intent(UI1.this, UI2.class);
         	    intent.putExtra(EXTRA_MESSAGE, list_music[position]);
-        	    startActivity(intent);
-            	
+        	    startActivity(intent);	
             }
         });  
     }
@@ -159,7 +146,6 @@ public class UI1 extends ListActivity {
       super.onCreateContextMenu(menu, v, menuInfo);
       MenuInflater inflater = getMenuInflater();
       inflater.inflate(R.menu.context_menu, menu);
-
       AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
       int position = info.position;
       menu.setHeaderTitle("Recording " + position);
@@ -205,7 +191,6 @@ public class UI1 extends ListActivity {
 		// TODO Auto-generated method stub
 		
 	}
-	
 	private void playRec(int position) {
 		Intent intent = new Intent(getApplicationContext(), UI4.class);
 	    startActivity(intent);
@@ -214,9 +199,14 @@ public class UI1 extends ListActivity {
 	}
 	
 	private void detailsRec(int position) {
-		Intent intent = new Intent(UI1.this, UI2.class);
+		Intent intent = new Intent(getApplicationContext(), UI2.class);
 	    intent.putExtra(EXTRA_MESSAGE, list_music[position]);
 	    startActivity(intent);	
+	}
+	
+	private void playRec(long id) {
+			// TODO Auto-generated method stub
+			
 	}
 	
 }
