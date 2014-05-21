@@ -3,10 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.musicmoves.UI4" >
 
-    <item
+    <item android:id="@+id/action_details" android:orderInCategory="70" android:title="@string/details"></item><item android:id="@+id/action_list" android:title="@string/music_sessions" android:orderInCategory="80"></item><item
         android:id="@+id/action_settings"
-        android:orderInCategory="100"
+        android:orderInCategory="90"
         android:title="@string/action_settings"
         app:showAsAction="never"/>
+    
+    
 
 </menu>

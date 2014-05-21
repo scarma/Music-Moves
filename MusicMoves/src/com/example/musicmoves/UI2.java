@@ -13,16 +13,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 public class UI2 extends ActionBarActivity {
-
+	private String message;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ui2);
-//		if (savedInstanceState == null) {
-//			getSupportFragmentManager().beginTransaction()
-//					.add(R.id.container, new PlaceholderFragment()).commit();
-//		}
-		
 	}
 	
 	@Override
@@ -30,7 +25,7 @@ public class UI2 extends ActionBarActivity {
 		super.onStart();
 		// Get the message from the intent
 		Intent intent = getIntent();
-	    String message = intent.getStringExtra(UI1.EXTRA_MESSAGE);
+	    message = intent.getStringExtra(UI1.EXTRA_MESSAGE);
 		//Modifica campo textView
 		TextView textView = (TextView) findViewById(R.id.textViewFileName);
 	    textView.setTextColor(Color.rgb(255, 153, 0));
@@ -58,22 +53,11 @@ public class UI2 extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_ui2, container,
-					false);
-			return rootView;
-		}
+	
+	public void toUI4(View view) 
+	{
+	    Intent intent = new Intent(getApplicationContext(), UI4.class);
+	    startActivity(intent);
+	    
 	}
-
 }

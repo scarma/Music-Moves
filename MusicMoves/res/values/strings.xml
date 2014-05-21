@@ -56,6 +56,8 @@
     <string name="clone">Clone</string>
     <string name="rename">Rename</string>
     <string name="details">Details</string>
+    <string name="music_sessions">Music Sessions</string>
+ 
     
     
 </resources>

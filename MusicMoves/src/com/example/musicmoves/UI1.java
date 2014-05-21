@@ -41,7 +41,7 @@ public class UI1 extends ListActivity {
 		setContentView(R.layout.activity_ui1);
 		Context ctx = getApplicationContext();
         Resources res = ctx.getResources();
-
+        
         //lettura dal database        
         databaseHelper = new DBAdapter(getApplicationContext());
 		databaseHelper.open();
@@ -60,7 +60,7 @@ public class UI1 extends ListActivity {
         
         TypedArray immagini = res.obtainTypedArray(R.array.immagini);
         
-        adapter = new UI1Adapter(ctx, R.layout.riga_lista, list_music, immagini);
+        adapter = new UI1Adapter(this, R.layout.riga_lista, list_music, immagini);
         setListAdapter(adapter);
         //da qui inseriamo il codice utile a mostrare un messaggio al click
         ListView listaV = getListView();
@@ -155,7 +155,7 @@ public class UI1 extends ListActivity {
 	public boolean onContextItemSelected(MenuItem item) {
 	    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 	    switch (item.getItemId()) {
-	        case R.id.play:
+	        case R.id.playB:
 	        	playRec(info.position);
 	            return true;
 	        case R.id.delete:
@@ -193,9 +193,9 @@ public class UI1 extends ListActivity {
 	}
 	private void playRec(int position) {
 		Intent intent = new Intent(getApplicationContext(), UI4.class);
-	    startActivity(intent);
 	    intent.putExtra(EXTRA_MESSAGE, list_music[position]);
-	    finish();
+	    startActivity(intent);
+	  
 	}
 	
 	private void detailsRec(int position) {

@@ -1,6 +1,7 @@
 package com.example.musicmoves;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,9 +13,10 @@ import android.widget.TextView;
 import android.widget.Toast;
  
 public class UI1Adapter extends ArrayAdapter<String> {
+	public final static String EXTRA_MESSAGE = "com.example.MusicMoves.MESSAGE";
     private LayoutInflater mInflater;
  
-    private String[] nomiPaesi;
+    private String[] list_music;
     private TypedArray immagini;
  
     private int mIdRisorsaVista;
@@ -28,7 +30,7 @@ public class UI1Adapter extends ArrayAdapter<String> {
  
         this.ctx=ctx;
         
-        nomiPaesi = strings;
+        list_music = strings;
         immagini = icons;
  
         mIdRisorsaVista = IdRisorsaVista;
@@ -36,12 +38,12 @@ public class UI1Adapter extends ArrayAdapter<String> {
  
     @Override
     public int getCount() {
-        return nomiPaesi.length;
+        return list_music.length;
     }
  
     @Override
     public String getItem(int position) {
-        return nomiPaesi[position];
+        return list_music[position];
     }
  
     @Override
@@ -57,7 +59,7 @@ public class UI1Adapter extends ArrayAdapter<String> {
         iv.setImageDrawable(immagini.getDrawable(position));
  
         TextView tv = (TextView)convertView.findViewById(R.id.testo_vista);
-        tv.setText(nomiPaesi[position]);
+        tv.setText(list_music[position]);
         
 //        tv.setOnClickListener(new OnClickListener() {
 //			
@@ -71,7 +73,9 @@ public class UI1Adapter extends ArrayAdapter<String> {
 			
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(ctx, "immagine " + position, Toast.LENGTH_SHORT).show();
+				Intent intent = new Intent(ctx, UI4.class);
+			    intent.putExtra(EXTRA_MESSAGE, list_music[position]);
+			    ctx.startActivity(intent);
 			}
 		});
         return convertView;

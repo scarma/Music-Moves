@@ -101,7 +101,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 				catch(java.lang.StringIndexOutOfBoundsException e){
 					value = "Rec_"+recCounter;
 					}
-				filename = value+".txt";
+				filename = value;
 				//Ottengo la data e l'ora corrente
 				Calendar c = Calendar.getInstance();
 				hour = c.get(Calendar.HOUR_OF_DAY);
@@ -211,7 +211,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		super.onResume();
 	    try {
 
-			writer = new FileWriter(new File(filepath, filename), true);
+			writer = new FileWriter(new File(filepath, filename+".txt"), true);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -269,7 +269,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    String date_m = day_m +"/"+ month_m +"/"+ year_m +" - "+ hour_m+":"+ minute_m +":"+ second_m;
 	    Context context = getApplicationContext();
 	    String location = context.getFilesDir().getPath();
-		Toast.makeText(getApplicationContext(), "Recorded\n"+readFileAsStringMod(filename)+"\n"+date_m + location, Toast.LENGTH_LONG).show();
+		Toast.makeText(getApplicationContext(), "Recorded\n"+readFileAsStringMod(filename+".txt")+"\n"+date_m + location, Toast.LENGTH_LONG).show();
 		
 		//Inserimento dati nel database
 		databaseHelper = new DBAdapter(getApplicationContext());
