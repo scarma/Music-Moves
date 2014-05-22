@@ -42,9 +42,7 @@ import database.DBAdapter;
 
 public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private String filename;
-	String filepath="/sdcard/";
-
-
+	String filepath="/sdcard/MusicMoves";
 	
 	private SensorManager mSensorManager;
 	private Sensor mAccelerometer;
@@ -58,11 +56,19 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private String date = null;
 	private DBAdapter databaseHelper;
 	//private Cursor cursor;
-
+	private int recCounter = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		//Pop up dialog
+		//Crea cartella in cui salvare i file
+		File folder = new File(filepath);
+	    boolean success = true;
+	    if (!folder.exists()) {
+	        Toast.makeText(UI3.this, "Directory Does Not Exist, I Create It", Toast.LENGTH_SHORT).show();
+	        success = folder.mkdir();
+	    }
+	    
+	  //Pop up dialog
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		
 		alert.setTitle("New Recording Session");
@@ -94,7 +100,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 				value = input.getText().toString().toLowerCase();
 				
 				
-				int recCounter = 0; //da rendere globale
+				
 				try {value = value.substring(0,1).toUpperCase() + value.substring(1).toLowerCase();}
 				catch(java.lang.StringIndexOutOfBoundsException e){
 					value = "Rec_"+recCounter;
@@ -173,22 +179,22 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		finish();
 	}
 
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_ui3, container,
-					false);
-			return rootView;
-		}
-	}
+//	/**
+//	 * A placeholder fragment containing a simple view.
+//	 */
+//	public static class PlaceholderFragment extends Fragment {
+//
+//		public PlaceholderFragment() {
+//		}
+//
+//		@Override
+//		public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//				Bundle savedInstanceState) {
+//			View rootView = inflater.inflate(R.layout.fragment_ui3, container,
+//					false);
+//			return rootView;
+//		}
+//	}
 	
 
 
@@ -275,9 +281,9 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		databaseHelper.createSession(filename, location, date, date_m, "ls", 1, 1, 1);
 		databaseHelper.close();
 		proSoundGenerator(filename+".txt");
-		//Permetto rotazione
-		UnlockScreenRotation();
-//		getApplicationContext().deleteFile(filepath);
+		
+		UnlockScreenRotation(); //Permetto rotazione
+//		getApplicationContext().deleteFile(filepath); //Cancello file di testo
 	}
 
 	public void proSoundGenerator(String textFile) {//Legge file come stringa e modifica dato accel
@@ -301,11 +307,13 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
         		{
         		line = in.readLine();
         		String[] coord = line.split(",");
-        		x[i] = (Double.parseDouble(coord[0])*10) + 440.0; //aggiunge freq La
-        		y[i] = Double.parseDouble(coord[1]) + 329.0; //aggiunge freq Mi
-        		z[i] = Double.parseDouble(coord[2]) + 392.0; //agguinge freq Sol
+        		x[i] = (Double.parseDouble(coord[0])*10) + 440.0 ; //aggiunge freq La4 ai dati dell'asse x
+        		y[i] = (Double.parseDouble(coord[1])*10) + 698.0; //aggiunge freq Fa5 ai dati dell'asse y
+        		z[i] = (Double.parseDouble(coord[2])*10) + 880.0; //aggiunge freq La5 ai dati dell'asse z
         	}
-        	playSound(genTone(x,cnt));
+        	playSound(genTone(x,cnt)); //Genera suono per l'asse x
+        	playSound(genTone(y,cnt)); //Genera suono per l'asse y
+        	playSound(genTone(z,cnt)); //Genera suono per l'asse z
         	in.close();
         } catch (FileNotFoundException e) {
         
@@ -337,23 +345,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
         StringBuilder stringBuilder = new StringBuilder();
         String line="";
         BufferedReader in = null;
-//        try { 
-//        	File text;
-//        	boolean exists = (new File(filepath, fileName)).exists();  
-//        	if (!exists){ 
-//        		text = new File(filepath, fileName);
-//        		text.mkdirs();
-//        	} 
-//        	else { 
-//        		Log.d("Creation text problem","Filename already in use");
-//        		text = new File(filepath, "Gianni.txt");
-//        	}
-//        	in = new BufferedReader(new FileReader(text));
-//        	while ((line = in.readLine()) != null) {
-//        		stringBuilder.append(line+"\n");
-//        	}
-//        	in.close();
-//         
         try {
             in = new BufferedReader(new FileReader(new File(filepath, fileName)));
             while ((line = in.readLine()) != null) stringBuilder.append(line+"\n");
@@ -418,7 +409,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 	}
 	
-	//MUSIC generation
+	/*-- MUSIC generation --*/
 //	public int getDuration()	{return duration;}
 //	public int getSampleRate()	{return sampleRate;}
 //	public double getFreqOfTone()	{return freqOfTone;}
@@ -432,13 +423,14 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
     private int sampleRate = 8000;
     private int upsampling = 200;
     Handler handler = new Handler(); 
-
+    private byte[] generatedArray;
+    
     public byte[] genTone(double[] x, int cnt){
         // fill out the array
     	int numSamples = 10*cnt*upsampling;
         double sample[] = new double[numSamples];
     	for (int i = 0; i < (10*cnt*upsampling); ++i) { 
-        	if ((i%(10*upsampling))==0) //aggiunge dati accel alla frequenza di base
+        	if ((i%(10*upsampling))==0) //inserisce dati accelerometro nell'array
         		{ freqOfTone = x[i/(10*upsampling)];}
             sample[i] = Math.sin(2 * Math.PI * i / (sampleRate/freqOfTone));
         }
@@ -455,31 +447,29 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
         }
         return generatedSnd;
     }
-
+    
 	void playSound(byte[] generatedSnd){
-        AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
-                sampleRate, AudioFormat.CHANNEL_OUT_MONO ,
-                AudioFormat.ENCODING_PCM_16BIT, generatedSnd.length,
-                AudioTrack.MODE_STATIC);
-        
-       
-        audioTrack.write(generatedSnd, 0, generatedSnd.length);
-        long time=0;
-        if(audioTrack.getState()==AudioTrack.STATE_INITIALIZED){
-        	audioTrack.play();
-        	time=System.currentTimeMillis();
-        }
-        else{
-        	
-	        Intent intent = new Intent(getApplicationContext(), UI3.class);
-		    startActivity(intent);
-		    finish();
-        }   
-        if((System.currentTimeMillis()-time)>=2){
-        	
-        	audioTrack.release();audioTrack.flush();
-        }
-    }
+		generatedArray = generatedSnd;
+		Thread thread = new Thread(new Runnable() {
+	        public void run() {
+	        
+	        AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
+	                sampleRate, AudioFormat.CHANNEL_OUT_MONO ,
+	                AudioFormat.ENCODING_PCM_16BIT, generatedArray.length,
+	                AudioTrack.MODE_STATIC);
+	        
+	        audioTrack.write(generatedArray, 0, generatedArray.length);
+	       
+		        if(audioTrack.getState()==AudioTrack.STATE_INITIALIZED){
+		        	audioTrack.play();	
+		        }
+		        else{
+			        Log.d("AudioTrack", "Audiotrack not initialized");
+		        }   
+			}
+		});
+		thread.start();
+	}
 	
 //	private void ThumbnailFromDateCreator(int date, int month, int year, int hour, int minute, int second){
 //		Bitmap _buffer;
