@@ -182,6 +182,14 @@ public class UI1 extends ListActivity {
 		// TODO Auto-generated method stub
 //		prelevo tutti i dati della sessione da clonare e ne creo una 
 //		nuova chiedendo all'utente di inserire un nuovo nome
+//		databaseHelper.open();
+//		cursor = databaseHelper.fetchIdSession(list_music[position]);
+//		cursor.moveToFirst();
+		
+//		databaseHelper.close();
+//		cursor.close();
+//		finish();
+//		startActivity(getIntent());
 	}
 
 	private void deleteRec(int position) {
