@@ -278,7 +278,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		//Inserimento dati nel database
 		databaseHelper = new DBAdapter(getApplicationContext());
 		databaseHelper.open();
-		databaseHelper.createSession(filename, location, date, date_m, "ls", 1, 1, 1);
+		databaseHelper.createSession(filename, location, date, date_m, "ls", 100, 1, 1, 1);
 		databaseHelper.close();
 		proSoundGenerator(filename+".txt");
 		

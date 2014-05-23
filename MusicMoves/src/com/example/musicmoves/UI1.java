@@ -174,23 +174,29 @@ public class UI1 extends ListActivity {
 
 	private void cloneRec(int position) {
 		// TODO Auto-generated method stub
-		
+//		prelevo tutti i dati della sessione da clonare e ne creo una 
+//		nuova chiedendo all'utente di inserire un nuovo nome
 	}
 
 	private void deleteRec(int id) { //NON FUNZIONANTE
 //		databaseHelper.open();
-//		databaseHelper.deleteSession(id);
-//		//come si fa a cancellare list_music[id]?
-//		//e a cancellare il file.txt?
+//		e a cancellare il file.txt?
+//		faccio la select sul db per avere il filepath cioè la nostra location
+//		getApplicationContext().deleteFile(filepath); //Cancello file di testo
 //		UI1.this.adapter.notifyDataSetChanged();
 //		Log.d("Database", "Delete");
+//		databaseHelper.deleteSession(id);
 //		databaseHelper.close();
+//		//come si fa a cancellare list_music[id]?
+//		finish();
+//		startActivity(getIntent());
 	}
 
 	private void renameRec(int position) {
 		// TODO Auto-generated method stub
-		
+//		faccio un semplice update
 	}
+	
 	private void playRec(int position) {
 		Intent intent = new Intent(getApplicationContext(), UI4.class);
 	    intent.putExtra(EXTRA_MESSAGE, list_music[position]);
@@ -202,11 +208,6 @@ public class UI1 extends ListActivity {
 		Intent intent = new Intent(getApplicationContext(), UI2.class);
 	    intent.putExtra(EXTRA_MESSAGE, list_music[position]);
 	    startActivity(intent);	
-	}
-	
-	private void playRec(long id) {
-			// TODO Auto-generated method stub
-			
 	}
 	
 }

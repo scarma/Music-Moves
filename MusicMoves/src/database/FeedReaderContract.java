@@ -12,6 +12,7 @@ public class FeedReaderContract {
     	public static final String COLUMN_NAME_DATE_CREATION = "date_creation";
     	public static final String COLUMN_NAME_LAST_MODIFY = "last_modify";
     	public static final String COLUMN_NAME_IMAGE = "image";
+    	public static final String COLUMN_NAME_SAMPLE_RATE = "sample_rate";
     	public static final String COLUMN_NAME_X = "x";
     	public static final String COLUMN_NAME_Y = "y";
     	public static final String COLUMN_NAME_Z = "z";
