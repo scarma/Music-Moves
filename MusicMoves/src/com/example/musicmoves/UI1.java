@@ -1,5 +1,7 @@
 package com.example.musicmoves;
 
+import java.io.File;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -25,6 +27,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import database.DBAdapter;
+import database.FeedReaderContract.FeedEntry;
 
 public class UI1 extends ListActivity {
 	
@@ -33,6 +36,9 @@ public class UI1 extends ListActivity {
 	private Cursor cursor;
 	private String[] list_music;
 	private UI1Adapter adapter;
+	private int pos;
+//	private String name;
+	private String loc;
 	
 	@SuppressLint("Recycle")
 	@Override
@@ -178,18 +184,19 @@ public class UI1 extends ListActivity {
 //		nuova chiedendo all'utente di inserire un nuovo nome
 	}
 
-	private void deleteRec(int id) { //NON FUNZIONANTE
-//		databaseHelper.open();
-//		e a cancellare il file.txt?
-//		faccio la select sul db per avere il filepath cioè la nostra location
-//		getApplicationContext().deleteFile(filepath); //Cancello file di testo
-//		UI1.this.adapter.notifyDataSetChanged();
-//		Log.d("Database", "Delete");
-//		databaseHelper.deleteSession(id);
-//		databaseHelper.close();
-//		//come si fa a cancellare list_music[id]?
-//		finish();
-//		startActivity(getIntent());
+	private void deleteRec(int position) {
+		databaseHelper.open();
+		cursor = databaseHelper.fetchIdSession(list_music[position]);
+		cursor.moveToFirst();
+		pos = cursor.getInt(0);
+		loc = cursor.getString(1);
+		File file = new File(loc, list_music[position]+".txt");
+		file.delete();
+		databaseHelper.deleteSession(pos);
+		databaseHelper.close();
+		cursor.close();
+		finish();
+		startActivity(getIntent());
 	}
 
 	private void renameRec(int position) {

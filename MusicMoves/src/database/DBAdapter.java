@@ -47,7 +47,7 @@ public class DBAdapter {
 	        
 	  //create a music session
 	  public long createSession(String title, String location, String date_c, String date_m, String image, int sample_rate, int x, int y, int z) {
-	    ContentValues initialValues = createContentValues(title, location, date_c, date_m, image, sample_rate, x, y, z);
+	    ContentValues initialValues = createContentValues(title, location+"/", date_c, date_m, image, sample_rate, x, y, z);
 	    return database.insertOrThrow(FeedEntry.TABLE_NAME, null, initialValues);
 	  }
 
@@ -77,5 +77,12 @@ public class DBAdapter {
 	            FeedEntry.COLUMN_NAME_TITLE + " like '%"+ filter + "%'", null, null, null, null, null);
 	        
 	    return mCursor;
+	  }
+	  
+	  //fetch id and location in a music session filter by a session name
+	  public Cursor fetchIdSession(String name){
+		  Cursor mCursor = database.query(FeedEntry.TABLE_NAME, new String[]{FeedEntry._ID/*, FeedEntry.COLUMN_NAME_TITLE*/, FeedEntry.COLUMN_NAME_LOCATION}, FeedEntry.COLUMN_NAME_TITLE + " like '%"+ name + "%'", null, null, null, null);
+		  
+		  return mCursor;
 	  }
 }
