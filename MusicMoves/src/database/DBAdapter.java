@@ -81,7 +81,7 @@ public class DBAdapter {
 	  
 	  //fetch id and location in a music session filter by a session name
 	  public Cursor fetchIdSession(String name){
-		  Cursor mCursor = database.query(FeedEntry.TABLE_NAME, new String[]{FeedEntry._ID/*, FeedEntry.COLUMN_NAME_TITLE*/, FeedEntry.COLUMN_NAME_LOCATION}, 
+		  Cursor mCursor = database.query(FeedEntry.TABLE_NAME, new String[]{FeedEntry._ID, FeedEntry.COLUMN_NAME_LOCATION}, 
 				  FeedEntry.COLUMN_NAME_TITLE + " like '%"+ name + "%'", null, null, null, null);
 		  
 		  return mCursor;

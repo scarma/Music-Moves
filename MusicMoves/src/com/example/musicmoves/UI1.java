@@ -1,6 +1,7 @@
 package com.example.musicmoves;
 
 import java.io.File;
+import java.util.Calendar;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -9,11 +10,16 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -25,9 +31,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import database.DBAdapter;
-import database.FeedReaderContract.FeedEntry;
 
 public class UI1 extends ListActivity {
 	
@@ -37,8 +44,15 @@ public class UI1 extends ListActivity {
 	private String[] list_music;
 	private UI1Adapter adapter;
 	private int pos;
-//	private String name;
 	private String loc;
+	private String new_filename;
+	private int hour = 0;
+	private int minute = 0;
+	private int second = 0;
+	private int day = 0;
+	private int month = 0;
+	private int year = 0;
+	private String date = null;
 	
 	@SuppressLint("Recycle")
 	@Override
@@ -182,14 +196,100 @@ public class UI1 extends ListActivity {
 		// TODO Auto-generated method stub
 //		prelevo tutti i dati della sessione da clonare e ne creo una 
 //		nuova chiedendo all'utente di inserire un nuovo nome
-//		databaseHelper.open();
-//		cursor = databaseHelper.fetchIdSession(list_music[position]);
-//		cursor.moveToFirst();
 		
-//		databaseHelper.close();
-//		cursor.close();
-//		finish();
-//		startActivity(getIntent());
+//		databaseHelper.open();
+//		cursor = databaseHelper.fetchASession(list_music[position]);
+		//Pop up dialog
+		AlertDialog.Builder alert = new AlertDialog.Builder(getApplicationContext());
+				
+		alert.setTitle("Raname new clone record");
+		alert.setMessage("Insert name for new clone Session");
+		
+		// Set an EditText view to get user input 
+		final EditText input = new EditText(this);
+		//Input filter to accept only letter or digit
+		InputFilter filter = new InputFilter() { 
+			public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) { 
+				for (int i = start; i < end; i++) { 
+					if (!Character.isLetterOrDigit(source.charAt(i))) { 
+						return ""; 
+					} 
+				} 
+				return null; 
+			} 
+		};
+		
+		input.setFilters(new InputFilter[]{filter}); 
+		alert.setView(input);
+
+		//alert.create();
+		
+		alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				LockScreenRotation();
+				 // Do something with value!   
+				String value="";
+				value = input.getText().toString().toLowerCase();
+				
+				try {value = value.substring(0,1).toUpperCase() + value.substring(1).toLowerCase();}
+				catch(java.lang.StringIndexOutOfBoundsException e){
+					}
+				
+				new_filename = value;
+				
+//				cursor.moveToFirst();
+//				
+////				int id_o = cursor.getInt(0);
+////				String name_o = cursor.getString(1);
+//				String loc_o = cursor.getString(2);
+////				String date_co = cursor.getString(3);
+////				String date_lmo = cursor.getString(4);
+//				String image_o = cursor.getString(5);
+//				int sample_o = cursor.getInt(6);
+//				int x_o = cursor.getInt(7);
+//				int y_o = cursor.getInt(8);
+//				int z_o = cursor.getInt(9);
+//				
+//				//Ottengo la data e l'ora corrente
+//				Calendar c = Calendar.getInstance();
+//				hour = c.get(Calendar.HOUR_OF_DAY);
+//			    minute = c.get(Calendar.MINUTE);
+//			    second = c.get(Calendar.SECOND);
+//			    day = c.get(Calendar.DATE);
+//			    month = c.get(Calendar.MONTH);
+//			    year = c.get(Calendar.YEAR);
+//			    
+//			    date = day +"/"+ month+"/"+ year +" - "+ hour+":"+ minute +":"+ second;
+//				
+//			    databaseHelper.createSession(new_filename, loc_o, date, date, image_o, sample_o, x_o, y_o, z_o);
+//			    
+//				databaseHelper.close();
+//				cursor.close();
+				TextView textView = (TextView) findViewById(R.id.textViewCloneName);
+			    textView.setTextSize(25);
+			    textView.setText(value);
+			    textView.setTextColor(Color.rgb(255, 153, 0));
+			}
+		});
+		
+		alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+			    // Canceled.
+				 onBackPressed();
+	        }
+	     });
+		
+		alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			public void onCancel(DialogInterface dialog){onBackPressed();}
+		});
+		
+		//alert.create();
+		alert.show();
+
+		//setContentView(R.layout.activity_ui1);
+		
+		finish();
+		startActivity(getIntent());
 	}
 
 	private void deleteRec(int position) {
@@ -210,6 +310,89 @@ public class UI1 extends ListActivity {
 	private void renameRec(int position) {
 		// TODO Auto-generated method stub
 //		faccio un semplice update
+//		databaseHelper.open();
+//		cursor = databaseHelper.fetchASession(list_music[position]);
+		//Pop up dialog
+		AlertDialog.Builder alert = new AlertDialog.Builder(getApplicationContext());
+		
+		alert.setTitle("Raname record");
+		alert.setMessage("Insert new name for this Session");
+		
+		// Set an EditText view to get user input 
+		final EditText input = new EditText(this);
+		//Input filter to accept only letter or digit
+		InputFilter filter = new InputFilter() { 
+			public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) { 
+				for (int i = start; i < end; i++) { 
+					if (!Character.isLetterOrDigit(source.charAt(i))) { 
+						return ""; 
+					} 
+				} 
+				return null; 
+			} 
+		};
+		
+		input.setFilters(new InputFilter[]{filter}); 
+		alert.setView(input);
+
+		//alert.create();
+		
+		alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+				LockScreenRotation();
+				 // Do something with value!   
+				String value="";
+				value = input.getText().toString().toLowerCase();
+				
+				try {value = value.substring(0,1).toUpperCase() + value.substring(1).toLowerCase();}
+				catch(java.lang.StringIndexOutOfBoundsException e){
+					}
+				
+				new_filename = value;
+				
+//				
+//				cursor.moveToFirst();
+//				
+//				int id_o = cursor.getInt(0);
+////				String name_o = cursor.getString(1);
+//				String loc_o = cursor.getString(2);
+//				String date_co = cursor.getString(3);
+//				String date_lmo = cursor.getString(4);
+//				String image_o = cursor.getString(5);
+//				int sample_o = cursor.getInt(6);
+//				int x_o = cursor.getInt(7);
+//				int y_o = cursor.getInt(8);
+//				int z_o = cursor.getInt(9);
+//				
+//			    databaseHelper.updateSession(id_o, new_filename, loc_o, date_co, date_lmo, image_o, sample_o, x_o, y_o, z_o);
+//			    
+//				databaseHelper.close();
+//				cursor.close();
+				TextView textView = (TextView) findViewById(R.id.textViewReName);
+			    textView.setTextSize(25);
+			    textView.setText(value);
+			    textView.setTextColor(Color.rgb(255, 153, 0));
+			}
+		});
+		
+		alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int whichButton) {
+			    // Canceled.
+				 onBackPressed();
+	        }
+	     });
+		
+		alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
+			public void onCancel(DialogInterface dialog){onBackPressed();}
+		});
+		
+		//alert.create();
+		alert.show();
+
+		//setContentView(R.layout.activity_ui1);
+		
+		finish();
+		startActivity(getIntent());
 	}
 	
 	private void playRec(int position) {
@@ -224,5 +407,20 @@ public class UI1 extends ListActivity {
 	    intent.putExtra(EXTRA_MESSAGE, list_music[position]);
 	    startActivity(intent);	
 	}
+
+	private void LockScreenRotation() { // Sets screen rotation as fixed to current rotation setting
+		switch (this.getResources().getConfiguration().orientation)
+		{   case Configuration.ORIENTATION_PORTRAIT:     
+				this.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+				break;   
+			case Configuration.ORIENTATION_LANDSCAPE:
+				this.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+				break;
+		} 
+	}
+//	
+//	private void UnlockScreenRotation(){ // allow screen rotations
+//		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+//	}
 	
 }
