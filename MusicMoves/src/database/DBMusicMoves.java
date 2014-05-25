@@ -21,6 +21,7 @@ public class DBMusicMoves extends SQLiteOpenHelper {
 	    FeedEntry.COLUMN_NAME_DATE_CREATION + TEXT_TYPE + COMMA_SEP +
 	    FeedEntry.COLUMN_NAME_LAST_MODIFY + TEXT_TYPE + COMMA_SEP +
 	    FeedEntry.COLUMN_NAME_IMAGE + TEXT_TYPE + COMMA_SEP + 
+	    FeedEntry.COLUMN_NAME_SAMPLE_RATE + " INTEGER" + COMMA_SEP +
 	    FeedEntry.COLUMN_NAME_X + " INTEGER" + COMMA_SEP +
 	    FeedEntry.COLUMN_NAME_Y + " INTEGER" + COMMA_SEP +
 	    FeedEntry.COLUMN_NAME_Z + " INTEGER" + COMMA_SEP +
