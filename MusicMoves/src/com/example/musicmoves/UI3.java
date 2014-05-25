@@ -457,12 +457,13 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	                sampleRate, AudioFormat.CHANNEL_OUT_MONO ,
 	                AudioFormat.ENCODING_PCM_16BIT, generatedArray.length,
 	                AudioTrack.MODE_STATIC);
-	        
 	        audioTrack.write(generatedArray, 0, generatedArray.length);
-	       
-		        if(audioTrack.getState()==AudioTrack.STATE_INITIALIZED){
-		        	audioTrack.play();	
-		        }
+		       
+	        if(audioTrack.getState()==AudioTrack.STATE_INITIALIZED){
+	        	audioTrack.play();	
+	        }
+	        
+		        
 		        else{
 			        Log.d("AudioTrack", "Audiotrack not initialized");
 		        }   
