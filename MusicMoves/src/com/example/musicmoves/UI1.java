@@ -1,20 +1,24 @@
 package com.example.musicmoves;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Calendar;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.InputFilter;
@@ -32,6 +36,8 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 import database.DBAdapter;
 
 public class UI1 extends ListActivity {
@@ -51,6 +57,7 @@ public class UI1 extends ListActivity {
 	private int month = 0;
 	private int year = 0;
 	private String date = null;
+	private FileWriter writer;
 	
 	@SuppressLint("Recycle")
 	@Override
@@ -95,6 +102,7 @@ public class UI1 extends ListActivity {
         	    startActivity(intent);	
             }
         });  
+        
     }
 
 	@Override
@@ -181,10 +189,13 @@ public class UI1 extends ListActivity {
 	            return true;
 	        case R.id.clone:
 	            cloneRec(info.position);
+	            return true;
 	        case R.id.rename:
 	            renameRec(info.position);
+	            return true;
 	        case R.id.details:
 	            detailsRec(info.position);
+	            return true;
 	        default:
 	            return super.onContextItemSelected(item);
 	    }
@@ -195,100 +206,122 @@ public class UI1 extends ListActivity {
 //		prelevo tutti i dati della sessione da clonare e ne creo una 
 //		nuova chiedendo all'utente di inserire un nuovo nome		
 
-//		databaseHelper.open();
-//		cursor = databaseHelper.fetchASession(list_music[position]);
-		//Pop up dialog
-		AlertDialog.Builder alert = new AlertDialog.Builder(getApplicationContext());
-				
-		alert.setTitle("Raname new clone record");
-		alert.setMessage("Insert name for new clone Session");
+		databaseHelper.open();
+		cursor = databaseHelper.fetchASession(list_music[position]);
+		
+		// 1. Instantiate an AlertDialog.Builder with its constructor
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+		// 2. Chain together various setter methods to set the dialog characteristics
+		builder.setMessage("Insert name for new clone Session")
+		       .setTitle("Raname new clone record");
 		
 		// Set an EditText view to get user input 
-//		final EditText input = new EditText(this);
+		final EditText input = new EditText(this);
 		//Input filter to accept only letter or digit
-//		InputFilter filter = new InputFilter() { 
-//			public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) { 
-//				for (int i = start; i < end; i++) { 
-//					if (!Character.isLetterOrDigit(source.charAt(i))) { 
-//						return ""; 
-//					} 
-//				} 
-//				return null; 
-//			} 
-//		};
+		InputFilter filter = new InputFilter() { 
+			public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) { 
+				for (int i = start; i < end; i++) { 
+					if (!Character.isLetterOrDigit(source.charAt(i))) { 
+						return ""; 
+					} 
+				} 
+				return null; 
+			} 
+		};
 		
-//		input.setFilters(new InputFilter[]{filter}); 
-//		alert.setView(input);
-
-		//alert.create();
+		input.setFilters(new InputFilter[]{filter});
+		builder.setView(input);
 		
-		alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-				// Do something with value!   
-//				String value="";
-//				value = input.getText().toString().toLowerCase();
-//				
-//				try {value = value.substring(0,1).toUpperCase() + value.substring(1).toLowerCase();}
-//				catch(java.lang.StringIndexOutOfBoundsException e){
-//					}
-//				
-//				new_filename = value;
+		builder.setPositiveButton(android.R.string.yes,new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				String value="";
+				value = input.getText().toString().toLowerCase();
 				
-//				cursor.moveToFirst();
-//				
-////				int id_o = cursor.getInt(0);
-////				String name_o = cursor.getString(1);
-//				String loc_o = cursor.getString(2);
-////				String date_co = cursor.getString(3);
-////				String date_lmo = cursor.getString(4);
-//				String image_o = cursor.getString(5);
-//				int sample_o = cursor.getInt(6);
-//				int x_o = cursor.getInt(7);
-//				int y_o = cursor.getInt(8);
-//				int z_o = cursor.getInt(9);
-//				
-//				//Ottengo la data e l'ora corrente
-//				Calendar c = Calendar.getInstance();
-//				hour = c.get(Calendar.HOUR_OF_DAY);
-//			    minute = c.get(Calendar.MINUTE);
-//			    second = c.get(Calendar.SECOND);
-//			    day = c.get(Calendar.DATE);
-//			    month = c.get(Calendar.MONTH);
-//			    year = c.get(Calendar.YEAR);
-//			    
-//			    date = day +"/"+ month+"/"+ year +" - "+ hour+":"+ minute +":"+ second;
-//				
-//			    databaseHelper.createSession(new_filename, loc_o, date, date, image_o, sample_o, x_o, y_o, z_o);
-//			    
-//				databaseHelper.close();
-//				cursor.close();
-//				TextView textView = (TextView) findViewById(R.id.textViewCloneName);
-//			    textView.setTextSize(25);
-//			    textView.setText(value);
-//			    textView.setTextColor(Color.rgb(255, 153, 0));
+				try {value = value.substring(0,1).toUpperCase() + value.substring(1).toLowerCase();}
+				catch(java.lang.StringIndexOutOfBoundsException e){
+					}
+				
+				new_filename = value;
+				
+				cursor.moveToFirst();
+				
+//				int id_o = cursor.getInt(0);
+				String name_o = cursor.getString(1);
+				String loc_o = cursor.getString(2);
+//				String date_co = cursor.getString(3);
+//				String date_lmo = cursor.getString(4);
+				String image_o = cursor.getString(5);
+				int sample_o = cursor.getInt(6);
+				int x_o = cursor.getInt(7);
+				int y_o = cursor.getInt(8);
+				int z_o = cursor.getInt(9);
+				
+				//Ottengo la data e l'ora corrente
+				Calendar c = Calendar.getInstance();
+				hour = c.get(Calendar.HOUR_OF_DAY);
+			    minute = c.get(Calendar.MINUTE);
+			    second = c.get(Calendar.SECOND);
+			    day = c.get(Calendar.DATE);
+			    month = c.get(Calendar.MONTH);
+			    year = c.get(Calendar.YEAR);
+			    
+			    date = day +"/"+ month+"/"+ year +" - "+ hour+":"+ minute +":"+ second;
+				
+			    databaseHelper.createSession(new_filename, loc_o, date, date, image_o, sample_o, x_o, y_o, z_o);
+			    
+				databaseHelper.close();
+				cursor.close();
+				
+				try {
+					writer = new FileWriter(new File(loc_o, new_filename+".txt"), true);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				cloneFileToFile(loc_o, name_o+".txt");
+				try {
+					writer.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				finish();
+				startActivity(getIntent());					
 			}
 		});
 		
-		alert.setNegativeButton(android.R.string.no, null/*new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-			    // Canceled.
-				 onBackPressed();
-	        }
-	     }*/);
+		builder.setNegativeButton(android.R.string.no,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+//						onBackPressed();
+					}
+				});
 		
-		alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
-			public void onCancel(DialogInterface dialog){onBackPressed();}
-		});
+		// 3. Get the AlertDialog from create()
+		AlertDialog dialog = builder.create();
 		
-		AlertDialog dialog = alert.create();
-		//alert.create();
 		dialog.show();
-
-		//setContentView(R.layout.activity_ui1);
-		
-//		finish();
-//		startActivity(getIntent());
 	}
+	
+	public void cloneFileToFile(String filepath, String fileName) {//Legge file come stringa
+        String line="dsfd";
+        BufferedReader in = null;
+        try {
+            in = new BufferedReader(new FileReader(new File(filepath,fileName)));
+            while ((line = in.readLine()) != null) 
+            	writer.write(line+"\n");
+            in.close();
+        } catch (FileNotFoundException e) {
+           
+        } catch (IOException e) {
+            
+        } 
+    }
 
 	private void deleteRec(int position) {
 		databaseHelper.open();
@@ -308,13 +341,15 @@ public class UI1 extends ListActivity {
 	private void renameRec(int position) {
 		// TODO Auto-generated method stub
 //		faccio un semplice update
-//		databaseHelper.open();
-//		cursor = databaseHelper.fetchASession(list_music[position]);
-		//Pop up dialog
-		AlertDialog.Builder alert = new AlertDialog.Builder(getApplicationContext());
+		databaseHelper.open();
+		cursor = databaseHelper.fetchASession(list_music[position]);
 		
-		alert.setTitle("Raname record");
-		alert.setMessage("Insert new name for this Session");
+		// 1. Instantiate an AlertDialog.Builder with its constructor
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+		// 2. Chain together various setter methods to set the dialog characteristics
+		builder.setMessage("Insert name for new clone Session")
+		       .setTitle("Raname new clone record");
 		
 		// Set an EditText view to get user input 
 		final EditText input = new EditText(this);
@@ -330,13 +365,13 @@ public class UI1 extends ListActivity {
 			} 
 		};
 		
-		input.setFilters(new InputFilter[]{filter}); 
-		alert.setView(input);
-
-		//alert.create();
+		input.setFilters(new InputFilter[]{filter});
+		builder.setView(input);
 		
-		alert.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
+		builder.setPositiveButton(android.R.string.yes,new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
 		        // Do something with value!   
 				String value="";
 				value = input.getText().toString().toLowerCase();
@@ -347,48 +382,44 @@ public class UI1 extends ListActivity {
 				
 				new_filename = value;
 				
-//				
-//				cursor.moveToFirst();
-//				
-//				int id_o = cursor.getInt(0);
-//				String name_o = cursor.getString(1);
-//				String loc_o = cursor.getString(2);
-//				String date_co = cursor.getString(3);
-//				String date_lmo = cursor.getString(4);
-//				String image_o = cursor.getString(5);
-//				int sample_o = cursor.getInt(6);
-//				int x_o = cursor.getInt(7);
-//				int y_o = cursor.getInt(8);
-//				int z_o = cursor.getInt(9);
-//				
-//			    databaseHelper.updateSession(id_o, new_filename, loc_o, date_co, date_lmo, image_o, sample_o, x_o, y_o, z_o);
-//			    
-//				databaseHelper.close();
-//				cursor.close();
-//				TextView textView = (TextView) findViewById(R.id.textViewReName);
-//			    textView.setTextSize(25);
-//			    textView.setText(value);
-//			    textView.setTextColor(Color.rgb(255, 153, 0));
+				cursor.moveToFirst();
+				
+				int id_o = cursor.getInt(0);
+				String name_o = cursor.getString(1);
+				String loc_o = cursor.getString(2);
+				String date_co = cursor.getString(3);
+				String date_lmo = cursor.getString(4);
+				String image_o = cursor.getString(5);
+				int sample_o = cursor.getInt(6);
+				int x_o = cursor.getInt(7);
+				int y_o = cursor.getInt(8);
+				int z_o = cursor.getInt(9);
+				
+			    databaseHelper.updateSession(id_o, new_filename, loc_o, date_co, date_lmo, image_o, sample_o, x_o, y_o, z_o);
+			    
+				databaseHelper.close();
+				cursor.close();
+				
+				File from = new File(loc_o,name_o+".txt");
+				File to = new File(loc_o,new_filename+".txt");
+				from.renameTo(to);
+				
+				finish();
+				startActivity(getIntent());
 			}
 		});
 		
-		alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int whichButton) {
-			    // Canceled.
-				 onBackPressed();
-	        }
-	     });
+		builder.setNegativeButton(android.R.string.no,
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+//						onBackPressed();
+					}
+				});
 		
-		alert.setOnCancelListener(new DialogInterface.OnCancelListener() {
-			public void onCancel(DialogInterface dialog){onBackPressed();}
-		});
+		// 3. Get the AlertDialog from create()
+		AlertDialog dialog = builder.create();
 		
-		//alert.create();
-		alert.show();
-
-		
-//		finish();
-//		startActivity(getIntent());
+		dialog.show();
 	}
 	
 	private void playRec(int position) {
