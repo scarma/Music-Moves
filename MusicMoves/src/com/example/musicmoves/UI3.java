@@ -272,13 +272,13 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    int year_m = c.get(Calendar.YEAR);
 	    String date_m = day_m +"/"+ month_m +"/"+ year_m +" - "+ hour_m+":"+ minute_m +":"+ second_m;
 	    Context context = getApplicationContext();
-	    String location = context.getFilesDir().getPath();
-		Toast.makeText(getApplicationContext(), "Recorded\n"+readFileAsString(filename+".txt")+"\n"+date_m + location, Toast.LENGTH_LONG).show();
+	   
+		Toast.makeText(getApplicationContext(), "Recorded\n"+readFileAsString(filename+".txt")+"\n"+date_m + filepath, Toast.LENGTH_LONG).show();
 		
 		//Inserimento dati nel database
 		databaseHelper = new DBAdapter(getApplicationContext());
 		databaseHelper.open();
-		databaseHelper.createSession(filename, location+"/", date, date_m, "ls", 100, 1, 1, 1);
+		databaseHelper.createSession(filename, filepath+"/", date, date_m, "ls", 100, 1, 1, 1);
 		databaseHelper.close();
 		proSoundGenerator(filename+".txt");
 		
