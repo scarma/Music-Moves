@@ -66,4 +66,39 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/textViewNewRecName" />
 
+    <com.example.musicmoves.VerticalProgressBar
+        android:id="@+id/progressX"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textViewSampleCounter"
+        android:indeterminate="false"
+        android:max="40"
+        android:visibility="invisible" />
+
+    <com.example.musicmoves.VerticalProgressBar
+        android:id="@+id/progressY"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignTop="@+id/progressX"
+        android:layout_marginRight="14dp"
+        android:layout_toLeftOf="@+id/stop_unselectedButton"
+        android:indeterminate="false"
+        android:max="40"
+        android:visibility="invisible" />
+
+    <com.example.musicmoves.VerticalProgressBar
+        android:id="@+id/progressZ"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignTop="@+id/progressY"
+        android:layout_marginLeft="19dp"
+        android:layout_toRightOf="@+id/recButton"
+        android:indeterminate="false"
+        android:max="40"
+        android:visibility="invisible" />
+
 </RelativeLayout>
