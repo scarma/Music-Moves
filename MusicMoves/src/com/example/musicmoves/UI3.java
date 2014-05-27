@@ -24,18 +24,16 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import database.DBAdapter;
@@ -58,9 +56,14 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	//private Cursor cursor;
 	private int recCounter = 0; //salvare stato
 	private int sampleCnt = 0;
-	
+	private ProgressBar progressBarX;
+    private ProgressBar progressBarY;
+    private ProgressBar progressBarZ;
+    
+   
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+
 		//Crea cartella in cui salvare i file
 		File folder = new File(filepath);
 	    boolean success = true;
@@ -202,11 +205,21 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 
 	public void Recording(View view) { //Cambia pulsanti visibili, crea il FileWriter, ascolta i dati accelerometro
 		Toast.makeText(getApplicationContext(), "Recording", Toast.LENGTH_SHORT).show();
-		ImageButton rec = (ImageButton) findViewById(R.id.recButton);
+
+	    progressBarX = (ProgressBar) findViewById(R.id.progressX);
+		progressBarY = (ProgressBar) findViewById(R.id.progressY);
+		progressBarZ = (ProgressBar) findViewById(R.id.progressZ);
+		
+	    progressBarX.setVisibility(ProgressBar.VISIBLE);
+	    progressBarY.setVisibility(ProgressBar.VISIBLE);
+	    progressBarZ.setVisibility(ProgressBar.VISIBLE);
+		
+	    
+	    ImageButton rec = (ImageButton) findViewById(R.id.recButton);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseButton);
 		ImageButton stopUns = (ImageButton) findViewById(R.id.stop_unselectedButton);
 		ImageButton stopSel = (ImageButton) findViewById(R.id.stop_selectedButton);
-		
+		   
 		rec.setVisibility(View.INVISIBLE);
 		pause.setVisibility(View.VISIBLE);
 		stopUns.setVisibility(View.INVISIBLE);
@@ -344,6 +357,12 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    sampleCnt++;
 	    TextView sampleCounter = (TextView)findViewById(R.id.textViewSampleCounter);
 	    sampleCounter.setText("Samples recorded: "+sampleCnt);
+	    
+		
+	    progressBarX.setProgress(20+(int)x);
+	    progressBarY.setProgress(20+(int)y);
+	    progressBarZ.setProgress(20+(int)z);
+		
 	}
 
 	public String readFileAsString(String fileName) {//Legge file come stringa
@@ -476,6 +495,11 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		});
 		thread.start();
 	}
+	
+
+    
+
+    
 	
 //	private void ThumbnailFromDateCreator(int date, int month, int year, int hour, int minute, int second){
 //		Bitmap _buffer;
