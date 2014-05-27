@@ -29,4 +29,19 @@ Membri progetto: Andrea Scarmagnan, Emanuele Fabian, Giovanni Zampieri
 •	Implementazione Echo  
 •	Associazione alle diverse gesture  
 •	Implementazione delle preferenze  
-
+  
+Cose da fare  
+•	Database  
+	o	Duplicare traccia  
+	o	Rinominare traccia  
+	o	Controlli inserimenti  
+•	Thumbnail picture
+•	Salvare lo stato
+•	Preferenze
+	o	UI5, Salvataggio stato seekbar e altre preferenze
+	o	UI2, Salvataggio preferenze
+	o	Database, utilizzo preferenze salvate
+•	UI3, Indicatori segnale accelerometro
+•	UI4
+	o	Gestione audio con classi MediaPlayer e AudioTrack
+	

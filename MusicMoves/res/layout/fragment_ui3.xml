@@ -58,4 +58,12 @@
         android:src="@drawable/ic_m_stop_selected"
         android:visibility="invisible" />
 
+    <TextView
+        android:id="@+id/textViewSampleCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textViewNewRecName" />
+
 </RelativeLayout>

@@ -56,7 +56,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private String date = null;
 	private DBAdapter databaseHelper;
 	//private Cursor cursor;
-	private int recCounter = 0;
+	private int recCounter = 0; //salvare stato
+	private int sampleCnt = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -272,13 +273,13 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    int year_m = c.get(Calendar.YEAR);
 	    String date_m = day_m +"/"+ month_m +"/"+ year_m +" - "+ hour_m+":"+ minute_m +":"+ second_m;
 	    Context context = getApplicationContext();
-	    String location = context.getFilesDir().getPath();
-		Toast.makeText(getApplicationContext(), "Recorded\n"+readFileAsString(filename+".txt")+"\n"+date_m + location, Toast.LENGTH_LONG).show();
+	   
+		Toast.makeText(getApplicationContext(), "Recorded\n"+readFileAsString(filename+".txt")+"\n"+date_m + filepath, Toast.LENGTH_LONG).show();
 		
 		//Inserimento dati nel database
 		databaseHelper = new DBAdapter(getApplicationContext());
 		databaseHelper.open();
-		databaseHelper.createSession(filename, location+"/", date, date_m, "ls", 100, 1, 1, 1);
+		databaseHelper.createSession(filename, filepath+"/", date, date_m, "ls", 100, 1, 1, 1);
 		databaseHelper.close();
 		proSoundGenerator(filename+".txt");
 		
@@ -326,6 +327,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 	}
 	
+	
 	@Override
 	public void onSensorChanged(SensorEvent event) {//Quando l'accel. ascolta scrive su file
 		
@@ -339,6 +341,9 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	    sampleCnt++;
+	    TextView sampleCounter = (TextView)findViewById(R.id.textViewSampleCounter);
+	    sampleCounter.setText("Samples recorded: "+sampleCnt);
 	}
 
 	public String readFileAsString(String fileName) {//Legge file come stringa
@@ -457,12 +462,13 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	                sampleRate, AudioFormat.CHANNEL_OUT_MONO ,
 	                AudioFormat.ENCODING_PCM_16BIT, generatedArray.length,
 	                AudioTrack.MODE_STATIC);
-	        
 	        audioTrack.write(generatedArray, 0, generatedArray.length);
-	       
-		        if(audioTrack.getState()==AudioTrack.STATE_INITIALIZED){
-		        	audioTrack.play();	
-		        }
+		       
+	        if(audioTrack.getState()==AudioTrack.STATE_INITIALIZED){
+	        	audioTrack.play();	
+	        }
+	        
+		        
 		        else{
 			        Log.d("AudioTrack", "Audiotrack not initialized");
 		        }   
