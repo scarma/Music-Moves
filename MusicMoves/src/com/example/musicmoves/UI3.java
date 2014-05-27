@@ -56,7 +56,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private String date = null;
 	private DBAdapter databaseHelper;
 	//private Cursor cursor;
-	private int recCounter = 0;
+	private int recCounter = 0; //salvare stato
+	private int sampleCnt = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -326,6 +327,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 	}
 	
+	
 	@Override
 	public void onSensorChanged(SensorEvent event) {//Quando l'accel. ascolta scrive su file
 		
@@ -339,6 +341,9 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	    sampleCnt++;
+	    TextView sampleCounter = (TextView)findViewById(R.id.textViewSampleCounter);
+	    sampleCounter.setText("Samples recorded: "+sampleCnt);
 	}
 
 	public String readFileAsString(String fileName) {//Legge file come stringa

@@ -6,8 +6,14 @@
         android:title="@string/x"
         android:defaultValue="true" android:summary="Enable/disable X axe"/>
     
-    <CheckBoxPreference android:key="y" android:title="@string/y" android:defaultValue="true" android:summary="Enable/disable Y axe"/>
-    <CheckBoxPreference android:key="z" android:title="@string/z" android:defaultValue="true" android:summary="Enable/disable Z axe"/>
+    <CheckBoxPreference 
+        android:key="y"
+        android:title="@string/y"
+        android:defaultValue="true" android:summary="Enable/disable Y axe"/>
+    <CheckBoxPreference
+		android:key="z"
+		android:title="@string/z"
+		android:defaultValue="true" android:summary="Enable/disable Z axe"/>
     </PreferenceCategory>   <PreferenceCategory android:summary="sss" android:title="asd"> 
     	
      <SeekBarPreference 
