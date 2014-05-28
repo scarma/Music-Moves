@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
  
 public class UI1Adapter extends ArrayAdapter<String> {
 	public final static String EXTRA_MESSAGE = "com.example.MusicMoves.MESSAGE";

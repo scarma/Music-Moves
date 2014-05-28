@@ -1,15 +1,4 @@
 package com.example.musicmoves;
-import android.content.Context;
-import android.content.res.TypedArray;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.preference.Preference;
-import android.preference.Preference.BaseSavedState;
-import android.util.AttributeSet;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 /**
  * @hide
  */

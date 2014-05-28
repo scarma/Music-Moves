@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -24,6 +25,7 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
@@ -41,7 +43,7 @@ import database.DBAdapter;
 
 public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private String filename;
-	String filepath="/sdcard/MusicMoves";
+	String filepath= Environment.getExternalStorageDirectory().getPath()+"/MusicMoves";
 	
 	private SensorManager mSensorManager;
 	private Sensor mAccelerometer;
@@ -67,10 +69,9 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 
 		//Crea cartella in cui salvare i file
 		File folder = new File(filepath);
-	    boolean success = true;
 	    if (!folder.exists()) {
 	        Toast.makeText(UI3.this, "Directory Does Not Exist, I Create It", Toast.LENGTH_SHORT).show();
-	        success = folder.mkdir();
+	        folder.mkdir();
 	    }
 	    
 	  //Pop up dialog
@@ -102,11 +103,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 				 // Do something with value!   
 				String value="";
 				
-				value = input.getText().toString().toLowerCase();
-				
-				
-				
-				try {value = value.substring(0,1).toUpperCase() + value.substring(1).toLowerCase();}
+				value = input.getText().toString().toLowerCase(Locale.getDefault());
+				try {value = value.substring(0,1).toUpperCase(Locale.getDefault()) + value.substring(1).toLowerCase(Locale.getDefault());}
 				catch(java.lang.StringIndexOutOfBoundsException e){
 					value = "Rec_"+recCounter;
 					}
@@ -245,7 +243,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		stopUns.setVisibility(View.INVISIBLE);
 		stopSel.setVisibility(View.VISIBLE);
 		
-		Context context = getApplicationContext();
 		super.onResume();
 		
 	    try {
@@ -309,56 +306,19 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    int month_m = c.get(Calendar.MONTH);
 	    int year_m = c.get(Calendar.YEAR);
 	    String date_m = day_m +"/"+ month_m +"/"+ year_m +" - "+ hour_m+":"+ minute_m +":"+ second_m;
-	    Context context = getApplicationContext();
-	   
-		Toast.makeText(getApplicationContext(), "Recorded\n"+readFileAsString(filename+".txt")+"\n"+date_m + filepath, Toast.LENGTH_LONG).show();
+	    
+		Toast.makeText(getApplicationContext(), "Recorded\n"+readFileAsString(filename)+"\n"+date_m + filepath, Toast.LENGTH_LONG).show();
 		
 		//Inserimento dati nel database
 		databaseHelper = new DBAdapter(getApplicationContext());
 		databaseHelper.open();
 		databaseHelper.createSession(filename, filepath+"/", date, date_m, "ls", 100, 1, 1, 1);
 		databaseHelper.close();
-		proSoundGenerator(filename+".txt");
+		proSoundGenerator(filename);
 		
 		UnlockScreenRotation(); //Permetto rotazione
 	}
 
-	public void proSoundGenerator(String textFile) {//Legge file come stringa e modifica dato accel
-													 //aggiungendo una certa frequenza 
-        
-        StringBuilder stringBuilder = new StringBuilder();
-        String line="";
-        double[] x;
-        double[] y;
-        double[] z;
-        int cnt = 0;
-        try{
-        	BufferedReader in = new BufferedReader(new FileReader(new File(filepath, textFile)));
-        	while ((line = in.readLine()) != null)
-        	{cnt++;}
-        	x = new double[cnt];
-        	y = new double[cnt];
-        	z = new double[cnt];
-        	in = new BufferedReader(new FileReader(new File(filepath, textFile)));
-        	for(int i=0; i<cnt; i++)
-        		{
-        		line = in.readLine();
-        		String[] coord = line.split(",");
-        		x[i] = (Double.parseDouble(coord[0])*10) + 440.0 ; //aggiunge freq La4 ai dati dell'asse x
-        		y[i] = (Double.parseDouble(coord[1])*10) + 698.0; //aggiunge freq Fa5 ai dati dell'asse y
-        		z[i] = (Double.parseDouble(coord[2])*10) + 880.0; //aggiunge freq La5 ai dati dell'asse z
-        	}
-        	playSound(genTone(x,cnt)); //Genera suono per l'asse x
-        	playSound(genTone(y,cnt)); //Genera suono per l'asse y
-        	playSound(genTone(z,cnt)); //Genera suono per l'asse z
-        	in.close();
-        } catch (FileNotFoundException e) {
-        
-        } catch (IOException e) {
-        
-        } 
-    }
-	
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 	}
@@ -414,7 +374,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
         String line="";
         BufferedReader in = null;
         try {
-            in = new BufferedReader(new FileReader(new File(filepath, fileName)));
+            in = new BufferedReader(new FileReader(new File(filepath, fileName+".txt")));
             while ((line = in.readLine()) != null) stringBuilder.append(line+"\n");
             in.close();
         } catch (FileNotFoundException e) {
@@ -426,41 +386,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
         return stringBuilder.toString();
     }
 	
-//	public String readFileAsStringMod(String fileName) {//Legge file come stringa e modifica dato accel
-//													 //aggiungendo una certa frequenza 
-//        Context context = getApplicationContext();
-//        StringBuilder stringBuilder = new StringBuilder();
-//        String line;
-//        BufferedReader in = null;
-//
-//        try { 
-//        	File text;
-//        	boolean exists = (new File(filepath, filename)).exists();  
-//        	if (!exists){ 
-//        		text = new File(filepath, filename);
-//        		text.mkdirs();
-//        	} 
-//        	else { 
-//        		Log.d("Creation text problem","Filename already in use");
-//        		text = new File(filepath, "Gianni.txt");
-//        	}
-//        	in = new BufferedReader(new FileReader(text));
-//        	while ((line = in.readLine()) != null) {
-//        		stringBuilder.append(accelToFreq(line)+"\n");
-//        	}
-//        	in.close();
-//        } 
-//        
-//        catch (FileNotFoundException e) {
-//        	Log.d("Creation text problem","File not found");
-//        } 
-//        
-//        catch (IOException e) {
-//        	Log.d("Creation text problem","IOException");
-//        } 
-//        
-//        return stringBuilder.toString();
-//    }
 	
 	private void LockScreenRotation() { // Sets screen rotation as fixed to current rotation setting
 		switch (this.getResources().getConfiguration().orientation)
@@ -476,6 +401,41 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private void UnlockScreenRotation(){ // allow screen rotations
 		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 	}
+	
+	public void proSoundGenerator(String textFile) {//Legge file come stringa e modifica dato accel
+													 //aggiungendo una certa frequenza 
+        
+        String line="";
+        double[] x;
+        double[] y;
+        double[] z;
+        int cnt = 0;
+        try{
+        	BufferedReader in = new BufferedReader(new FileReader(new File(filepath, textFile+".txt")));
+        	while ((line = in.readLine()) != null)
+        	{cnt++;}
+        	x = new double[cnt];
+        	y = new double[cnt];
+        	z = new double[cnt];
+        	in = new BufferedReader(new FileReader(new File(filepath, textFile+".txt")));
+        	for(int i=0; i<cnt; i++)
+        		{
+        		line = in.readLine();
+        		String[] coord = line.split(",");
+        		x[i] = (Double.parseDouble(coord[0])*10) + 440.0 ; //aggiunge freq La4 ai dati dell'asse x
+        		y[i] = (Double.parseDouble(coord[1])*10) + 698.0; //aggiunge freq Fa5 ai dati dell'asse y
+        		z[i] = (Double.parseDouble(coord[2])*10) + 880.0; //aggiunge freq La5 ai dati dell'asse z
+        	}
+        	playSound(genTone(x,cnt)); //Genera suono per l'asse x
+        	playSound(genTone(y,cnt)); //Genera suono per l'asse y
+        	playSound(genTone(z,cnt)); //Genera suono per l'asse z
+        	in.close();
+        } catch (FileNotFoundException e) {
+        
+        } catch (IOException e) {
+        
+        } 
+    }
 	
 	/*-- MUSIC generation --*/
 //	public int getDuration()	{return duration;}
@@ -516,7 +476,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
         return generatedSnd;
     }
     
-	void playSound(byte[] generatedSnd){
+    public synchronized void playSound(byte[] generatedSnd){
 		generatedArray = generatedSnd;
 		Thread thread = new Thread(new Runnable() {
 	        public void run() {
@@ -529,13 +489,13 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		       
 	        if(audioTrack.getState()==AudioTrack.STATE_INITIALIZED){
 	        	audioTrack.play();	
-	        }
-	        
-		        
-		        else{
+	        }  
+		    else{
 			        Log.d("AudioTrack", "Audiotrack not initialized");
-		        }   
-			}
+		        }
+	        float time = (float)generatedArray.length/audioTrack.getSampleRate()/2;
+	        Log.d("AudioTrack", "Time: "+time);
+	        }
 		});
 		thread.start();
 	}

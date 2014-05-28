@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Locale;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -18,7 +19,6 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.InputFilter;
@@ -36,8 +36,6 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 import database.DBAdapter;
 
 public class UI1 extends ListActivity {
@@ -238,9 +236,9 @@ public class UI1 extends ListActivity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				String value="";
-				value = input.getText().toString().toLowerCase();
+				value = input.getText().toString().toLowerCase(Locale.getDefault());
 				
-				try {value = value.substring(0,1).toUpperCase() + value.substring(1).toLowerCase();}
+				try {value = value.substring(0,1).toUpperCase(Locale.getDefault()) + value.substring(1).toLowerCase(Locale.getDefault());}
 				catch(java.lang.StringIndexOutOfBoundsException e){
 					}
 				
@@ -374,9 +372,9 @@ public class UI1 extends ListActivity {
 			public void onClick(DialogInterface dialog, int which) {
 		        // Do something with value!   
 				String value="";
-				value = input.getText().toString().toLowerCase();
+				value = input.getText().toString().toLowerCase(Locale.getDefault());
 				
-				try {value = value.substring(0,1).toUpperCase() + value.substring(1).toLowerCase();}
+				try {value = value.substring(0,1).toUpperCase(Locale.getDefault()) + value.substring(1).toLowerCase(Locale.getDefault());}
 				catch(java.lang.StringIndexOutOfBoundsException e){
 					}
 				
