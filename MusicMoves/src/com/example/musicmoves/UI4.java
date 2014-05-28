@@ -7,6 +7,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +17,7 @@ public class UI4 extends ActionBarActivity {
 	
 	public final static String EXTRA_MESSAGE = "com.example.MusicMoves.MESSAGE";
 	private String sessionName;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -66,7 +69,7 @@ public class UI4 extends ActionBarActivity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public void PlayMusic(View view) { //Cambia pulsanti visibili, crea il FileWriter, ascolta i dati accelerometro
+	public void PlayMusic(View view) { //// Play button: starts the playback music service 
 		Toast.makeText(getApplicationContext(), "Play", Toast.LENGTH_SHORT).show();
 		ImageButton play = (ImageButton) findViewById(R.id.playB);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseB);
@@ -77,13 +80,17 @@ public class UI4 extends ActionBarActivity {
 		pause.setVisibility(View.VISIBLE);
 		stopUns.setVisibility(View.INVISIBLE);
 		stopSel.setVisibility(View.VISIBLE);
+		
+		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
+		i.putExtra(PlayerService.PLAY_START, true); 
+		startService(i); 
 //		
 //		Context context = getApplicationContext();
 //		super.onResume();   
 		
 	}
 	
-	public void PauseMusic(View view) { //Cambia pulsanti visibili, chiude il FileWriter se aperto
+	public void PauseMusic(View view) { //Pause button
 		Toast.makeText(getApplicationContext(), "Paused", Toast.LENGTH_SHORT).show();	
 		ImageButton play = (ImageButton) findViewById(R.id.playB);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseB);
@@ -92,8 +99,7 @@ public class UI4 extends ActionBarActivity {
 		super.onPause();
 	}
 	
-	public void StopMusic(View view) { //Cambia pulsanti visibili, chiude il FileWriter se aperto,
-									 //mostra dati registrati e cancella il file
+	public void StopMusic(View view) { // Stop button: stops the music by stopping the service 
 		Toast.makeText(getApplicationContext(), "Stopped", Toast.LENGTH_SHORT).show();
 		ImageButton play = (ImageButton) findViewById(R.id.playB);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseB);
@@ -104,6 +110,9 @@ public class UI4 extends ActionBarActivity {
 		pause.setVisibility(View.INVISIBLE);
 		stopSel.setVisibility(View.INVISIBLE);
 		stopUns.setVisibility(View.VISIBLE);
+		
+		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
+		stopService(i); 
 	}
 	
 	

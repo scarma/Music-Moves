@@ -56,9 +56,9 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	//private Cursor cursor;
 	private int recCounter = 0; //salvare stato
 	private int sampleCnt = 0;
-	private ProgressBar progressBarX;
-    private ProgressBar progressBarY;
-    private ProgressBar progressBarZ;
+	private VerticalProgressBar progressBarX;
+    private VerticalProgressBar progressBarY;
+    private VerticalProgressBar progressBarZ;
     
    
 	@Override
@@ -206,14 +206,17 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	public void Recording(View view) { //Cambia pulsanti visibili, crea il FileWriter, ascolta i dati accelerometro
 		Toast.makeText(getApplicationContext(), "Recording", Toast.LENGTH_SHORT).show();
 
-	    progressBarX = (ProgressBar) findViewById(R.id.progressX);
-		progressBarY = (ProgressBar) findViewById(R.id.progressY);
-		progressBarZ = (ProgressBar) findViewById(R.id.progressZ);
+	    progressBarX = (VerticalProgressBar) findViewById(R.id.progressX);
+		progressBarY = (VerticalProgressBar) findViewById(R.id.progressY);
+		progressBarZ = (VerticalProgressBar) findViewById(R.id.progressZ);
 		
 	    progressBarX.setVisibility(ProgressBar.VISIBLE);
 	    progressBarY.setVisibility(ProgressBar.VISIBLE);
 	    progressBarZ.setVisibility(ProgressBar.VISIBLE);
 		
+//	    progressBarX.setProgress(20);
+//	    progressBarY.setProgress(20);
+//	    progressBarZ.setProgress(20);
 	    
 	    ImageButton rec = (ImageButton) findViewById(R.id.recButton);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseButton);
@@ -227,6 +230,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		
 		Context context = getApplicationContext();
 		super.onResume();
+		
 	    try {
 
 			writer = new FileWriter(new File(filepath, filename+".txt"), true);
@@ -234,7 +238,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		mSensorManager.registerListener(this, mAccelerometer , SensorManager.SENSOR_DELAY_NORMAL);
+	    mSensorManager.registerListener(this, mAccelerometer , SensorManager.SENSOR_DELAY_NORMAL);
+		
 	}
 	
 	public void Paused(View view) { //Cambia pulsanti visibili, chiude il FileWriter se aperto
@@ -243,6 +248,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseButton);
 		pause.setVisibility(View.INVISIBLE);
 		rec.setVisibility(View.VISIBLE);
+		
 		super.onPause();
 		
 	    if(writer != null) {
@@ -252,6 +258,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	}
+	    mSensorManager.unregisterListener(this);
 	}
 	
 	public void Stopped(View view) { //Cambia pulsanti visibili, chiude il FileWriter se aperto,
@@ -266,7 +273,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		pause.setVisibility(View.INVISIBLE);
 		stopSel.setVisibility(View.INVISIBLE);
 		stopUns.setVisibility(View.VISIBLE);
-		mSensorManager.unregisterListener(this);
+		
 		if(writer != null) {
 		       try {
 				writer.close();
@@ -274,9 +281,9 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}	}
-		
+		mSensorManager.unregisterListener(this);
 
-//Ottengo la data e l'ora corrente
+		//Ottengo la data e l'ora corrente
 		Calendar c = Calendar.getInstance();
 		int hour_m = c.get(Calendar.HOUR_OF_DAY);
 	    int minute_m = c.get(Calendar.MINUTE);
@@ -297,7 +304,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		proSoundGenerator(filename+".txt");
 		
 		UnlockScreenRotation(); //Permetto rotazione
-//		getApplicationContext().deleteFile(filepath); //Cancello file di testo
 	}
 
 	public void proSoundGenerator(String textFile) {//Legge file come stringa e modifica dato accel
@@ -340,7 +346,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 	}
 	
-	
 	@Override
 	public void onSensorChanged(SensorEvent event) {//Quando l'accel. ascolta scrive su file
 		
@@ -355,15 +360,37 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			e.printStackTrace();
 		}
 	    sampleCnt++;
-	    TextView sampleCounter = (TextView)findViewById(R.id.textViewSampleCounter);
+	    TextView sampleCounter = (TextView)findViewById(R.id.textViewSampleCounter); //Contatore Samples
 	    sampleCounter.setText("Samples recorded: "+sampleCnt);
-	    
-		
+//	    int xx = 20+(int)x; 	//Aggiornamento progress bar (non va su android 2.3.6!)
+//	    int yy = 20+(int)y;
+//	    int zz = 20+(int)z;
+//	    progressBarX = (VerticalProgressBar) findViewById(R.id.progressX);
+//		progressBarY = (VerticalProgressBar) findViewById(R.id.progressY);
+//		progressBarZ = (VerticalProgressBar) findViewById(R.id.progressZ);
+//		if (sampleCnt%10==0){prog((int)x,(int)y,(int)z);}
+//    	progressBarX.setProgress(0);
+//	    progressBarX.setMax(40);
 	    progressBarX.setProgress(20+(int)x);
+	   
+//	    progressBarY.setProgress(0);
+//	    progressBarY.setMax(40);
 	    progressBarY.setProgress(20+(int)y);
+	    
+//	    progressBarZ.setProgress(0);
+//	    progressBarZ.setMax(40);
 	    progressBarZ.setProgress(20+(int)z);
-		
+	    
+//	    progressBarX.updateThumb();
+//	    progressBarY.updateThumb();
+//	    progressBarZ.updateThumb();
+//		  
 	}
+//	public synchronized void prog(int x, int y, int z) { 
+//		progressBarX.setProgress(20+x);
+//		progressBarY.setProgress(20+y);
+//		progressBarZ.setProgress(20+z);
+//	}
 
 	public String readFileAsString(String fileName) {//Legge file come stringa
         StringBuilder stringBuilder = new StringBuilder();

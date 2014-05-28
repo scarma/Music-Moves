@@ -58,6 +58,9 @@ public class VerticalProgressBar extends ProgressBar{
 
         else
             super.setProgress(0);
-        onSizeChanged(getWidth(), getHeight(), 0, 0);
+        onSizeChanged(x, y, z, w);
     }
+//    public void updateThumb(){
+//        onSizeChanged(getWidth(), getHeight(), 0, 0);
+//   }
 }

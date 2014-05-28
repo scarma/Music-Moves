@@ -213,8 +213,8 @@ public class UI1 extends ListActivity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 		// 2. Chain together various setter methods to set the dialog characteristics
-		builder.setMessage("Insert name for new clone Session")
-		       .setTitle("Raname new clone record");
+		builder.setMessage("Rename cloned session")
+		       .setTitle("Insert new name");
 		
 		// Set an EditText view to get user input 
 		final EditText input = new EditText(this);
@@ -348,8 +348,8 @@ public class UI1 extends ListActivity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 		// 2. Chain together various setter methods to set the dialog characteristics
-		builder.setMessage("Insert name for new clone Session")
-		       .setTitle("Raname new clone record");
+		builder.setMessage("Rename session")
+		       .setTitle("Insert name");
 		
 		// Set an EditText view to get user input 
 		final EditText input = new EditText(this);

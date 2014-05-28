@@ -14,7 +14,7 @@
         android:visibility="visible" />
 
     <ProgressBar
-        android:id="@+id/progressBar1"
+        android:id="@+id/progressBarMusic"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/progressBar1"
+        android:layout_above="@+id/progressBarMusic"
         android:layout_centerHorizontal="true"
         android:src="@drawable/ic_background" />
 
@@ -77,15 +77,15 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textViewDuration"
         android:layout_alignBottom="@+id/textViewDuration"
-        android:layout_toLeftOf="@+id/progressBar1"
+        android:layout_toLeftOf="@+id/progressBarMusic"
         android:text="00:00" />
 
     <TextView
         android:id="@+id/textViewDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/progressBar1"
-        android:layout_toRightOf="@+id/progressBar1"
+        android:layout_alignBottom="@+id/progressBarMusic"
+        android:layout_toRightOf="@+id/progressBarMusic"
         android:text="99:99" />
 
 </RelativeLayout>
