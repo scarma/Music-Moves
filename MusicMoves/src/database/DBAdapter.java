@@ -37,7 +37,7 @@ public class DBAdapter {
 	    values.put( FeedEntry.COLUMN_NAME_DATE_CREATION, date_c);
 	    values.put( FeedEntry.COLUMN_NAME_LAST_MODIFY, date_m);
 	    values.put( FeedEntry.COLUMN_NAME_IMAGE, image);
-	    values.put( FeedEntry.COLUMN_NAME_SAMPLE_RATE, sample_rate);
+	    values.put( FeedEntry.COLUMN_NAME_UPSAMPLING, sample_rate);
 	    values.put( FeedEntry.COLUMN_NAME_X, x);
 	    values.put( FeedEntry.COLUMN_NAME_Y, y);
 	    values.put( FeedEntry.COLUMN_NAME_Z, z);
@@ -65,14 +65,14 @@ public class DBAdapter {
 	  //fetch all music sessions order by name
 	  public Cursor fetchAllSession() {
 		return database.query(FeedEntry.TABLE_NAME, new String[] {FeedEntry._ID, FeedEntry.COLUMN_NAME_TITLE, FeedEntry.COLUMN_NAME_LOCATION, 
-	    		FeedEntry.COLUMN_NAME_DATE_CREATION, FeedEntry.COLUMN_NAME_LAST_MODIFY, FeedEntry.COLUMN_NAME_IMAGE, FeedEntry.COLUMN_NAME_SAMPLE_RATE, 
+	    		FeedEntry.COLUMN_NAME_DATE_CREATION, FeedEntry.COLUMN_NAME_LAST_MODIFY, FeedEntry.COLUMN_NAME_IMAGE, FeedEntry.COLUMN_NAME_UPSAMPLING, 
 	    		FeedEntry.COLUMN_NAME_X, FeedEntry.COLUMN_NAME_Y, FeedEntry.COLUMN_NAME_Z}, null, null, null, null, FeedEntry.COLUMN_NAME_TITLE);
 	  }
 	  
 	  //fetch music sessions filter by a string
 	  public Cursor fetchSessionByFilter(String filter) {
 	    Cursor mCursor = database.query(true, FeedEntry.TABLE_NAME, new String[] {FeedEntry._ID, FeedEntry.COLUMN_NAME_TITLE, FeedEntry.COLUMN_NAME_LOCATION, 
-	    		FeedEntry.COLUMN_NAME_DATE_CREATION, FeedEntry.COLUMN_NAME_LAST_MODIFY, FeedEntry.COLUMN_NAME_IMAGE, FeedEntry.COLUMN_NAME_SAMPLE_RATE, 
+	    		FeedEntry.COLUMN_NAME_DATE_CREATION, FeedEntry.COLUMN_NAME_LAST_MODIFY, FeedEntry.COLUMN_NAME_IMAGE, FeedEntry.COLUMN_NAME_UPSAMPLING, 
 	    		FeedEntry.COLUMN_NAME_X, FeedEntry.COLUMN_NAME_Y, FeedEntry.COLUMN_NAME_Z},
 	            FeedEntry.COLUMN_NAME_TITLE + " like '%"+ filter + "%'", null, null, null, null, null);
 	        
@@ -89,8 +89,13 @@ public class DBAdapter {
 	  
 	  //
 	  public Cursor fetchASession(String name) {
-			return database.query(FeedEntry.TABLE_NAME, new String[] {FeedEntry._ID, FeedEntry.COLUMN_NAME_TITLE, FeedEntry.COLUMN_NAME_LOCATION, 
-		    		FeedEntry.COLUMN_NAME_DATE_CREATION, FeedEntry.COLUMN_NAME_LAST_MODIFY, FeedEntry.COLUMN_NAME_IMAGE, FeedEntry.COLUMN_NAME_SAMPLE_RATE, 
+	      return database.query(FeedEntry.TABLE_NAME, new String[] {FeedEntry._ID, FeedEntry.COLUMN_NAME_TITLE, FeedEntry.COLUMN_NAME_LOCATION, 
+		    		FeedEntry.COLUMN_NAME_DATE_CREATION, FeedEntry.COLUMN_NAME_LAST_MODIFY, FeedEntry.COLUMN_NAME_IMAGE, FeedEntry.COLUMN_NAME_UPSAMPLING, 
 		    		FeedEntry.COLUMN_NAME_X, FeedEntry.COLUMN_NAME_Y, FeedEntry.COLUMN_NAME_Z}, FeedEntry.COLUMN_NAME_TITLE + " like '%"+ name + "%'", null, null, null, null);
-		  }
+	  }
+	  
+	  //
+	  public Cursor NameSessionAsExist(String name){
+		  return database.rawQuery("select count(*) from " + FeedEntry.TABLE_NAME + " where " + FeedEntry.COLUMN_NAME_TITLE + "=?", new String[] {name});
+	  }
 }
