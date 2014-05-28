@@ -14,6 +14,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -53,7 +54,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private int year = 0;
 	private String date = null;
 	private DBAdapter databaseHelper;
-	//private Cursor cursor;
+	private Cursor cursor;
 	private int recCounter = 0; //salvare stato
 	private int sampleCnt = 0;
 	private VerticalProgressBar progressBarX;
@@ -109,6 +110,23 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 				catch(java.lang.StringIndexOutOfBoundsException e){
 					value = "Rec_"+recCounter;
 					}
+				
+				//controllo che il nuovo nome non sia già presente nel db
+				databaseHelper = new DBAdapter(getApplicationContext());
+				databaseHelper.open();
+				cursor = databaseHelper.NameSessionAsExist(value);
+				cursor.moveToFirst();
+				int count = cursor.getInt(0);
+				databaseHelper.close();
+				cursor.close();
+				
+				if(count != 0){
+					//avviso l'utente che è già esistente una sessione con il nome che vuole inserire
+					Toast.makeText(getApplicationContext(), "Il nome inserito è già presente ! Riprova !", Toast.LENGTH_LONG).show();
+					finish();
+					startActivity(getIntent());
+				}
+				
 				filename = value;
 				//Ottengo la data e l'ora corrente
 				Calendar c = Calendar.getInstance();
@@ -127,7 +145,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			    textView.setText(value);
 			    textView.setTextColor(Color.rgb(255, 153, 0));
 			    recCounter++;
-			    
 			  }
 			});
 
