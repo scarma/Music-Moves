@@ -46,6 +46,10 @@
             android:label="@string/title_activity_ui5"
             android:launchMode="singleInstance" >
         </activity>
+        <service 
+			 android:name=".PlayerService" 
+			 android:enabled="true" 
+			 android:exported="false" /> 	        
     </application>
 
 </manifest>
