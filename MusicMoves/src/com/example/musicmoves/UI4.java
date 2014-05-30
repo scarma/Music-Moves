@@ -45,7 +45,8 @@ public class UI4 extends ActionBarActivity {
 		TextView textView = (TextView) findViewById(R.id.textViewSessionName);
 	    textView.setTextColor(Color.rgb(255, 153, 0));
 	    textView.setText(sessionName);
-	    proSoundGenerator(filepath, sessionName);
+//	    proSoundGenerator(filepath, sessionName);
+	    PlayMusic(null);
 	}
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -95,9 +96,10 @@ public class UI4 extends ActionBarActivity {
 		stopSel.setVisibility(View.VISIBLE);
 		
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
-		i.putExtra(PlayerService.PLAY_START, true); 
+		i.putExtra(PlayerService.PLAY, true); 
+		i.putExtra(EXTRA_MESSAGE, sessionName);
 		startService(i); 
-//		
+		
 //		Context context = getApplicationContext();
 //		super.onResume();   
 		
@@ -110,6 +112,10 @@ public class UI4 extends ActionBarActivity {
 		pause.setVisibility(View.INVISIBLE);
 		play.setVisibility(View.VISIBLE);
 		super.onPause();
+		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
+		i.putExtra(PlayerService.PAUSE, true); 
+		startService(i); 
+		
 	}
 	
 	public void StopMusic(View view) { // Stop button: stops the music by stopping the service 
@@ -128,7 +134,8 @@ public class UI4 extends ActionBarActivity {
 		stopService(i); 
 	}
 	
-
+	
+	/*-- MUSIC generation --*/
 	public void proSoundGenerator(String filepath, String textFile) {//Legge file come stringa e modifica dato accel
 												 //aggiungendo una certa frequenza 
         String line="";
@@ -163,7 +170,6 @@ public class UI4 extends ActionBarActivity {
         } 
     }
 	
-	/*-- MUSIC generation --*/
 //	public int getDuration()	{return duration;}
 //	public int getSampleRate()	{return sampleRate;}
 //	public double getFreqOfTone()	{return freqOfTone;}

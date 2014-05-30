@@ -36,6 +36,7 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 import database.DBAdapter;
 
 public class UI1 extends ListActivity {
@@ -46,6 +47,7 @@ public class UI1 extends ListActivity {
 	private String[] list_music;
 	private UI1Adapter adapter;
 	private int pos;
+	private int p; //posizione nella lista, non sapevo se c'era già una variabile che potevo usare
 	private String loc;
 	private String new_filename;
 	private int hour = 0;
@@ -200,7 +202,7 @@ public class UI1 extends ListActivity {
 	}
 
 	private void cloneRec(int position) {
-		// TODO Auto-generated method stub
+		p = position;
 //		prelevo tutti i dati della sessione da clonare e ne creo una 
 //		nuova chiedendo all'utente di inserire un nuovo nome		
 
@@ -211,8 +213,8 @@ public class UI1 extends ListActivity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 		// 2. Chain together various setter methods to set the dialog characteristics
-		builder.setMessage("Rename cloned session")
-		       .setTitle("Insert new name");
+		builder.setMessage("Insert New Session Name")
+		       .setTitle("Rename Cloned Session");
 		
 		// Set an EditText view to get user input 
 		final EditText input = new EditText(this);
@@ -238,9 +240,9 @@ public class UI1 extends ListActivity {
 				String value="";
 				value = input.getText().toString().toLowerCase(Locale.getDefault());
 				
-				try {value = value.substring(0,1).toUpperCase(Locale.getDefault()) + value.substring(1).toLowerCase(Locale.getDefault());}
-				catch(java.lang.StringIndexOutOfBoundsException e){
-					}
+				try { value = value.substring(0,1).toUpperCase(Locale.getDefault()) + value.substring(1).toLowerCase(Locale.getDefault());}
+				catch(java.lang.StringIndexOutOfBoundsException e)
+					{ value = "Rec";}
 				
 				new_filename = value;
 				
@@ -256,7 +258,17 @@ public class UI1 extends ListActivity {
 				int x_o = cursor.getInt(7);
 				int y_o = cursor.getInt(8);
 				int z_o = cursor.getInt(9);
+				//Controllo che il nuovo nome non sia già presente nel db
+				cursor = databaseHelper.NameSessionAsExist(value);
+				cursor.moveToFirst();
+				int count = cursor.getInt(0);
 				
+				if(count != 0){
+					//avviso l'utente che è già esistente una sessione con il nome che vuole inserire
+					Toast.makeText(getApplicationContext(), "Name not avaiable, please choose a different name", Toast.LENGTH_LONG).show();
+					cloneRec(p);
+					return;
+				}
 				//Ottengo la data e l'ora corrente
 				Calendar c = Calendar.getInstance();
 				hour = c.get(Calendar.HOUR_OF_DAY);
@@ -307,7 +319,7 @@ public class UI1 extends ListActivity {
 	}
 	
 	public void cloneFileToFile(String filepath, String fileName) {//Legge file come stringa
-        String line="dsfd";
+        String line = "";
         BufferedReader in = null;
         try {
             in = new BufferedReader(new FileReader(new File(filepath,fileName)));
@@ -335,9 +347,9 @@ public class UI1 extends ListActivity {
 		finish();
 		startActivity(getIntent());
 	}
-
+	
 	private void renameRec(int position) {
-		// TODO Auto-generated method stub
+		p = position;
 //		faccio un semplice update
 		databaseHelper.open();
 		cursor = databaseHelper.fetchASession(list_music[position]);
@@ -346,8 +358,8 @@ public class UI1 extends ListActivity {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 		// 2. Chain together various setter methods to set the dialog characteristics
-		builder.setMessage("Rename session")
-		       .setTitle("Insert name");
+		builder.setMessage("Insert Session Name")
+		       .setTitle("Rename Session");
 		
 		// Set an EditText view to get user input 
 		final EditText input = new EditText(this);
@@ -374,9 +386,9 @@ public class UI1 extends ListActivity {
 				String value="";
 				value = input.getText().toString().toLowerCase(Locale.getDefault());
 				
-				try {value = value.substring(0,1).toUpperCase(Locale.getDefault()) + value.substring(1).toLowerCase(Locale.getDefault());}
-				catch(java.lang.StringIndexOutOfBoundsException e){
-					}
+				try { value = value.substring(0,1).toUpperCase(Locale.getDefault()) + value.substring(1).toLowerCase(Locale.getDefault());}
+				catch(java.lang.StringIndexOutOfBoundsException e)//caso stringa vuota
+					{ value = "Rec";	}
 				
 				new_filename = value;
 				
@@ -393,6 +405,17 @@ public class UI1 extends ListActivity {
 				int y_o = cursor.getInt(8);
 				int z_o = cursor.getInt(9);
 				
+				//Controllo che il nuovo nome non sia già presente nel db
+				cursor = databaseHelper.NameSessionAsExist(value);
+				cursor.moveToFirst();
+				int count = cursor.getInt(0);
+				
+				if(count != 0){
+					//avviso l'utente che è già esistente una sessione con il nome che vuole inserire
+					Toast.makeText(getApplicationContext(), "Name not avaiable, please choose a different name", Toast.LENGTH_LONG).show();
+					renameRec(p);
+					return;
+				}
 			    databaseHelper.updateSession(id_o, new_filename, loc_o, date_co, date_lmo, image_o, sample_o, x_o, y_o, z_o);
 			    
 				databaseHelper.close();

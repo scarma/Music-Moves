@@ -54,6 +54,7 @@ public class UI2 extends ActionBarActivity {
 	public void toUI4(View view) 
 	{
 	    Intent intent = new Intent(getApplicationContext(), UI4.class);
+	    intent.putExtra(UI1.EXTRA_MESSAGE, message);
 	    startActivity(intent);
 	    
 	}

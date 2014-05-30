@@ -120,7 +120,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 				
 				if(count != 0){
 					//avviso l'utente che è già esistente una sessione con il nome che vuole inserire
-					Toast.makeText(getApplicationContext(), "Il nome inserito è già presente ! Riprova !", Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), "Name not avaiable, please choose a different name", Toast.LENGTH_LONG).show();
 					finish();
 					startActivity(getIntent());
 				}
