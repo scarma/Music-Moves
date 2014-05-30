@@ -21,7 +21,8 @@
         android:layout_above="@+id/pauseB"
         android:layout_alignLeft="@+id/pauseB"
         android:layout_alignRight="@+id/stop_selectedB"
-        android:layout_marginBottom="19dp" />
+        android:layout_marginBottom="19dp"
+        android:progressDrawable="@drawable/progressbar" />
 
     <ImageView
         android:id="@+id/imageView1"

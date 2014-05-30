@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
+import android.graphics.PorterDuff.Mode;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -91,7 +91,6 @@ public class UI4 extends ActionBarActivity {
 	}
 	
 	public void PlayMusic(View view) { //// Play button: starts the playback music service 
-		Toast.makeText(getApplicationContext(), "Play", Toast.LENGTH_SHORT).show();
 		ImageButton play = (ImageButton) findViewById(R.id.playB);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseB);
 		ImageButton stopUns = (ImageButton) findViewById(R.id.stop_unselectedB);
@@ -123,6 +122,7 @@ public class UI4 extends ActionBarActivity {
 	           	                	 tDuration.setText(totTime);
 	           	                	 tBar.setMax(time);
 	           	                	 tBar.setProgress(current);
+	           	                	 tBar.getProgressDrawable().setColorFilter(Color.rgb(255, 209, 179), Mode.MULTIPLY);
 	                	            }catch (Exception e) {Log.d("Thread","Exception");}
 	                	        }
 	                	    });
@@ -143,7 +143,6 @@ public class UI4 extends ActionBarActivity {
 	}
 	
 	public void PauseMusic(View view) { //Pause button
-		Toast.makeText(getApplicationContext(), "Paused", Toast.LENGTH_SHORT).show();	
 		ImageButton play = (ImageButton) findViewById(R.id.playB);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseB);
 		pause.setVisibility(View.INVISIBLE);
@@ -156,7 +155,6 @@ public class UI4 extends ActionBarActivity {
 	}
 	
 	public void StopMusic(View view) { // Stop button: stops the music by stopping the service 
-		Toast.makeText(getApplicationContext(), "Stopped", Toast.LENGTH_SHORT).show();
 		ImageButton play = (ImageButton) findViewById(R.id.playB);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseB);
 		ImageButton stopUns = (ImageButton) findViewById(R.id.stop_unselectedB);
