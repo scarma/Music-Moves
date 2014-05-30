@@ -26,14 +26,18 @@ import android.widget.Toast;
 public class UI4 extends ActionBarActivity {
 	
 	public final static String EXTRA_MESSAGE = "com.example.MusicMoves.MESSAGE";
+	
 	private String sessionName;
 	private String filepath = Environment.getExternalStorageDirectory().getPath()+"/MusicMoves";
-	
+	private TextView tPlaybackPosition;
+	private TextView tDuration;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		setVolumeControlStream(AudioManager.STREAM_MUSIC); //aumenta volume musica anche se in pausa
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ui4);
+		
 	}
 	@Override
 	protected void onStart() {
@@ -99,7 +103,34 @@ public class UI4 extends ActionBarActivity {
 		i.putExtra(PlayerService.PLAY, true); 
 		i.putExtra(EXTRA_MESSAGE, sessionName);
 		startService(i); 
-		
+	    Thread thread = new Thread(new Runnable() {
+	        public void run() {
+	        	 while(!Thread.currentThread().isInterrupted()){
+	                 try {runOnUiThread(new Runnable() {
+	                	        public void run() {
+	                	            try{
+	                	           	 tPlaybackPosition = (TextView) findViewById(R.id.textViewPlaybackPosition);
+	                	           	 tDuration = (TextView) findViewById(R.id.textViewDuration);
+	                	           	 int time= PlayerService.getTime();
+	                	           	 int current=PlayerService.audioX.getPlaybackHeadPosition()/PlayerService.sampleRate;
+	                	             String curTime = intToTime(current);
+	           	                	 String totTime = intToTime(time);
+	                				 tPlaybackPosition.setText(curTime);
+	           	                	 tDuration.setText(totTime);
+	                	            }catch (Exception e) {Log.d("Thread","Exception");}
+	                	        }
+	                	    });
+	                	 Thread.sleep(1000);
+	                 } 
+	                 catch (InterruptedException e) {
+	                        Thread.currentThread().interrupt();
+	                        Log.d("Thread", "Time thread interrupted");
+	                 }
+	        	 }
+	        }
+		});
+		thread.start();
+        
 //		Context context = getApplicationContext();
 //		super.onResume();   
 		
@@ -233,7 +264,12 @@ public class UI4 extends ActionBarActivity {
 	}
 	
 
-    
+ public String intToTime (int time){ 	
+	 int seconds = time%60;
+	 int minutes = ((time-seconds)/60)%60;
+	 String t = String.format("%02d%s%02d", minutes,":",seconds);
+	 return t;
+   }
 
 	
 

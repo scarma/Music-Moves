@@ -2,8 +2,6 @@ package com.example.musicmoves;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -15,12 +13,13 @@ import android.content.Intent;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.media.MediaPlayer;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class PlayerService extends Service {
 	
@@ -42,6 +41,7 @@ public class PlayerService extends Service {
 	 @Override 
 	 public int onStartCommand(Intent intent, int flags, int startId) 
 	 { 
+ 	
 	 if(intent.getBooleanExtra(PLAY, false)) 
 	 	{	String message = intent.getStringExtra(UI1.EXTRA_MESSAGE);
 		 	if(!sessionName.equals(message))
@@ -91,9 +91,10 @@ public class PlayerService extends Service {
 				        audioX.play();
 				        audioY.play();
 				        audioZ.play();	
-				        initialized = true;	
-				        }
-				        else {
+				        initialized = true;
+				        
+				     }
+				     else {
 						    Log.d("AudioTrack", "Audiotrack not initialized");
 					    }
 //					 fis = new FileInputStream(audioPath);	
@@ -131,7 +132,8 @@ public class PlayerService extends Service {
 				 .build(); 
 				 final int notificationID = 5786423; // An ID for this notification unique within the app 
 				 startForeground(notificationID, notification); 
-//			} 
+				 Toast.makeText(getApplicationContext(), "Time:"+audioX.getPlaybackHeadPosition(), Toast.LENGTH_SHORT).show();
+//			} audioX.getPlaybackHeadPosition()/PlayerService.numSamples;
 	}
 	
 	 private void stop() { 
@@ -175,12 +177,12 @@ public class PlayerService extends Service {
 	 
 	 
 	 /*-- MUSIC generation --*/
-	 private AudioTrack audioX;
-	 private AudioTrack audioY;
-	 private AudioTrack audioZ;
+	 static AudioTrack audioX;
+	 static AudioTrack audioY;
+	 static AudioTrack audioZ;
 	 
 		public void proSoundGenerator(String filepath, String textFile) {//Legge file come stringa e modifica dato accel
-													 //aggiungendo una certa frequenza 
+											 //aggiungendo una certa frequenza 
 	        String line="";
 	        double[] x;
 	        double[] y;
@@ -221,17 +223,19 @@ public class PlayerService extends Service {
 //		public void setSampleRate(int sampleR)	{if(sampleR>=4000 && sampleR<=10000) sampleRate=sampleR; else sampleRate=8000;}
 //		public void setFreq(int freq)	{if(freq>=200 && freq<=3000) freqOfTone=freq; else freqOfTone=440;}
 //	    private int duration = 3; // seconds
-//	    private int numSamples = duration * sampleRate;
+//	   
 //	    private double sample[] = new double[numSamples];
 	    private double freqOfTone; // hz //200-3000 range consigliato
-	    private int sampleRate = 8000;
+	    static int sampleRate = 8000;
 	    private int upsampling = 200;
 	    Handler handler = new Handler(); 
 	    private byte[] generatedArray;
+	    private static int time;
+	    static int numSamples;
 	    
 	    public byte[] genTone(double[] x, int cnt){
 	        // fill out the array
-	    	int numSamples = 10*cnt*upsampling;
+	    	numSamples = 10*cnt*upsampling;
 	        double sample[] = new double[numSamples];
 	    	for (int i = 0; i < (10*cnt*upsampling); ++i) { 
 	        	if ((i%(10*upsampling))==0) //inserisce dati accelerometro nell'array
@@ -262,7 +266,9 @@ public class PlayerService extends Service {
 			                AudioFormat.ENCODING_PCM_16BIT, generatedArray.length,
 			                AudioTrack.MODE_STATIC);
 			        audioTrack.write(generatedArray, 0, generatedArray.length);
-				    audioTrack.setLoopPoints(0, generatedArray.length/2, -1);
+				    audioTrack.setLoopPoints(0, numSamples, -1);
+				    setTime((numSamples)/sampleRate);
+//				    Toast.makeText(getApplicationContext(), "Time:"+getTime(), Toast.LENGTH_SHORT).show();
 //			        if(audioTrack.getState()==AudioTrack.STATE_INITIALIZED){
 //			        	audioTrack.play();	
 //			        }   
@@ -273,5 +279,14 @@ public class PlayerService extends Service {
 //			});
 //			thread.start();
 	        return audioTrack;
+		}
+
+		public static int getTime() {
+			
+			return time;
+		}
+
+		public void setTime(int time) {
+			PlayerService.time = time;
 		}
 }
