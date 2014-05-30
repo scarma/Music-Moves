@@ -1,14 +1,14 @@
 package com.example.musicmoves;
 
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-public class UI5 extends PreferenceActivity implements OnSeekBarChangeListener{
+public class UI5 extends Activity implements OnSeekBarChangeListener{
 	
 	//	SEEKBAR
 	private SeekBar seekbar/*, Duration, Speed*/;
@@ -22,8 +22,10 @@ public class UI5 extends PreferenceActivity implements OnSeekBarChangeListener{
 //        addPreferencesFromResource(R.xml.preferences);
 //        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         
-	        setContentView(R.layout.activity_ui5);
+	    setContentView(R.layout.activity_ui5);
         
+	    seekbar = new SeekBar(getApplicationContext());
+	    
 //        Upsampling = new SeekBar(getApplicationContext());
 //        Duration = new SeekBar(getApplicationContext());
 //        Speed = new SeekBar(getApplicationContext());
@@ -44,20 +46,20 @@ public class UI5 extends PreferenceActivity implements OnSeekBarChangeListener{
         textAction = (TextView)findViewById(R.id.textViewAction);
         
     }
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
 
 //		 Inflate the menu; this adds items to the action bar if it is present.
 //		getMenuInflater().inflate(R.menu.ui5, menu);
-		return true;
-	}
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+//		return true;
+//	}
+//	@Override
+//	public boolean onOptionsItemSelected(MenuItem item) {
 //		 Handle action bar item clicks here. The action bar will
 //		 automatically handle clicks on the Home/Up button, so long
 //		 as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+//		int id = item.getItemId();
+//		if (id == R.id.action_settings) {
 //			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
 //			PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
 //			SharedPreferences.Editor editor = preferences.edit();
@@ -66,9 +68,9 @@ public class UI5 extends PreferenceActivity implements OnSeekBarChangeListener{
 //			Intent intent = new Intent(getApplicationContext(), UI5.class);
 //		    startActivity(intent);
 //		    finish();
-			}
-		return true;
-	}
+//			}
+//		return true;
+//	}
 	
 	 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 	    // change progress text label with current seekbar value
