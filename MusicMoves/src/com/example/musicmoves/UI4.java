@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -20,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +33,7 @@ public class UI4 extends ActionBarActivity {
 	private String filepath = Environment.getExternalStorageDirectory().getPath()+"/MusicMoves";
 	private TextView tPlaybackPosition;
 	private TextView tDuration;
+	private ProgressBar tBar;
     
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -111,12 +114,15 @@ public class UI4 extends ActionBarActivity {
 	                	            try{
 	                	           	 tPlaybackPosition = (TextView) findViewById(R.id.textViewPlaybackPosition);
 	                	           	 tDuration = (TextView) findViewById(R.id.textViewDuration);
+	                	           	 tBar = (ProgressBar) findViewById(R.id.progressBarMusic);
 	                	           	 int time= PlayerService.getTime();
 	                	           	 int current=PlayerService.audioX.getPlaybackHeadPosition()/PlayerService.sampleRate;
 	                	             String curTime = intToTime(current);
 	           	                	 String totTime = intToTime(time);
 	                				 tPlaybackPosition.setText(curTime);
 	           	                	 tDuration.setText(totTime);
+	           	                	 tBar.setMax(time);
+	           	                	 tBar.setProgress(current);
 	                	            }catch (Exception e) {Log.d("Thread","Exception");}
 	                	        }
 	                	    });
