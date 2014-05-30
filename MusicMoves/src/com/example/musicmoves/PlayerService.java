@@ -28,11 +28,11 @@ public class PlayerService extends Service {
 	 public static String PLAY = "BGPlay";
 	 public static String PAUSE = "BGPause";
 	 public static String STOP = "BGStop"; // Not used 
-	 private String sessionName;
+	 private String sessionName ="";
 	 private boolean initialized = false;
-	 private MediaPlayer myPlayer = null; 
+//	 private MediaPlayer myPlayer = null; 
 	 private boolean isPlaying = false; 
-	 private FileInputStream fis;
+//	 private FileInputStream fis;
 	 @Override 
 	 public IBinder onBind(Intent intent) 
 	 { 
@@ -43,7 +43,10 @@ public class PlayerService extends Service {
 	 public int onStartCommand(Intent intent, int flags, int startId) 
 	 { 
 	 if(intent.getBooleanExtra(PLAY, false)) 
-	 	{	sessionName = intent.getStringExtra(UI1.EXTRA_MESSAGE);
+	 	{	String message = intent.getStringExtra(UI1.EXTRA_MESSAGE);
+		 	if(!sessionName.equals(message))
+	 			{ stop();}
+		 	sessionName = message;
 	 	  	play(); }
 	 if(intent.getBooleanExtra(PAUSE, false)) pause();
 	 return Service.START_STICKY;
@@ -67,7 +70,9 @@ public class PlayerService extends Service {
 	    }
 	}
 
-	private void play() { //Fa riprodurre il file su sd chiamato "Tria.mp3"
+	private void play() {
+		
+		//Fa riprodurre il file su sd chiamato "Tria.mp3"
 		if(isPlaying) return; 
 		isPlaying = true; 
 //		 if (myPlayer != null)	myPlayer.start();
@@ -132,22 +137,22 @@ public class PlayerService extends Service {
 	 private void stop() { 
 //		 if (isPlaying) { 
 		 	isPlaying = false; 
-			if(audioX.getState()==AudioTrack.STATE_INITIALIZED &&
-				    	audioY.getState()==AudioTrack.STATE_INITIALIZED &&
-				    	audioZ.getState()==AudioTrack.STATE_INITIALIZED){
-			        	audioX.stop();
-			        	audioY.stop();
-			        	audioZ.stop();	
-			        	audioX.release();
-			        	audioY.release();
-			        	audioZ.release();	
-			        	audioX.flush();
-			        	audioY.flush();
-			        	audioZ.flush();	
-			        	initialized = false;
-	        }   
-	        else {
+		 	initialized = false;
+			try{if (audioX.getState()==AudioTrack.STATE_INITIALIZED &&
+		    	audioY.getState()==AudioTrack.STATE_INITIALIZED &&
+		    	audioZ.getState()==AudioTrack.STATE_INITIALIZED){
+	        	audioX.stop();
+	        	audioY.stop();
+	        	audioZ.stop();	
+	        	audioX.release();
+	        	audioY.release();
+	        	audioZ.release();	
+	        	audioX.flush();
+	        	audioY.flush();
+	        	audioZ.flush();	}  } 
+	        catch (NullPointerException e){ 
 			    Log.d("AudioTrack", "Audiotrack not initialized");
+			    return;
 		    }
 			 
 //			 if (myPlayer != null) { 
@@ -206,6 +211,7 @@ public class PlayerService extends Service {
 	        } catch (IOException e) {
 	        
 	        } 
+	      
 	    }
 		
 //		public int getDuration()	{return duration;}
@@ -256,7 +262,7 @@ public class PlayerService extends Service {
 			                AudioFormat.ENCODING_PCM_16BIT, generatedArray.length,
 			                AudioTrack.MODE_STATIC);
 			        audioTrack.write(generatedArray, 0, generatedArray.length);
-				    
+				    audioTrack.setLoopPoints(0, generatedArray.length/2, -1);
 //			        if(audioTrack.getState()==AudioTrack.STATE_INITIALIZED){
 //			        	audioTrack.play();	
 //			        }   
