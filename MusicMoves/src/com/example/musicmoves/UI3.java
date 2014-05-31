@@ -524,4 +524,225 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 //         _buffer = Bitmap.createBitmap(colors, width, height, Bitmap.Config.RGB_565);
 //         canvas.drawBitmap(_buffer, 0, 0, null);
 //	}
+	
+	//--CODICE PER ZAMPA--
+//	package com.example.pixels;
+//
+//
+//	import java.util.ArrayList;
+//	import android.annotation.SuppressLint;
+//	import android.app.Activity;
+//	import android.content.Context;
+//	import android.graphics.Bitmap;
+//	import android.graphics.BitmapFactory;
+//	import android.graphics.Canvas;
+//	import android.graphics.Color;
+//	import android.os.Bundle;
+//	import android.os.Debug;
+//	import android.view.MotionEvent;
+//	import android.view.SurfaceHolder;
+//	import android.view.SurfaceView;
+//	import android.view.Window;
+//
+//	public class MainActivity extends Activity {
+//	    @Override
+//	    public void onCreate(Bundle savedInstanceState) {
+//	        super.onCreate(savedInstanceState);
+//	        requestWindowFeature(Window.FEATURE_NO_TITLE);
+//	        setContentView(new Panel(this));
+//	        Debug.startMethodTracing("pixeldraw");
+//	    }
+//
+//	    @Override
+//	    protected void onDestroy() {
+//	        super.onDestroy();
+//	        Debug.stopMethodTracing();
+//	    }
+//
+//	    class Panel extends SurfaceView implements SurfaceHolder.Callback {
+//	        private TutorialThread _thread;
+//	        private Bitmap _buffer;
+//	        private ArrayList<GraphicObject> _graphics = new ArrayList<GraphicObject>();
+//	        private int width = 40;
+//	        private int height = 40;
+//	        public Panel(Context context) {
+//	            super(context);
+//	            getHolder().addCallback(this);
+//	            _thread = new TutorialThread(getHolder(), this);
+//	            setFocusable(true);
+//	        }
+//
+//	        @Override
+//	        public boolean onTouchEvent(MotionEvent event) {
+//	            synchronized (_thread.getSurfaceHolder()) {
+//	                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//	                    GraphicObject graphic = new GraphicObject(BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
+//	                    graphic.getCoordinates().setX((int) event.getX() - graphic.getGraphic().getWidth() / 2);
+//	                    graphic.getCoordinates().setY((int) event.getY() - graphic.getGraphic().getHeight() / 2);
+//	                    _graphics.add(graphic);
+//	                }
+//	                return true;
+//	            }
+//	        }
+//	        long lastTime = System.currentTimeMillis();
+//	        int CLOCKS_PER_SEC = 500;
+//	        float timeCnt = 0;
+//	        @Override
+//	        public void onDraw(Canvas canvas) {
+////	            canvas.drawColor(Color.BLACK);
+//	            width = getWidth()/2;
+//	            height = getHeight()/2;
+//
+//	            long frameTime = System.currentTimeMillis();
+//
+//	            // The elapsed seconds per frame will almost always be less than 1.0.
+//	            float elapsedSeconds = (float)(frameTime - lastTime) / CLOCKS_PER_SEC;
+//
+//	            int colors[] = new int[width*height];
+//	            for (int x = 0; x<width ; x++) {
+//	                for (int y = 0; y<height ; y++){
+//	                    int r = (int)(timeCnt/5*255);
+//	                    int b = 0;
+//	                    int g = 0;
+//	                    int a = 255;
+//	                    colors[x + y * width] = (a << 24) | (r << 16) | (g << 8) | b;
+//	                }
+//	            }
+//	            for (int x = 0; x<10 ; x++) {
+//	                for (int y = 0; y<height; y++){
+//	                    int r = 0;
+//	                    int b = 255;
+//	                    int g = 0;
+//	                    int a = 255;
+//	                    colors[(int)(timeCnt*32)+x + y * width] = (a << 24) | (r << 16) | (g << 8) | b;
+//	                }
+//	            }
+//	            _buffer = Bitmap.createBitmap(colors, width, height, Bitmap.Config.RGB_565);
+//	            canvas.drawBitmap(_buffer, 0, 0, null);
+//
+//	            timeCnt += elapsedSeconds;
+//	            if (timeCnt > 5) timeCnt = 0;
+//	            // Update the last time counter so that we can use it next frame.
+//	            lastTime = frameTime;
+//
+//	        }
+//
+//	        @Override
+//	        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+//	            // TODO Auto-generated method stub
+//	        }
+//
+//	        @Override
+//	        public void surfaceCreated(SurfaceHolder holder) {
+//	            _thread.setRunning(true);
+//	            _thread.start();
+//	        }
+//
+//	        @Override
+//	        public void surfaceDestroyed(SurfaceHolder holder) {
+//	            // simply copied from sample application LunarLander:
+//	            // we have to tell thread to shut down & wait for it to finish, or else
+//	            // it might touch the Surface after we return and explode
+//	            boolean retry = true;
+//	            _thread.setRunning(false);
+//	            while (retry) {
+//	                try {
+//	                    _thread.join();
+//	                    retry = false;
+//	                } catch (InterruptedException e) {
+//	                    // we will try it again and again...
+//	                }
+//	            }
+//	        }
+//	    }
+//
+//	    class TutorialThread extends Thread {
+//	        private SurfaceHolder _surfaceHolder;
+//	        private Panel _panel;
+//	        private boolean _run = false;
+//
+//	        public TutorialThread(SurfaceHolder surfaceHolder, Panel panel) {
+//	            _surfaceHolder = surfaceHolder;
+//	            _panel = panel;
+//	        }
+//
+//	        public void setRunning(boolean run) {
+//	            _run = run;
+//	        }
+//
+//	        public SurfaceHolder getSurfaceHolder() {
+//	            return _surfaceHolder;
+//	        }
+//
+//	        @SuppressLint("WrongCall")
+//			@Override
+//	        public void run() {
+//	            Canvas c;
+//	            while (_run) {
+//	                c = null;
+//	                try {
+//	                    c = _surfaceHolder.lockCanvas(null);
+//	                    synchronized (_surfaceHolder) {
+//	                        _panel.onDraw(c);
+//	                    }
+//	                } finally {
+//	                    // do this in a finally so that if an exception is thrown
+//	                    // during the above, we don't leave the Surface in an
+//	                    // inconsistent state
+//	                    if (c != null) {
+//	                        _surfaceHolder.unlockCanvasAndPost(c);
+//	                    }
+//	                }
+//	            }
+//	        }
+//	    }
+//
+//	    class GraphicObject {
+//	        /**
+//	         * Contains the coordinates of the graphic.
+//	         */
+//	        public class Coordinates {
+//	            private int _x = 100;
+//	            private int _y = 0;
+//
+//	            public int getX() {
+//	                return _x + _bitmap.getWidth() / 2;
+//	            }
+//
+//	            public void setX(int value) {
+//	                _x = value - _bitmap.getWidth() / 2;
+//	            }
+//
+//	            public int getY() {
+//	                return _y + _bitmap.getHeight() / 2;
+//	            }
+//
+//	            public void setY(int value) {
+//	                _y = value - _bitmap.getHeight() / 2;
+//	            }
+//
+//	            public String toString() {
+//	                return "Coordinates: (" + _x + "/" + _y + ")";
+//	            }
+//	        }
+//
+//	        private Bitmap _bitmap;
+//	        private Coordinates _coordinates;
+//
+//	        public GraphicObject(Bitmap bitmap) {
+//	            _bitmap = bitmap;
+//	            _coordinates = new Coordinates();
+//	        }
+//
+//	        public Bitmap getGraphic() {
+//	            return _bitmap;
+//	        }
+//
+//	        public Coordinates getCoordinates() {
+//	            return _coordinates;
+//	        }
+//	    }
+//	    
+//	}
+
 }

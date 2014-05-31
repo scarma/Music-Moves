@@ -132,8 +132,7 @@ public class PlayerService extends Service {
 				 .build(); 
 				 final int notificationID = 5786423; // An ID for this notification unique within the app 
 				 startForeground(notificationID, notification); 
-				 Toast.makeText(getApplicationContext(), "Time:"+audioX.getPlaybackHeadPosition(), Toast.LENGTH_SHORT).show();
-//			} audioX.getPlaybackHeadPosition()/PlayerService.numSamples;
+				 
 	}
 	
 	 private void stop() { 
@@ -182,8 +181,7 @@ public class PlayerService extends Service {
 	 static AudioTrack audioZ;
 	 
 		public void proSoundGenerator(String filepath, String textFile) {//Legge file come stringa e modifica dato accel
-											 //aggiungendo una certa frequenza 
-	        String line="";
+			String line="";									 			//aggiungendo una certa frequenza
 	        double[] x;
 	        double[] y;
 	        double[] z;
@@ -268,7 +266,7 @@ public class PlayerService extends Service {
 			        audioTrack.write(generatedArray, 0, generatedArray.length);
 				    audioTrack.setLoopPoints(0, numSamples, -1);
 				    setTime((numSamples)/sampleRate);
-//				    Toast.makeText(getApplicationContext(), "Time:"+getTime(), Toast.LENGTH_SHORT).show();
+//				    Toast.makeText(getApplicationContext(), "Maxvol:"+AudioTrack.getMaxVolume(), Toast.LENGTH_SHORT).show();
 //			        if(audioTrack.getState()==AudioTrack.STATE_INITIALIZED){
 //			        	audioTrack.play();	
 //			        }   
