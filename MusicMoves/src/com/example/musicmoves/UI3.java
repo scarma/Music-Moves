@@ -530,11 +530,17 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	      ex.printStackTrace();
 	    }	
 	    
-	    temp1 = bitmap.copy(Bitmap.Config.RGB_565, true);
-	
+	   temp1 = bitmap.copy(Bitmap.Config.RGB_565, true);
+	   
+
+
+	    
 	// Da cambiare, codice che cambia i colori della bitmap in modo univoco
 	for (int y = 0; y < bitmap.getWidth(); y++) {
 		for (int x = 0; x < bitmap.getHeight(); x++) {
+			
+			
+			
 				if(temp1.getPixel(x, y)==Color.RED){
 						temp1.setPixel(x, y, primo);
 					}
@@ -554,8 +560,35 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		}//fine for
 	}//fine for
 	
+	 //fine primo metodo inefficiente
+	//nuovo metodo piu efficiente? funziona male, bisogna correggere
+	  /*  for (int i=0; i<pixels.length; i++){
+	    	if (pixels[i]==Color.RED){
+	    		pixels[i]=primo;
+	    	}
+	    	else if (pixels[i]==Color.BLUE){
+	    		pixels[i]=secondo;
+	    	}
+	    	else if (pixels[i]==Color.GREEN){
+	    		pixels[i]=terzo;
+	    	}
+	    	else if (pixels[i]==Color.YELLOW){
+	    		pixels[i]=quarto;
+	    	}
+	    	else if (pixels[i]==Color.BLACK){
+	    		pixels[i]=quinto;
+	    	}
+	    	else pixels[i]=sesto;
+	    	
+	    }
+	    temp1.setPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+	    */
+	    
 	storeImage(temp1);
 	}
+	
+	
+  
 	
 	
     
