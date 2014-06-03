@@ -1,38 +1,37 @@
 package com.example.musicmoves;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
-import android.widget.TextView;
 
-public class UI5 extends Activity implements OnSeekBarChangeListener{
+
+public class UI5 extends PreferenceActivity/*implements OnSeekBarChangeListener*/{
 	
 	//	SEEKBAR
-	private SeekBar seekbar/*, Duration, Speed*/;
-//	private int progressUp = 10, progressD = 10, progressS = 10;
-	private TextView textProgress, textAction;
+//	private SeekBar seekbar;
+//	private TextView textProgress, textAction;
 	
 //    @SuppressWarnings("deprecation")
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        addPreferencesFromResource(R.xml.preferences);
-//        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        SharedPreferences setting = getSharedPreferences("MusicMovesPreferences",0);
+        		
+        addPreferencesFromResource(R.xml.preferences);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         
-	    setContentView(R.layout.activity_ui5);
+	    setContentView(R.xml.preferences);
         
 	    
 //        Upsampling = new SeekBar(getApplicationContext());
 //        Duration = new SeekBar(getApplicationContext());
 //        Speed = new SeekBar(getApplicationContext());
         
-	    seekbar=(SeekBar) findViewById(R.id.seekbar1);
+//	    seekbar=(SeekBar) findViewById(R.id.seekbar1);
         //Duration.findViewById(R.id.DurationSeekBar);
         //Speed.findViewById(R.id.SpeedSeekBar);
         
@@ -40,12 +39,12 @@ public class UI5 extends Activity implements OnSeekBarChangeListener{
 //        Duration.setProgress(progressD);
 //        Speed.setProgress(progressS);
         
-        seekbar.setOnSeekBarChangeListener(this);
+//        seekbar.setOnSeekBarChangeListener(this);
         //Duration.setOnSeekBarChangeListener(this);
         //Speed.setOnSeekBarChangeListener(this);
         
-        textProgress = (TextView)findViewById(R.id.textViewProgress);
-        textAction = (TextView)findViewById(R.id.textViewAction);
+//        textProgress = (TextView)findViewById(R.id.textViewProgress);
+//        textAction = (TextView)findViewById(R.id.textViewAction);
         
     }
 	@Override
@@ -75,30 +74,25 @@ public class UI5 extends Activity implements OnSeekBarChangeListener{
 	}
 	
 	
-	 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-	    // change progress text label with current seekbar value
-	    textProgress.setText("The value is: "+ progress);
-	 // change action text label to changing
-    	textAction.setText("changing");
-	 }
-
-	 public void onStartTrackingTouch(SeekBar seekBar) {
-	    // TODO Auto-generated method stub
-		 textAction.setText("starting to track touch");	    
-	    }
-
-	public void onStopTrackingTouch(SeekBar seekBar) {
-	    // TODO Auto-generated method stub
-		seekBar.setSecondaryProgress(seekBar.getProgress()); // set the shade of the previous value.
-    	textAction.setText("ended tracking touch"); 
-	}
-	
-	
-	
-		
-		
+//	 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//	    // change progress text label with current seekbar value
+//	    textProgress.setText("The value is: "+ progress);
+//	 // change action text label to changing
+//    	textAction.setText("changing");
+//	 }
 //
-//		
+//	 public void onStartTrackingTouch(SeekBar seekBar) {
+//	    // TODO Auto-generated method stub
+//		 textAction.setText("starting to track touch");	    
+//	    }
+//
+//	public void onStopTrackingTouch(SeekBar seekBar) {
+//	    // TODO Auto-generated method stub
+//		seekBar.setSecondaryProgress(seekBar.getProgress()); // set the shade of the previous value.
+//    	textAction.setText("ended tracking touch"); 
+//	}
+	
+	
 //		@Override
 //		public void onCreate(Bundle savedInstanceState) {
 //		    super.onCreate( savedInstanceState );
@@ -147,3 +141,4 @@ public class UI5 extends Activity implements OnSeekBarChangeListener{
 //		}
 	
 }
+
