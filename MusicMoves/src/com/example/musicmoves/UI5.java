@@ -7,41 +7,25 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
 
 public class UI5 extends PreferenceActivity/*implements OnSeekBarChangeListener*/{
 	
 	//	SEEKBAR
-//	private SeekBar seekbar;
-//	private TextView textProgress, textAction;
+	private SeekBar seekbar;
+	private TextView textProgress;
 	
-//    @SuppressWarnings("deprecation")
+    @SuppressWarnings("deprecation")
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences setting = getSharedPreferences("MusicMovesPreferences",0);
-        		
+//        SharedPreferences setting = getSharedPreferences("MusicMovesPreferences",0);
+//        		
         addPreferencesFromResource(R.xml.preferences);
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-        
-	    setContentView(R.xml.preferences);
-        
-	    
-//        Upsampling = new SeekBar(getApplicationContext());
-//        Duration = new SeekBar(getApplicationContext());
-//        Speed = new SeekBar(getApplicationContext());
-        
-//	    seekbar=(SeekBar) findViewById(R.id.seekbar1);
-        //Duration.findViewById(R.id.DurationSeekBar);
-        //Speed.findViewById(R.id.SpeedSeekBar);
-        
-//        Upsampling.setProgress(progressUp);
-//        Duration.setProgress(progressD);
-//        Speed.setProgress(progressS);
-        
-//        seekbar.setOnSeekBarChangeListener(this);
-        //Duration.setOnSeekBarChangeListener(this);
-        //Speed.setOnSeekBarChangeListener(this);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);       
         
 //        textProgress = (TextView)findViewById(R.id.textViewProgress);
 //        textAction = (TextView)findViewById(R.id.textViewAction);
@@ -73,7 +57,9 @@ public class UI5 extends PreferenceActivity/*implements OnSeekBarChangeListener*
 		return true;
 	}
 	
-	
+	public void onStopTrackingTouch(SeekBar seekBar) {
+		
+	}
 //	 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 //	    // change progress text label with current seekbar value
 //	    textProgress.setText("The value is: "+ progress);

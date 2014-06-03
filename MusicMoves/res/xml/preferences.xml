@@ -21,9 +21,10 @@
 		android:summary="Enable/disable Z axe"/>
     </PreferenceCategory>   
     
-    <PreferenceCategory android:summary="sss" 
-        android:title="asd"> 
-    	
+    <PreferenceCategory 
+        android:title="asd"
+        android:summary="sss" 
+        >
      <SeekBarPreference
          android:key="upsampling" 
          android:title="Upsampling" 
@@ -33,7 +34,8 @@
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"
          android:progress="0" />
-      <SeekBarPreference 
+     
+      <SeekBarPreference
          android:key="maxRecTime" 
          android:title="Maximum recording duration" 
          android:summary="Maximum recording duration" 
@@ -42,13 +44,15 @@
          android:progress="0"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"/>
-      <SeekBarPreference 
+     
+      <SeekBarPreference
           android:key="speechRate" 
           android:title="Speech speed" 
           android:summary="Adjust reading speed" 
           android:defaultValue="80" 
           android:max="200"
           android:progress="0" />
+      
       
     </PreferenceCategory>
 </PreferenceScreen>
