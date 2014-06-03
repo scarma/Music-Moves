@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -24,13 +25,12 @@ public class UI5 extends Activity implements OnSeekBarChangeListener{
         
 	    setContentView(R.layout.activity_ui5);
         
-	    seekbar = new SeekBar(getApplicationContext());
 	    
 //        Upsampling = new SeekBar(getApplicationContext());
 //        Duration = new SeekBar(getApplicationContext());
 //        Speed = new SeekBar(getApplicationContext());
         
-        seekbar.findViewById(R.id.seekbar1);
+	    seekbar=(SeekBar) findViewById(R.id.seekbar1);
         //Duration.findViewById(R.id.DurationSeekBar);
         //Speed.findViewById(R.id.SpeedSeekBar);
         
@@ -71,6 +71,28 @@ public class UI5 extends Activity implements OnSeekBarChangeListener{
 //			}
 //		return true;
 //	}
+	
+	OnSeekBarChangeListener ttt= new OnSeekBarChangeListener() {
+		
+		@Override
+		public void onStopTrackingTouch(SeekBar seekBar) {
+			System.out.println("saa");
+			
+		}
+		
+		@Override
+		public void onStartTrackingTouch(SeekBar seekBar) {
+			System.out.println("saa1");
+			
+		}
+		
+		@Override
+		public void onProgressChanged(SeekBar seekBar, int progress,
+				boolean fromUser) {
+			System.out.println("saa2");
+			
+		}
+	};
 	
 	 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 	    // change progress text label with current seekbar value

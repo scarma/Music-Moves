@@ -229,10 +229,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    progressBarY.setVisibility(ProgressBar.VISIBLE);
 	    progressBarZ.setVisibility(ProgressBar.VISIBLE);
 		
-//	    progressBarX.setProgress(20);
-//	    progressBarY.setProgress(20);
-//	    progressBarZ.setProgress(20);
-	    
 	    ImageButton rec = (ImageButton) findViewById(R.id.recButton);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseButton);
 		ImageButton stopUns = (ImageButton) findViewById(R.id.stop_unselectedButton);
@@ -326,9 +322,9 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	@Override
 	public void onSensorChanged(SensorEvent event) {//Quando l'accel. ascolta scrive su file
 		
-	    float x = event.values[0];
-	    float y = event.values[1];
-	    float z = event.values[2];
+	    final float x = event.values[0];
+	    final float y = event.values[1];
+	    final float z = event.values[2];
 	    try {
 			writer.write(x+", "+y+", "+z+"\n");
 		} 
@@ -339,35 +335,15 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    sampleCnt++;
 	    TextView sampleCounter = (TextView)findViewById(R.id.textViewSampleCounter); //Contatore Samples
 	    sampleCounter.setText("Samples recorded: "+sampleCnt);
-//	    int xx = 20+(int)x; 	//Aggiornamento progress bar (non va su android 2.3.6!)
-//	    int yy = 20+(int)y;
-//	    int zz = 20+(int)z;
-//	    progressBarX = (VerticalProgressBar) findViewById(R.id.progressX);
-//		progressBarY = (VerticalProgressBar) findViewById(R.id.progressY);
-//		progressBarZ = (VerticalProgressBar) findViewById(R.id.progressZ);
-//		if (sampleCnt%10==0){prog((int)x,(int)y,(int)z);}
-//    	progressBarX.setProgress(0);
-//	    progressBarX.setMax(40);
+
 	    progressBarX.setProgress(20+(int)x);
-	   
-//	    progressBarY.setProgress(0);
-//	    progressBarY.setMax(40);
 	    progressBarY.setProgress(20+(int)y);
-	    
-//	    progressBarZ.setProgress(0);
-//	    progressBarZ.setMax(40);
 	    progressBarZ.setProgress(20+(int)z);
 	    
-//	    progressBarX.updateThumb();
-//	    progressBarY.updateThumb();
-//	    progressBarZ.updateThumb();
-//		  
+	    progressBarX.postInvalidate();
+	    progressBarY.postInvalidate();
+	    progressBarZ.postInvalidate(); 
 	}
-//	public synchronized void prog(int x, int y, int z) { 
-//		progressBarX.setProgress(20+x);
-//		progressBarY.setProgress(20+y);
-//		progressBarZ.setProgress(20+z);
-//	}
 
 	public String readFileAsString(String fileName) {//Legge file come stringa
         StringBuilder stringBuilder = new StringBuilder();
