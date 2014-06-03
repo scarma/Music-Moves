@@ -1,10 +1,12 @@
 package com.example.musicmoves;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
@@ -46,53 +48,32 @@ public class UI5 extends Activity implements OnSeekBarChangeListener{
         textAction = (TextView)findViewById(R.id.textViewAction);
         
     }
-//	@Override
-//	public boolean onCreateOptionsMenu(Menu menu) {
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
 
 //		 Inflate the menu; this adds items to the action bar if it is present.
-//		getMenuInflater().inflate(R.menu.ui5, menu);
-//		return true;
-//	}
-//	@Override
-//	public boolean onOptionsItemSelected(MenuItem item) {
+		getMenuInflater().inflate(R.menu.ui5, menu);
+		return true;
+	}
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
 //		 Handle action bar item clicks here. The action bar will
 //		 automatically handle clicks on the Home/Up button, so long
 //		 as you specify a parent activity in AndroidManifest.xml.
-//		int id = item.getItemId();
-//		if (id == R.id.action_settings) {
-//			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
-//			PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
-//			SharedPreferences.Editor editor = preferences.edit();
-//			editor.clear();
-//			editor.commit();
-//			Intent intent = new Intent(getApplicationContext(), UI5.class);
-//		    startActivity(intent);
-//		    finish();
-//			}
-//		return true;
-//	}
+		int id = item.getItemId();
+		if (id == R.id.action_settings) {
+			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
+			PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
+			SharedPreferences.Editor editor = preferences.edit();
+			editor.clear();
+			editor.commit();
+			Intent intent = new Intent(getApplicationContext(), UI5.class);
+		    startActivity(intent);
+		    finish();
+			}
+		return true;
+	}
 	
-	OnSeekBarChangeListener ttt= new OnSeekBarChangeListener() {
-		
-		@Override
-		public void onStopTrackingTouch(SeekBar seekBar) {
-			System.out.println("saa");
-			
-		}
-		
-		@Override
-		public void onStartTrackingTouch(SeekBar seekBar) {
-			System.out.println("saa1");
-			
-		}
-		
-		@Override
-		public void onProgressChanged(SeekBar seekBar, int progress,
-				boolean fromUser) {
-			System.out.println("saa2");
-			
-		}
-	};
 	
 	 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 	    // change progress text label with current seekbar value
@@ -117,16 +98,7 @@ public class UI5 extends Activity implements OnSeekBarChangeListener{
 		
 		
 //
-//		private int newProgressValue, currentProgress;
-//		private int newProgressValue1, currentProgress1;
-//		private SharedPreferences sharedPreferences, sharedPreferences1;
-//		private String Key_PROGRESS = "key_progress";
-//		private String Key = "key_value";
-//		private String PREFERENCE_PROGRESS = "preference_progress";
-//		private String Key_PROGRESS1 = "key_progress1";
-//		private String Key1 = "key_value1";
-//		private String PREFERENCE_PROGRESS1 = "preference_progress1";
-
+//		
 //		@Override
 //		public void onCreate(Bundle savedInstanceState) {
 //		    super.onCreate( savedInstanceState );

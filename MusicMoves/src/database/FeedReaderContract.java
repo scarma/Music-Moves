@@ -16,6 +16,6 @@ public class FeedReaderContract {
     	public static final String COLUMN_NAME_X = "x";
     	public static final String COLUMN_NAME_Y = "y";
     	public static final String COLUMN_NAME_Z = "z";
-
+    	
 	}
 }
