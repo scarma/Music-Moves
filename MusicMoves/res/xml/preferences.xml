@@ -2,43 +2,53 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" 
     android:title="@string/title_activity_ui5">
     
-    <PreferenceCategory android:title="@string/default_axes" android:key="default_axes">
+    <PreferenceCategory android:title="@string/default_axes" 
+        android:key="default_axes">
     <CheckBoxPreference
         android:key="x"
         android:title="@string/x"
-        android:defaultValue="true" android:summary="Enable/disable X axe"/>
-    
+        android:defaultValue="true" 
+        android:summary="Enable/disable X axe"/>
     <CheckBoxPreference 
         android:key="y"
         android:title="@string/y"
-        android:defaultValue="true" android:summary="Enable/disable Y axe"/>
+        android:defaultValue="true" 
+        android:summary="Enable/disable Y axe"/>
     <CheckBoxPreference
 		android:key="z"
 		android:title="@string/z"
-		android:defaultValue="true" android:summary="Enable/disable Z axe"/>
+		android:defaultValue="true" 
+		android:summary="Enable/disable Z axe"/>
     </PreferenceCategory>   
     
-    <PreferenceCategory android:summary="sss" android:title="asd"> 
+    <PreferenceCategory android:summary="sss" 
+        android:title="asd"> 
     	
-     <SeekBarPreference 
-             android:key="upsampling" 
-        	 android:title="Upsampling" 
-        	 android:summary="Adjust default upsampling" 
-             android:defaultValue="1" android:max="200"
-             android:layout_width="fill_parent"
-             android:layout_height="wrap_content"/>
+     <SeekBarPreference
+         android:key="upsampling" 
+         android:title="Upsampling" 
+         android:summary="Adjust default upsampling" 
+         android:defaultValue="1" 
+         android:max="200"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:progress="0" />
       <SeekBarPreference 
-            android:key="maxRecTime" 
-        	 android:title="Maximum recording duration" 
-        	 android:summary="Maximum recording duration" 
-             android:defaultValue="0" android:max="8"
-             android:layout_width="fill_parent"
-             android:layout_height="wrap_content"/>
+         android:key="maxRecTime" 
+         android:title="Maximum recording duration" 
+         android:summary="Maximum recording duration" 
+         android:defaultValue="0" 
+         android:max="100"
+         android:progress="0"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"/>
       <SeekBarPreference 
-        android:key="speechRate" 
-        android:title="Speech speed" 
-        android:summary="Adjust reading speed" 
-        android:defaultValue="80" android:max="200" />
+          android:key="speechRate" 
+          android:title="Speech speed" 
+          android:summary="Adjust reading speed" 
+          android:defaultValue="80" 
+          android:max="200"
+          android:progress="0" />
       
-        </PreferenceCategory>
+    </PreferenceCategory>
 </PreferenceScreen>
