@@ -57,8 +57,14 @@ public class UI1Adapter extends ArrayAdapter<String> {
         ImageView iv = (ImageView)convertView.findViewById(R.id.immagine_vista);
         iv.setImageDrawable(immagini.getDrawable(position));
  
-        TextView tv = (TextView)convertView.findViewById(R.id.testo_vista);
-        tv.setText(list_music[position]);
+        TextView name = (TextView)convertView.findViewById(R.id.textName);
+        name.setText(list_music[position]);
+        //TODO prendere date da database
+        TextView dateCreation = (TextView)convertView.findViewById(R.id.textDateCreation);
+        dateCreation.setText(list_music[position]+" ");
+        
+        TextView dateLastModified = (TextView)convertView.findViewById(R.id.textDateLastModified);
+        dateLastModified.setText(list_music[position]+" ");
         
 //        tv.setOnClickListener(new OnClickListener() {
 //			

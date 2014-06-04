@@ -207,7 +207,7 @@ public class PlayerService extends Service {
 	        	audioZ = playSound(genTone(z,cnt)); //Genera suono per l'asse z
 	        	in.close();
 	        } catch (FileNotFoundException e) {
-	          Log.d("FileNotFoundException", "File:"+filepath+"/"+textFile);
+	        	Log.d("FileNotFoundException", "File:"+filepath+"/"+textFile);
 	        } catch (IOException e) {
 	        
 	        } 

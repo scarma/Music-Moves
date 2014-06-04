@@ -46,12 +46,12 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private SensorManager mSensorManager;
 	private Sensor mAccelerometer;
 	private FileWriter writer;
-	private int hour = 0;
-	private int minute = 0;
-	private int second = 0;
-	private int day = 0;
-	private int month = 0;
-	private int year = 0;
+	private int hour;
+	private int minute;
+	private int second;
+	private int day;
+	private int month;
+	private int year;
 	private String date = null;
 	private DBAdapter databaseHelper;
 	private Cursor cursor;
@@ -62,6 +62,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
     private VerticalProgressBar progressBarZ;
     Bitmap bitmap = null;
     Bitmap temp1;
+    Calendar c = Calendar.getInstance();
    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -293,7 +294,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		mSensorManager.unregisterListener(this);
 
 		//Ottengo la data e l'ora corrente
-		Calendar c = Calendar.getInstance();
+		
 		 hour = c.get(Calendar.HOUR_OF_DAY);
 	     minute = c.get(Calendar.MINUTE);
 	     second = c.get(Calendar.SECOND);
@@ -380,114 +381,16 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 	}
 	
-//	public void proSoundGenerator(String textFile) {//Legge file come stringa e modifica dato accel
-//													 //aggiungendo una certa frequenza 
-//        
-//        String line="";
-//        double[] x;
-//        double[] y;
-//        double[] z;
-//        int cnt = 0;
-//        try{
-//        	BufferedReader in = new BufferedReader(new FileReader(new File(filepath, textFile+".txt")));
-//        	while ((line = in.readLine()) != null)
-//        	{cnt++;}
-//        	x = new double[cnt];
-//        	y = new double[cnt];
-//        	z = new double[cnt];
-//        	in = new BufferedReader(new FileReader(new File(filepath, textFile+".txt")));
-//        	for(int i=0; i<cnt; i++)
-//        		{
-//        		line = in.readLine();
-//        		String[] coord = line.split(",");
-//        		x[i] = (Double.parseDouble(coord[0])*10) + 440.0 ; //aggiunge freq La4 ai dati dell'asse x
-//        		y[i] = (Double.parseDouble(coord[1])*10) + 698.0; //aggiunge freq Fa5 ai dati dell'asse y
-//        		z[i] = (Double.parseDouble(coord[2])*10) + 880.0; //aggiunge freq La5 ai dati dell'asse z
-//        	}
-//        	playSound(genTone(x,cnt)); //Genera suono per l'asse x
-//        	playSound(genTone(y,cnt)); //Genera suono per l'asse y
-//        	playSound(genTone(z,cnt)); //Genera suono per l'asse z
-//        	in.close();
-//        } catch (FileNotFoundException e) {
-//        
-//        } catch (IOException e) {
-//        
-//        } 
-//    }
-//	
-//	/*-- MUSIC generation --*/
-////	public int getDuration()	{return duration;}
-////	public int getSampleRate()	{return sampleRate;}
-////	public double getFreqOfTone()	{return freqOfTone;}
-////	public void setDuration(int dur)	{if(dur>=1 && dur<=100) duration=dur; else duration=3;}
-////	public void setSampleRate(int sampleR)	{if(sampleR>=4000 && sampleR<=10000) sampleRate=sampleR; else sampleRate=8000;}
-////	public void setFreq(int freq)	{if(freq>=200 && freq<=3000) freqOfTone=freq; else freqOfTone=440;}
-////    private int duration = 3; // seconds
-////    private int numSamples = duration * sampleRate;
-////    private double sample[] = new double[numSamples];
-//    private double freqOfTone; // hz //200-3000 range consigliato
-//    private int sampleRate = 8000;
-//    private int upsampling = 200;
-//    Handler handler = new Handler(); 
-//    private byte[] generatedArray;
-//    
-//    public byte[] genTone(double[] x, int cnt){
-//        // fill out the array
-//    	int numSamples = 10*cnt*upsampling;
-//        double sample[] = new double[numSamples];
-//    	for (int i = 0; i < (10*cnt*upsampling); ++i) { 
-//        	if ((i%(10*upsampling))==0) //inserisce dati accelerometro nell'array
-//        		{ freqOfTone = x[i/(10*upsampling)];}
-//            sample[i] = Math.sin(2 * Math.PI * i / (sampleRate/freqOfTone));
-//        }
-//    	byte generatedSnd[] = new byte[2 * 10*cnt*upsampling];
-//        // convert to 16 bit pcm sound array
-//        // assumes the sample buffer is normalised.
-//        int idx = 0;
-//        for (final double dVal : sample) {
-//            // scale to maximum amplitude
-//            final short val = (short) ((dVal * 32767));
-//            // in 16 bit wav PCM, first byte is the low order byte
-//            generatedSnd[idx++] = (byte) (val & 0x00ff);
-//            generatedSnd[idx++] = (byte) ((val & 0xff00) >>> 8);
-//        }
-//        return generatedSnd;
-//    }
-//    
-//    public synchronized void playSound(byte[] generatedSnd){
-//		generatedArray = generatedSnd;
-//		Thread thread = new Thread(new Runnable() {
-//	        public void run() {
-//	        
-//	        AudioTrack audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC,
-//	                sampleRate, AudioFormat.CHANNEL_OUT_MONO ,
-//	                AudioFormat.ENCODING_PCM_16BIT, generatedArray.length,
-//	                AudioTrack.MODE_STATIC);
-//	        audioTrack.write(generatedArray, 0, generatedArray.length);
-//		       
-//	        if(audioTrack.getState()==AudioTrack.STATE_INITIALIZED){
-//	        	audioTrack.play();	
-//	        }  
-//		    else{
-//			        Log.d("AudioTrack", "Audiotrack not initialized");
-//		        }
-//	        float time = (float)generatedArray.length/audioTrack.getSampleRate()/2;
-//	        Log.d("AudioTrack", "Time: "+time);
-//	        }
-//		});
-//		thread.start();
-//	}
-//	
 
     //crea la thumbnail
 	//metodo che salva un'immagine nella cartella MusicMoves
 	private void storeImage(Bitmap image) {
-		File pictureFile = new File(filepath, filename + ".jpg");
+		File pictureFile = new File(filepath, filename + ".png");
 		
 		try {
 		FileOutputStream fos = new FileOutputStream(pictureFile);
-		if (!image.compress(Bitmap.CompressFormat.JPEG, 100, fos))
-			Log.d("storeImage", "error compressing file");
+		if (!image.compress(Bitmap.CompressFormat.PNG, 100, fos))
+			Log.d("storeImage", "Error compressing file");
 		fos.close();
 		}
 		catch (IOException e) {
@@ -498,72 +401,70 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	protected void creaThumbNail() {
 		int primo, secondo, terzo, quarto, quinto, sesto;
 		int a, b, c, d, e, f;
+		//I valori assumevano dati che non spaziavano da 1 a 255 (i mesi sono massimo 12)
+		a= (year)%255;
+		b= (int)(minute*255/60);
+		c= (int)(hour*255/60);
+		d= (int)(month*255/12);
+		e= (int)(day*255/31);
+		f= (int)(second*255/60);
+		//		Log.d("Valori:",a+" "+b+" "+c+" "+d+" "+e+" "+f);
 		
-		a= (second*year)%255;
-		b= (second*minute)%255;
-		c= (second*hour)%255;
-		d= (second*month)%255;
-		e= (second*day)%255;
-		f= (second*second)%255;
 		// inizializza colori, da modificare
-	Color col1 = new Color();
-	primo = col1.argb(255, a, b, c);
-	Color col2 = new Color();
-	secondo = col2.argb(255, d, e, f);
-	Color col3 = new Color();
-	terzo = col3.argb(255, a, c, e);
-	Color col4 = new Color();
-	quarto = col4.argb(255, b, d, f);
-	Color col5 = new Color();
-	quinto = col5.argb(255, f, e, c);
-	Color col6 = new Color();
-	sesto = col6.argb(255, a, d, b );
+		primo =   Color.rgb(a, b, c);
+		secondo = Color.rgb(d, e, f);
+		terzo =   Color.rgb(a, c, e);
+		quarto =  Color.rgb(b, d, f);
+		quinto =  Color.rgb(f, e, c);
+		sesto =   Color.rgb(a, d, b);
 	
-	
+
     	//per gli dei non cambiare ne rimuovere assolutamente
-		//Bitmap bitmap = null;
+		
 		//Prende la bitmap dalla cartela res/raw/
 	    try {
-	      bitmap = BitmapFactory.decodeResource(getResources(),R.raw.basefortp);
+	      bitmap = BitmapFactory.decodeResource(getResources(),R.raw.icon_trasp);
 	    	} 
 	    catch (Exception ex) {
 	      ex.printStackTrace();
 	    }	
 	    
-	   temp1 = bitmap.copy(Bitmap.Config.RGB_565, true);
+	   temp1 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
 	   
 
 
 	    
-	// Da cambiare, codice che cambia i colori della bitmap in modo univoco
-	for (int y = 0; y < bitmap.getWidth(); y++) {
-		for (int x = 0; x < bitmap.getHeight(); x++) {
-			
-			
-			
-				if(temp1.getPixel(x, y)==Color.RED){
-						temp1.setPixel(x, y, primo);
-					}
-				else if(temp1.getPixel(x, y)==Color.BLUE){
-						temp1.setPixel(x, y, secondo);
-					}
-				else if(temp1.getPixel(x, y)==Color.GREEN){
-						temp1.setPixel(x, y, terzo);
-					}
-				else if(temp1.getPixel(x, y)==Color.YELLOW){
-						temp1.setPixel(x, y, quarto);
-					}
-				else if(temp1.getPixel(x, y)==Color.BLACK){
-						temp1.setPixel(x, y, quinto);
-				}
-				else temp1.setPixel(x, y, sesto);
-		}//fine for
-	}//fine for
+	// primo metodo inefficiente, codice che cambia i colori della bitmap in modo univoco
+//	for (int y = 0; y < bitmap.getWidth(); y++) {
+//		for (int x = 0; x < bitmap.getHeight(); x++) {
+//			
+//			
+//			
+//				if(temp1.getPixel(x, y)==Color.RED){
+//						temp1.setPixel(x, y, primo);
+//					}
+//				else if(temp1.getPixel(x, y)==Color.BLUE){
+//						temp1.setPixel(x, y, secondo);
+//					}
+//				else if(temp1.getPixel(x, y)==Color.GREEN){
+//						temp1.setPixel(x, y, terzo);
+//					}
+//				else if(temp1.getPixel(x, y)==Color.YELLOW){
+//						temp1.setPixel(x, y, quarto);
+//					}
+//				else if(temp1.getPixel(x, y)==Color.BLACK){
+//						temp1.setPixel(x, y, quinto);
+//				}
+//				else temp1.setPixel(x, y, sesto);
+//		}//fine for
+//	}//fine for
 	
-	 //fine primo metodo inefficiente
-	//nuovo metodo piu efficiente? funziona male, bisogna correggere
-	  /*  for (int i=0; i<pixels.length; i++){
-	    	if (pixels[i]==Color.RED){
+	 //
+	//Nuovo metodo piu efficiente, sistemato a dovere
+	   int pixels[]= new int[bitmap.getWidth()*bitmap.getHeight()];
+	   bitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+	    for (int i=0; i<pixels.length; i++){
+	    	if (pixels[i]==Color.WHITE){
 	    		pixels[i]=primo;
 	    	}
 	    	else if (pixels[i]==Color.BLUE){
@@ -578,11 +479,17 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    	else if (pixels[i]==Color.BLACK){
 	    		pixels[i]=quinto;
 	    	}
-	    	else pixels[i]=sesto;
+	    	else if (pixels[i]==Color.RED){
+	    		pixels[i]=sesto;
+	    	}
+	    	else if (pixels[i]==Color.TRANSPARENT){
+	    		pixels[i]=Color.TRANSPARENT;
+	    	}
+	    	else pixels[i]=primo;
 	    	
 	    }
 	    temp1.setPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
-	    */
+	   
 	    
 	storeImage(temp1);
 	}
