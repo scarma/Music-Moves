@@ -62,7 +62,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
     private VerticalProgressBar progressBarZ;
     Bitmap bitmap = null;
     Bitmap temp1;
-    Calendar c = Calendar.getInstance();
+    Calendar c;
    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -132,7 +132,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			    minute = c.get(Calendar.MINUTE);
 			    second = c.get(Calendar.SECOND);
 			    day = c.get(Calendar.DATE);
-			    month = c.get(Calendar.MONTH);
+			    month = c.get(Calendar.MONTH)+1;
 			    year = c.get(Calendar.YEAR);
 			    
 			    date = day +"/"+ month+"/"+ year +" - "+ hour+":"+ minute +":"+ second;
@@ -294,26 +294,24 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		mSensorManager.unregisterListener(this);
 
 		//Ottengo la data e l'ora corrente
-		
+		 c = Calendar.getInstance();
 		 hour = c.get(Calendar.HOUR_OF_DAY);
 	     minute = c.get(Calendar.MINUTE);
 	     second = c.get(Calendar.SECOND);
 	     day = c.get(Calendar.DATE);
-	     month = c.get(Calendar.MONTH);
+	     month = c.get(Calendar.MONTH)+1;
 	     year = c.get(Calendar.YEAR);
 	    String date_m = day +"/"+ month +"/"+ year +" - "+ hour+":"+ minute +":"+ second;
 	    
-		Toast.makeText(getApplicationContext(), "Recorded\n"+readFileAsString(filename)+"\n"+date_m + filepath, Toast.LENGTH_LONG).show();
+	    //crea la thumbnail univoca
+	  	creaThumbNail();
 		
 		//Inserimento dati nel database
 		databaseHelper = new DBAdapter(getApplicationContext());
 		databaseHelper.open();
-		databaseHelper.createSession(filename, filepath+"/", date, date_m, "ls", 100, 1, 1, 1);
+		databaseHelper.createSession(filename, filepath+"/", date, date_m, filepath+"/", 100, 1, 1, 1);
 		databaseHelper.close();
 //		proSoundGenerator(filename);
-		
-		//crea la thumbnail univoca
-		creaThumbNail();
 		
 		UnlockScreenRotation(); //Permetto rotazione
 	}

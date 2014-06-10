@@ -3,6 +3,10 @@ package com.example.musicmoves;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import database.DBAdapter;
  
 public class UI1Adapter extends ArrayAdapter<String> {
 	public final static String EXTRA_MESSAGE = "com.example.MusicMoves.MESSAGE";
@@ -21,6 +26,9 @@ public class UI1Adapter extends ArrayAdapter<String> {
     private int mIdRisorsaVista;
 
 	private Context ctx;
+	
+	private DBAdapter databaseHelper;
+	private Cursor cursor;
  
     public UI1Adapter(Context ctx, int IdRisorsaVista, String[] strings, TypedArray icons) {
         super(ctx, IdRisorsaVista, strings);
@@ -54,17 +62,28 @@ public class UI1Adapter extends ArrayAdapter<String> {
     public View getView(final int position, View convertView, ViewGroup parent) {
         convertView = mInflater.inflate(mIdRisorsaVista, null);
  
+        databaseHelper = new DBAdapter(ctx);
+		databaseHelper.open();
+		cursor = databaseHelper.fetchSessionByFilter(list_music[position]);
+		cursor.moveToFirst();
+        
         ImageView iv = (ImageView)convertView.findViewById(R.id.immagine_vista);
-        iv.setImageDrawable(immagini.getDrawable(position));
- 
+        Bitmap bitmap = BitmapFactory.decodeFile(cursor.getString(5)+list_music[position]+".png");
+        Bitmap bitmapScaled = Bitmap.createScaledBitmap(bitmap, 50, 50, false);
+        iv.setImageDrawable(Drawable.createFromPath());
+		
         TextView name = (TextView)convertView.findViewById(R.id.textName);
         name.setText(list_music[position]);
+        
         //TODO prendere date da database
         TextView dateCreation = (TextView)convertView.findViewById(R.id.textDateCreation);
-        dateCreation.setText(list_music[position]+" ");
+        dateCreation.setText(cursor.getString(3)+" ");
         
         TextView dateLastModified = (TextView)convertView.findViewById(R.id.textDateLastModified);
-        dateLastModified.setText(list_music[position]+" ");
+        dateLastModified.setText(cursor.getString(4)+" ");
+        
+        databaseHelper.close();
+		cursor.close();
         
 //        tv.setOnClickListener(new OnClickListener() {
 //			
