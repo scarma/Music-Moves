@@ -41,6 +41,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 import database.DBAdapter;
 
+
 public class UI1 extends ListActivity {
 	
 	public final static String EXTRA_MESSAGE = "com.example.MusicMoves.MESSAGE";
@@ -69,7 +70,7 @@ public class UI1 extends ListActivity {
 		setContentView(R.layout.activity_ui1);
 		Context ctx = getApplicationContext();
         Resources res = ctx.getResources();
-        
+               
         //lettura dal database        
         databaseHelper = new DBAdapter(getApplicationContext());
 		databaseHelper.open();
@@ -116,7 +117,7 @@ public class UI1 extends ListActivity {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
 		System.out.println("x="+preferences.getBoolean("x", false));
 		System.out.println(""
-				+ "="+preferences.getInt("upsampling", 0));
+				+ "="+preferences.getInt("upsampling", 2));
 		
 	}
 	

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,9 +67,10 @@ public class UI1Adapter extends ArrayAdapter<String> {
 		cursor.moveToFirst();
         
         ImageView iv = (ImageView)convertView.findViewById(R.id.immagine_vista);
-        Bitmap bitmap = BitmapFactory.decodeFile(cursor.getString(5)+list_music[position]+".png");
-        Bitmap bitmapScaled = Bitmap.createScaledBitmap(bitmap, 50, 50, false);
-        iv.setImageDrawable(Drawable.createFromPath());
+//        Bitmap b = BitmapFactory.decodeFile(pathName);
+//        Bitmap bitmapResized = Bitmap.createScaledBitmap(b, 50, 50, false);
+        
+        iv.setImageDrawable(Drawable.createFromPath(cursor.getString(5)+list_music[position]+".png"));
 		
         TextView name = (TextView)convertView.findViewById(R.id.textName);
         name.setText(list_music[position]);

@@ -19,12 +19,40 @@
 		android:title="@string/z"
 		android:defaultValue="true" 
 		android:summary="Enable/disable Z axe"/>
+    <com.example.musicmoves.SeekBarPreference
+         android:key="upsampling" 
+         android:title="@string/Upsampling" 
+         android:summary="Adjust default upsampling" 
+         android:defaultValue="1" 
+         android:max="200"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:progress="5" />
+     
+      <com.example.musicmoves.SeekBarPreference
+         android:key="maxRecTime" 
+         android:title="Maximum recording duration" 
+         android:summary="Maximum recording duration" 
+         android:defaultValue="0" 
+         android:max="100"
+         android:progress="0"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"/>
+     
+      <com.example.musicmoves.SeekBarPreference
+          android:key="speechRate" 
+          android:title="Speech speed" 
+          android:summary="Adjust reading speed" 
+          android:defaultValue="80" 
+          android:max="200"
+          android:progress="0" />
+    
     </PreferenceCategory>   
     
-    <PreferenceCategory 
+ <!--    <PreferenceCategory 
         android:title="asd"
         android:summary="sss" 
-        >
+        android:key="seekbars">
      <SeekBarPreference
          android:key="upsampling" 
          android:title="Upsampling" 
@@ -33,7 +61,7 @@
          android:max="200"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"
-         android:progress="0" />
+         android:progress="5" />
      
       <SeekBarPreference
          android:key="maxRecTime" 
@@ -54,5 +82,5 @@
           android:progress="0" />
       
       
-    </PreferenceCategory>
+    </PreferenceCategory> -->
 </PreferenceScreen>

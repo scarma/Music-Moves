@@ -10,6 +10,8 @@
     <string name="title_activity_ui5">Preferences-UI5</string>
     <string name="default_axes">Default axes to use</string>
     <string name="x">X</string>
+    <string name="Upsampling">Upsampling</string>
+    
     <string name="y">Y</string>
     <string name="z">Z</string>
     <string name="default_upsampling">Default upsampling amount</string>

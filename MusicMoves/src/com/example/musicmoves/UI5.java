@@ -67,9 +67,10 @@ boolean x = true;
 //		 as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
-			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
+//			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
+			mPreferences= PreferenceManager.getDefaultSharedPreferences (this);
 			PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
-			SharedPreferences.Editor editor = preferences.edit();
+			SharedPreferences.Editor editor = mPreferences.edit();
 			editor.clear();
 			editor.commit();
 			Intent intent = new Intent(getApplicationContext(), UI5.class);
