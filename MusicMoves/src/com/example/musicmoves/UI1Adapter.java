@@ -6,7 +6,6 @@ import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -21,8 +20,7 @@ public class UI1Adapter extends ArrayAdapter<String> {
     private LayoutInflater mInflater;
  
     private String[] list_music;
-    private TypedArray immagini;
- 
+    
     private int mIdRisorsaVista;
 
 	private Context ctx;
@@ -30,7 +28,7 @@ public class UI1Adapter extends ArrayAdapter<String> {
 	private DBAdapter databaseHelper;
 	private Cursor cursor;
  
-    public UI1Adapter(Context ctx, int IdRisorsaVista, String[] strings, TypedArray icons) {
+    public UI1Adapter(Context ctx, int IdRisorsaVista, String[] strings) {
         super(ctx, IdRisorsaVista, strings);
         //per instanziare un file xml layout nel suo oggetto vista corrispondente
         mInflater = (LayoutInflater)ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -38,8 +36,7 @@ public class UI1Adapter extends ArrayAdapter<String> {
         this.ctx=ctx;
         
         list_music = strings;
-        immagini = icons;
- 
+        
         mIdRisorsaVista = IdRisorsaVista;
     }
  
@@ -68,12 +65,11 @@ public class UI1Adapter extends ArrayAdapter<String> {
 		cursor.moveToFirst();
         
         ImageView iv = (ImageView)convertView.findViewById(R.id.immagine_vista);
-        
         //Scala dimensioni Bitmap e la mostra
         Bitmap bitmapScaled = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(cursor.getString(5)+list_music[position]+".png"), 100, 100, false);
         iv.setImageBitmap(bitmapScaled);
-		Log.d("Path",cursor.getString(5)+list_music[position]+".png");
-        TextView name = (TextView)convertView.findViewById(R.id.textName);
+
+		TextView name = (TextView)convertView.findViewById(R.id.textName);
         name.setText(list_music[position]);
         
         TextView dateCreation = (TextView)convertView.findViewById(R.id.textDateCreation);

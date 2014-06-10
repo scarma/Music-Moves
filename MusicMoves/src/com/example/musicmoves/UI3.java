@@ -397,29 +397,33 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	
 	
 	protected void creaThumbNail() {
-		int primo, secondo, terzo, quarto, quinto, sesto;
+		
+		// Variabili che variano da 0 a 255
 		int a, b, c, d, e, f;
-		//I valori assumevano dati che non spaziavano da 1 a 255 (i mesi sono massimo 12)
 		a= (year)%255;
-		b= (int)(minute*255/60);
-		c= (int)(hour*255/60);
-		d= (int)(month*255/12);
-		e= (int)(day*255/31);
-		f= (int)(second*255/60);
-		//		Log.d("Valori:",a+" "+b+" "+c+" "+d+" "+e+" "+f);
+		b= minute*255/60;
+		c= hour*255/60;
+		d= month*255/12;
+		e= day*255/31;
+		f= second*255/60;
+		//	Log.d("Valori:",a+" "+b+" "+c+" "+d+" "+e+" "+f);
 		
-		// inizializza colori, da modificare
-		primo =   Color.rgb(a, b, c);
-		secondo = Color.rgb(d, e, f);
-		terzo =   Color.rgb(a, c, e);
-		quarto =  Color.rgb(b, d, f);
-		quinto =  Color.rgb(f, e, c);
-		sesto =   Color.rgb(a, d, b);
+		// Inizializza colori
+		int primo, secondo, terzo, quarto, quinto, sesto;
+//		primo =   Color.rgb(a, b, c); //sfondo
+//		secondo = Color.rgb(d, e, f); //2
+//		terzo =   Color.rgb(a, c, e); //3
+//		quarto =  Color.rgb(b, d, f); //1
+//		quinto =  Color.rgb(f, e, c); //altoparlante interno
+//		sesto =   Color.rgb(a, d, b); //altoparlante
+		primo =   Color.rgb(a, b, f); //sfondo
+		secondo = Color.rgb(d, e, f); //2
+		terzo =   Color.rgb(c, f, e); //3
+		quarto =  Color.rgb(f, d, b); //1
+		quinto =  Color.rgb(f, e, c); //altoparlante interno
+		sesto =   Color.rgb(a, d, b); //altoparlante
 	
-
-    	//per gli dei non cambiare ne rimuovere assolutamente
-		
-		//Prende la bitmap dalla cartela res/raw/
+		//Prende la bitmap dalla cartella res/raw/
 	    try {
 	      bitmap = BitmapFactory.decodeResource(getResources(),R.raw.icon_trasp);
 	    	} 
@@ -429,36 +433,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    
 	   temp1 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
 	   
-
-
-	    
-	// primo metodo inefficiente, codice che cambia i colori della bitmap in modo univoco
-//	for (int y = 0; y < bitmap.getWidth(); y++) {
-//		for (int x = 0; x < bitmap.getHeight(); x++) {
-//			
-//			
-//			
-//				if(temp1.getPixel(x, y)==Color.RED){
-//						temp1.setPixel(x, y, primo);
-//					}
-//				else if(temp1.getPixel(x, y)==Color.BLUE){
-//						temp1.setPixel(x, y, secondo);
-//					}
-//				else if(temp1.getPixel(x, y)==Color.GREEN){
-//						temp1.setPixel(x, y, terzo);
-//					}
-//				else if(temp1.getPixel(x, y)==Color.YELLOW){
-//						temp1.setPixel(x, y, quarto);
-//					}
-//				else if(temp1.getPixel(x, y)==Color.BLACK){
-//						temp1.setPixel(x, y, quinto);
-//				}
-//				else temp1.setPixel(x, y, sesto);
-//		}//fine for
-//	}//fine for
-	
-	 //
-	//Nuovo metodo piu efficiente, sistemato a dovere
+	   //Scrive nuova bitmap in base ai colori
 	   int pixels[]= new int[bitmap.getWidth()*bitmap.getHeight()];
 	   bitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
 	    for (int i=0; i<pixels.length; i++){

@@ -2,26 +2,23 @@ package com.example.musicmoves;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.SeekBar;
-import android.widget.TextView;
 
 
 
 public class UI5 extends PreferenceActivity {
-
+	
+	@SuppressWarnings("deprecation")
+	@Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);       
+        addPreferencesFromResource(R.xml.preferences);
+    } 
       
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -37,9 +34,9 @@ public class UI5 extends PreferenceActivity {
 //		 as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
-			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
+			SharedPreferences mPreferences= PreferenceManager.getDefaultSharedPreferences (this);
 			PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
-			SharedPreferences.Editor editor = preferences.edit();
+			SharedPreferences.Editor editor = mPreferences.edit();
 			editor.clear();
 			editor.commit();
 			Intent intent = new Intent(getApplicationContext(), UI5.class);

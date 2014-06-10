@@ -12,13 +12,10 @@ import java.util.Locale;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
-import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -40,6 +37,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 import database.DBAdapter;
+
 
 public class UI1 extends ListActivity {
 	
@@ -67,9 +65,7 @@ public class UI1 extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ui1);
-		Context ctx = getApplicationContext();
-        Resources res = ctx.getResources();
-        
+		     
         //lettura dal database        
         databaseHelper = new DBAdapter(getApplicationContext());
 		databaseHelper.open();
@@ -86,9 +82,7 @@ public class UI1 extends ListActivity {
 		databaseHelper.close();
 		cursor.close();
         
-        TypedArray immagini = res.obtainTypedArray(R.array.immagini);
-        
-        adapter = new UI1Adapter(this, R.layout.riga_lista, list_music, immagini);
+        adapter = new UI1Adapter(this, R.layout.riga_lista, list_music);
         setListAdapter(adapter);
         //da qui inseriamo il codice utile a mostrare un messaggio al click
         ListView listaV = getListView();
@@ -116,7 +110,7 @@ public class UI1 extends ListActivity {
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
 		System.out.println("x="+preferences.getBoolean("x", false));
 		System.out.println(""
-				+ "="+preferences.getInt("upsampling", 0));
+				+ "="+preferences.getInt("upsampling", 2));
 		
 	}
 	

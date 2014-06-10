@@ -12,42 +12,11 @@
     <string name="x">X</string>
     <string name="y">Y</string>
     <string name="z">Z</string>
+    <string name="upsampling">Upsampling</string>
     <string name="default_upsampling">Default upsampling amount</string>
     <string name="max_duration">Maximum recording duration</string>
     <string name="sample_rate">Sample rate</string>
     <string name="action_restore_defaults">Restore to default settings</string>
-<string-array name="paesi">
-        <item>Rec01</item>
-        <item>Rec02</item>
-        <item>AranciaGranate</item>
-        <item>Milano</item>
-        <item>3</item>
-        <item>Roma</item>
-        <item>Venezia</item>
-        <item>Rec01</item>
-        <item>Rec02</item>
-        <item>AranciaGranate</item>
-        <item>Milano</item>
-        <item>3</item>
-        <item>Roma</item>
-        <item>Venezia</item>
- </string-array>
-    <array name="immagini">
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-        <item>@drawable/ic_launcher</item>
-    </array>
     <string name="current_file">Default Name</string>
     <string name="restore_defaults">Restore defaults settings</string>
     <string name="new_session">Create A New Recording Session</string>

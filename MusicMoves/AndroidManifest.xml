@@ -44,8 +44,7 @@
         </activity>
         <activity
             android:name="com.example.musicmoves.UI5"
-            android:label="@string/title_activity_ui5"
-            android:launchMode="singleInstance" >
+            android:label="@string/title_activity_ui5">
         </activity>
         <service 
 			 android:name=".PlayerService" 

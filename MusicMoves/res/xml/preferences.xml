@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" 
+    			  xmlns:musicmoves="musicmoves"
     android:title="@string/title_activity_ui5">
     
     <PreferenceCategory android:title="@string/default_axes" 
@@ -19,40 +20,45 @@
 		android:title="@string/z"
 		android:defaultValue="true" 
 		android:summary="Enable/disable Z axe"/>
-    </PreferenceCategory>   
     
-    <PreferenceCategory 
-        android:title="asd"
-        android:summary="sss" 
-        >
-     <SeekBarPreference
+    
+    <com.example.musicmoves.SeekBarPreference
          android:key="upsampling" 
-         android:title="Upsampling" 
-         android:summary="Adjust default upsampling" 
-         android:defaultValue="1" 
-         android:max="200"
+         android:title="@string/upsampling" 
+         android:summary="Default amount of upsampling" 
+         android:defaultValue="20" 
+         android:max="40"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"
-         android:progress="0" />
-     
-      <SeekBarPreference
+         android:progress="0"
+         musicmoves:min="10"
+         musicmoves:unitsLeft=""
+         musicmoves:unitsRight="0 samples"
+         />
+     <com.example.musicmoves.SeekBarPreference
          android:key="maxRecTime" 
          android:title="Maximum recording duration" 
-         android:summary="Maximum recording duration" 
-         android:defaultValue="0" 
-         android:max="100"
+         android:summary="Maximum duration of a recording session" 
+         android:defaultValue="10" 
+         android:max="10"
          android:progress="0"
          android:layout_width="fill_parent"
-         android:layout_height="wrap_content"/>
-     
-      <SeekBarPreference
-          android:key="speechRate" 
-          android:title="Speech speed" 
-          android:summary="Adjust reading speed" 
-          android:defaultValue="80" 
-          android:max="200"
-          android:progress="0" />
-      
-      
-    </PreferenceCategory>
+         android:layout_height="wrap_content"
+         musicmoves:min="2"
+         musicmoves:unitsLeft=""
+         musicmoves:unitsRight=" minutes"
+         />
+     <com.example.musicmoves.SeekBarPreference
+          android:key="sampleRate" 
+          android:title="Sample rate" 
+          android:summary="Sample rate used to record accelerometer data" 
+          android:defaultValue="8" 
+          android:max="20"
+          android:progress="0" 
+          musicmoves:min="1"
+          musicmoves:unitsLeft=""
+          musicmoves:unitsRight="000 Hz"
+          />
+    
+    </PreferenceCategory>   
 </PreferenceScreen>
