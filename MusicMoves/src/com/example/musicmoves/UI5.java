@@ -85,7 +85,8 @@ boolean x = true;
 
             //You can check to see what change in two different ways.           
             //a) you can check the TypeOf the preference that changed. 
-            if (preference instanceof CheckBoxPreference) {
+            if (preference.getKey().equals("x")) {
+            	Log.d("asdasd","asd");
                 //If the preference that changes is a CheckBoxPreference, then do such and such changes. 
             } 
             //Or, you can check if it's a specific preference that changed
