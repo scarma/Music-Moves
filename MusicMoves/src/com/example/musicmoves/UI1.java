@@ -16,10 +16,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -58,6 +60,7 @@ public class UI1 extends ListActivity {
 	private int year = 0;
 	private String date = null;
 	private FileWriter writer;
+	
 	
 	@SuppressLint("Recycle")
 	@Override
@@ -103,7 +106,22 @@ public class UI1 extends ListActivity {
             }
         });  
         
+
+        
     }
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
+		System.out.println("x="+preferences.getBoolean("x", false));
+		System.out.println(""
+				+ "="+preferences.getInt("upsampling", 0));
+		
+	}
+	
+	
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
