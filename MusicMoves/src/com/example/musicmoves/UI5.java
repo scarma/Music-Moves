@@ -22,37 +22,7 @@ import android.widget.TextView;
 
 public class UI5 extends PreferenceActivity {
 
-/**
- * The Key to be used to access the preference. This should be defined already on your preferences.xml file
- */
-public static final String KEY_CURRENT_THEME = "pref_current_theme";
-/**
- * The instance of the Theme Preference. 
- */
-Preference mThemePreference;
-SharedPreferences mPreferences;
-OnPreferenceChangeListener mChangeListener;
-boolean x = true;
-	//	SEEKBAR
-    @SuppressWarnings("deprecation")
-	@Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);       
-        addPreferencesFromResource(R.xml.preferences);
-    }
-//            @Override
-//        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-//	        Preference p = findPreference(key);
-//	        if (key.equals("x")) {
-//	        Log.d("olè","sdflsdf");
-//	        }
-//	        else if (p instanceof ListPreference) {
-//	        p.setSummary((String) ((ListPreference) p).getEntry());
-//	        }
-//	    }
-//	        //First time initialization     
-	        
+      
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 

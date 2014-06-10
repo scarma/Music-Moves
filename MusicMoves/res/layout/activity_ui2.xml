@@ -56,6 +56,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/seekBarUpsampling"
+        android:layout_below="@+id/checkX"
         android:layout_alignLeft="@+id/seekBarUpsampling"
         android:layout_marginBottom="15dp"
         android:text="Upsampling" />
@@ -76,5 +77,24 @@
         android:layout_alignTop="@+id/imageButtonPlay"
         android:layout_centerHorizontal="true"
         android:text="l" />
+
+    <TextView
+        android:id="@+id/textViewRename"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/seekBarUpsampling"
+        android:layout_below="@+id/seekBarUpsampling"
+        android:layout_marginTop="49dp"
+        android:text="Rename" />
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewRename"
+        android:layout_alignRight="@+id/seekBarUpsampling"
+        android:layout_below="@+id/textViewRename"
+        android:layout_marginTop="26dp"
+        android:ems="10" />
 
 </RelativeLayout>
