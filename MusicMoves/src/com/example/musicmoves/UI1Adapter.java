@@ -6,7 +6,7 @@ import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -68,14 +68,14 @@ public class UI1Adapter extends ArrayAdapter<String> {
 		cursor.moveToFirst();
         
         ImageView iv = (ImageView)convertView.findViewById(R.id.immagine_vista);
-        Bitmap bitmap = BitmapFactory.decodeFile(cursor.getString(5)+list_music[position]+".png");
-        Bitmap bitmapScaled = Bitmap.createScaledBitmap(bitmap, 50, 50, false);
-        iv.setImageDrawable(Drawable.createFromPath());
-		
+        
+        //Scala dimensioni Bitmap e la mostra
+        Bitmap bitmapScaled = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(cursor.getString(5)+list_music[position]+".png"), 100, 100, false);
+        iv.setImageBitmap(bitmapScaled);
+		Log.d("Path",cursor.getString(5)+list_music[position]+".png");
         TextView name = (TextView)convertView.findViewById(R.id.textName);
         name.setText(list_music[position]);
         
-        //TODO prendere date da database
         TextView dateCreation = (TextView)convertView.findViewById(R.id.textDateCreation);
         dateCreation.setText(cursor.getString(3)+" ");
         

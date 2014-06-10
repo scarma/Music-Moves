@@ -23,7 +23,7 @@ import android.widget.Toast;
 
 public class PlayerService extends Service {
 	
-
+	 private String message;
 	 public static String PLAY = "BGPlay";
 	 public static String PAUSE = "BGPause";
 	 public static String STOP = "BGStop"; // Not used 
@@ -43,7 +43,7 @@ public class PlayerService extends Service {
 	 { 
  	
 	 if(intent.getBooleanExtra(PLAY, false)) 
-	 	{	String message = intent.getStringExtra(UI1.EXTRA_MESSAGE);
+	 	{	message = intent.getStringExtra(UI1.EXTRA_MESSAGE);
 		 	if(!sessionName.equals(message))
 	 			{ stop();}
 		 	sessionName = message;
@@ -121,7 +121,8 @@ public class PlayerService extends Service {
 //		   	   }
 				 // Runs this service in the foreground, 
 				 // supplying the ongoing notification to be shown to the user 
-				 Intent intent = new Intent(this, UI4.class); 
+				 Intent intent = new Intent(this, UI4.class);
+				 intent.putExtra(UI1.EXTRA_MESSAGE, message);
 				 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP); 
 				 PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0); 
 				 Notification notification = new NotificationCompat.Builder(getApplicationContext()) 
