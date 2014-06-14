@@ -8,12 +8,6 @@ import android.widget.ProgressBar;
 public class VerticalProgressBar extends ProgressBar{
     private int x, y, z, w;
 
-    @Override
-    protected void drawableStateChanged() {
-        // TODO Auto-generated method stub
-        super.drawableStateChanged();
-    }
-
     public VerticalProgressBar(Context context) {
         super(context);
     }
@@ -59,7 +53,4 @@ public class VerticalProgressBar extends ProgressBar{
             super.setProgress(0);
         onSizeChanged(x, y, z, w);
     }
-//    public void updateThumb(){
-//        onSizeChanged(getWidth(), getHeight(), 0, 0);
-//   }
 }

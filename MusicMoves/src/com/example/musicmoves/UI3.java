@@ -87,20 +87,19 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) { 
 	        		
 	                for (int i = start; i < end; i++) { 
-	                        if (!Character.isLetterOrDigit(source.charAt(i))) { 
-	                                return ""; 
-	                        } 
+	                        if (!Character.isLetterOrDigit(source.charAt(i))) { return ""; } 
 	                } 
 	                return null; 
 	        } 
 		}; 
-		input.setFilters(new InputFilter[]{filter}); 
+		//Input filter per accettare file al massimo di 10 char
+		InputFilter lenghtfilter = new InputFilter.LengthFilter(10);
+		input.setFilters(new InputFilter[]{filter,lenghtfilter}); 
 		alert.setView(input);
 
 		alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
-				LockScreenRotation();
-				 // Do something with value!   
+				LockScreenRotation(); 
 				String value="";
 				
 				value = input.getText().toString().toLowerCase(Locale.getDefault());
@@ -119,7 +118,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 				cursor.close();
 				
 				if(count != 0){
-					//avviso l'utente che ï¿½ giï¿½ esistente una sessione con il nome che vuole inserire
+					//avviso l'utente che è già esistente una sessione con il nome che vuole inserire
 					Toast.makeText(getApplicationContext(), "Name not avaiable, please choose a different name", Toast.LENGTH_LONG).show();
 					finish();
 					startActivity(getIntent());
@@ -167,6 +166,18 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 //			getSupportFragmentManager().beginTransaction()
 //					.add(R.id.container, new PlaceholderFragment()).commit();
 //		}
+	}
+	
+	@Override
+	protected void onPause() {
+	//TODO: Salvare lo stato
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+	//TODO: Ripristinare lo stato
+		super.onResume();
 	}
 
 	@Override
@@ -311,9 +322,11 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		databaseHelper.open();
 		databaseHelper.createSession(filename, filepath+"/", date, date_m, filepath+"/", 100, 1, 1, 1);
 		databaseHelper.close();
-//		proSoundGenerator(filename);
 		
 		UnlockScreenRotation(); //Permetto rotazione
+		Intent intent = new Intent(getApplicationContext(), UI1.class);
+		startActivity(intent);
+		finish();
 	}
 
 	@Override

@@ -52,12 +52,12 @@
           android:key="sampleRate" 
           android:title="Sample rate" 
           android:summary="Sample rate used to record accelerometer data" 
-          android:defaultValue="8" 
-          android:max="20"
+          android:defaultValue="3" 
+          android:max="10"
           android:progress="0" 
           musicmoves:min="1"
           musicmoves:unitsLeft=""
-          musicmoves:unitsRight="000 Hz"
+          musicmoves:unitsRight=" sample/second"
           />
     
     </PreferenceCategory>   

@@ -18,8 +18,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class PlayerService extends Service {
 	
@@ -29,9 +27,8 @@ public class PlayerService extends Service {
 	 public static String STOP = "BGStop"; // Not used 
 	 private String sessionName ="";
 	 private boolean initialized = false;
-//	 private MediaPlayer myPlayer = null; 
 	 private boolean isPlaying = false; 
-//	 private FileInputStream fis;
+
 	 @Override 
 	 public IBinder onBind(Intent intent) 
 	 { 
@@ -72,19 +69,12 @@ public class PlayerService extends Service {
 
 	private void play() {
 		
-		//Fa riprodurre il file su sd chiamato "Tria.mp3"
 		if(isPlaying) return; 
 		isPlaying = true; 
-//		 if (myPlayer != null)	myPlayer.start();
-//		 else{	
-//		 try {
+
 		if(!initialized)	 {
 			proSoundGenerator(Environment.getExternalStorageDirectory().getPath()+"/MusicMoves", sessionName);
-		}
-//					 FileDescriptor fd = null;
-//					 File baseDir = Environment.getExternalStorageDirectory();
-//				     String audioPath = baseDir.getAbsolutePath() + "/Tria" + ".mp3";
-//				     
+		}				     
 				     if(audioX.getState()==AudioTrack.STATE_INITIALIZED &&
 				    	audioY.getState()==AudioTrack.STATE_INITIALIZED &&
 				    	audioZ.getState()==AudioTrack.STATE_INITIALIZED){
@@ -97,28 +87,6 @@ public class PlayerService extends Service {
 				     else {
 						    Log.d("AudioTrack", "Audiotrack not initialized");
 					    }
-//					 fis = new FileInputStream(audioPath);	
-//				     fd = fis.getFD();
-//				     
-				//	 myPlayer = MediaPlayer.create(this, R.raw.doowackadoo); 
-//				     myPlayer = new MediaPlayer();
-//					 myPlayer.setDataSource();
-//					 myPlayer.prepare();
-//					 myPlayer.setLooping(true); 
-//					 myPlayer.start(); 
-//					} catch (FileNotFoundException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					} catch (IllegalArgumentException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					} catch (IllegalStateException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					} catch (IOException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//		   	   }
 				 // Runs this service in the foreground, 
 				 // supplying the ongoing notification to be shown to the user 
 				 Intent intent = new Intent(this, UI4.class);
@@ -131,7 +99,7 @@ public class PlayerService extends Service {
 				 .setSmallIcon(R.drawable.ic_launcher) 
 				 .setContentIntent(pi) // Required on Gingerbread and below 
 				 .build(); 
-				 final int notificationID = 5786423; // An ID for this notification unique within the app 
+				 final int notificationID = 7071727; //An ID for this notification unique within the app 
 				 startForeground(notificationID, notification); 
 				 
 	}
@@ -156,19 +124,7 @@ public class PlayerService extends Service {
 			    Log.d("AudioTrack", "Audiotrack not initialized");
 			    return;
 		    }
-			 
-//			 if (myPlayer != null) { 
-//					 myPlayer.release(); 
-//				   	 myPlayer = null; 
-//				   	 try {
-//						fis.close();
-//					} catch (IOException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//			 } 
-			 stopForeground(true); 
-//		 } 
+			 stopForeground(true);
 	 } 
 	
 	 @Override 

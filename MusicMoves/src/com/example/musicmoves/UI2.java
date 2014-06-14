@@ -1,16 +1,24 @@
 package com.example.musicmoves;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import database.DBAdapter;
 
 public class UI2 extends ActionBarActivity {
 	private String message;
+	private DBAdapter databaseHelper;
+	private Cursor cursor;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -23,12 +31,32 @@ public class UI2 extends ActionBarActivity {
 		// Get the message from the intent
 		Intent intent = getIntent();
 	    message = intent.getStringExtra(UI1.EXTRA_MESSAGE);
+	    databaseHelper = new DBAdapter(this);
+		databaseHelper.open();
+		cursor = databaseHelper.fetchSessionByFilter(message);
+		cursor.moveToFirst();
+		ImageView iv = (ImageView) findViewById(R.id.imageThumb);
+		Bitmap bitmapScaled = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(cursor.getString(5)+message+".png"), 200, 200, false);
+        iv.setImageBitmap(bitmapScaled);
 		//Modifica campo textView
 		TextView textView = (TextView) findViewById(R.id.textViewFileName);
 	    textView.setTextColor(Color.rgb(255, 153, 0));
-	    textView.setText(message+ "\n<3 "+message+ " <3"+ "\n<3 "+message+ " <3"+ "\n<3 "+message+ " <3");
+	    textView.setText(message+ "\nDate Creation: "+cursor.getString(3)+ "\nLast Modified: "+cursor.getString(4));
+	    this.setTitle(message);
+	}
+	
+	@Override
+	protected void onPause() {
+	//TODO: Salvare lo stato
+		super.onPause();
 	}
 
+	@Override
+	protected void onResume() {
+	//TODO: Ripristinare lo stato
+		super.onResume();
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 

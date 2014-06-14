@@ -2,7 +2,6 @@ package com.example.musicmoves;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,7 +22,7 @@ public class UI1Adapter extends ArrayAdapter<String> {
     
     private int mIdRisorsaVista;
 
-	private Context ctx;
+    private Context ctx;
 	
 	private DBAdapter databaseHelper;
 	private Cursor cursor;

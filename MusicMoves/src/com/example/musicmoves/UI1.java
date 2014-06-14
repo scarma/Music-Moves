@@ -22,6 +22,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -111,11 +112,14 @@ public class UI1 extends ListActivity {
 		System.out.println("x="+preferences.getBoolean("x", false));
 		System.out.println(""
 				+ "="+preferences.getInt("upsampling", 2));
-		
+		//TODO: Ripristinare lo stato
 	}
 	
-	
-	
+	@Override
+	protected void onPause() {
+	//TODO: Salvare lo stato
+		super.onPause();
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -213,7 +217,7 @@ public class UI1 extends ListActivity {
 	    }
 	}
 
-	private void cloneRec(int position) {
+	private void cloneRec(int position) {//TODO: Sistemare, non funzionante
 		p = position;
 //		prelevo tutti i dati della sessione da clonare e ne creo una 
 //		nuova chiedendo all'utente di inserire un nuovo nome		
@@ -241,8 +245,9 @@ public class UI1 extends ListActivity {
 				return null; 
 			} 
 		};
-		
-		input.setFilters(new InputFilter[]{filter});
+		//Input filter per accettare file al massimo di 10 caratteri
+		InputFilter lenghtfilter = new InputFilter.LengthFilter(10);
+		input.setFilters(new InputFilter[]{filter,lenghtfilter});
 		builder.setView(input);
 		
 		builder.setPositiveButton(android.R.string.yes,new OnClickListener() {
@@ -299,19 +304,13 @@ public class UI1 extends ListActivity {
 				
 				try {
 					writer = new FileWriter(new File(loc_o, new_filename+".txt"), true);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				cloneFileToFile(loc_o, name_o+".txt");
-				try {
+					cloneFileToFile(loc_o, name_o+".txt");
 					writer.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					Log.d("FileWriter","IOException");
 					e.printStackTrace();
 				}
-				
+								
 				finish();
 				startActivity(getIntent());					
 			}
@@ -360,7 +359,7 @@ public class UI1 extends ListActivity {
 		startActivity(getIntent());
 	}
 	
-	private void renameRec(int position) {
+	private void renameRec(int position) {//TODO: Sistemare, non funzionante
 		p = position;
 //		faccio un semplice update
 		databaseHelper.open();
@@ -386,8 +385,9 @@ public class UI1 extends ListActivity {
 				return null; 
 			} 
 		};
-		
-		input.setFilters(new InputFilter[]{filter});
+		//Input filter per accettare file al massimo di 10 caratteri
+		InputFilter lenghtfilter = new InputFilter.LengthFilter(10);
+		input.setFilters(new InputFilter[]{filter,lenghtfilter});
 		builder.setView(input);
 		
 		builder.setPositiveButton(android.R.string.yes,new OnClickListener() {
