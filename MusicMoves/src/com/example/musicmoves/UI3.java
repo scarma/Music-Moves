@@ -14,6 +14,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.database.Cursor;
@@ -26,6 +27,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
 import android.text.Spanned;
@@ -60,8 +62,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private VerticalProgressBar progressBarX;
     private VerticalProgressBar progressBarY;
     private VerticalProgressBar progressBarZ;
-    Bitmap bitmap = null;
-    Bitmap temp1;
+   
     Calendar c;
    
 	@Override
@@ -317,12 +318,27 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    String date_m = day +"/"+ month +"/"+ year +" - "+ hour+":"+ minute +":"+ second;
 	    
 	    //crea la thumbnail univoca
-	  	creaThumbNail();
+	  	creaThumbNail(day, month, year, hour, minute, second);
 		
+	  	//lettura delle preferenze dell'utente
+	  	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
+	  	boolean x=preferences.getBoolean("x", false);
+	  	boolean y=preferences.getBoolean("y", false);
+	  	boolean z=preferences.getBoolean("z", false);
+	  	int x1=0, y1=0, z1=0;
+	  	if(x)
+	  		x1=1;
+	  	if(y)
+	  		y1=1;
+	  	if(z)
+	  		z1=1;
+	  	int upsampl = preferences.getInt("upsampling", 200);
+		System.out.println("" + "="+preferences.getInt("upsampling", 200));
+	  	
 		//Inserimento dati nel database
 		databaseHelper = new DBAdapter(getApplicationContext());
 		databaseHelper.open();
-		databaseHelper.createSession(filename, filepath+"/", date, date_m, filepath+"/", 100, 1, 1, 1);
+		databaseHelper.createSession(filename, filepath+"/", date, date_m, filepath+"/", upsampl, x1, y1, z1);
 		databaseHelper.close();
 		
 		UnlockScreenRotation(); //Permetto rotazione
@@ -411,16 +427,20 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	}//fine storeImage
 	
 	
-	protected void creaThumbNail() {
+	public void creaThumbNail(int da, int m, int y, int h, int mi, int s) {
 		
+		 Bitmap bitmap = null;
+		 Bitmap temp1;
 		// Variabili che variano da 0 a 255
 		int a, b, c, d, e, f;
-		a= (year)%255;
-		b= minute*255/60;
-		c= hour*255/60;
-		d= month*255/12;
-		e= day*255/31;
-		f= second*255/60;
+		
+		e= da*255/31;
+		d= m*255/12;
+		a= y%255;
+		c= h*255/60;
+		b= mi*255/60;
+		f= s*255/60;
+	
 		//	Log.d("Valori:",a+" "+b+" "+c+" "+d+" "+e+" "+f);
 		
 		// Inizializza colori
@@ -477,7 +497,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    	
 	    }
 	    temp1.setPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
-	   
 	    
 	storeImage(temp1);
 	}

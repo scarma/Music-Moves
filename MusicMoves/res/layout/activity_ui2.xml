@@ -23,6 +23,7 @@
         android:layout_alignLeft="@+id/imageThumb"
         android:layout_below="@+id/textViewAxes"
         android:checked="true"
+        android:onClick="aggiorna"
         android:text="x" />
 
     <CheckBox
@@ -33,6 +34,7 @@
         android:layout_alignBottom="@+id/checkX"
         android:layout_centerHorizontal="true"
         android:checked="true"
+        android:onClick="aggiorna"
         android:text="y" />
 
     <CheckBox
@@ -44,6 +46,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="25dp"
         android:checked="true"
+        android:onClick="aggiorna"
         android:text="z" />
 
     <ImageView
