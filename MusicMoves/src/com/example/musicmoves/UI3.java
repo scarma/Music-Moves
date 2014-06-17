@@ -62,7 +62,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private VerticalProgressBar progressBarX;
     private VerticalProgressBar progressBarY;
     private VerticalProgressBar progressBarZ;
-   
+    private boolean isAccelListening=false;
     Calendar c;
    
 	@Override
@@ -205,6 +205,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	
 	@Override
 	public void onBackPressed() {
+		if(isAccelListening == true)
+			Stopped(null);
 		Intent settings_intent = new Intent(getApplicationContext(), UI1.class);
 		startActivity(settings_intent);
 		finish();
@@ -260,11 +262,12 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
+		int sampleRate = 1000*1000/preferences.getInt("sampleRate", 5);
 	    mSensorManager.registerListener(this, mAccelerometer , sampleRate);//SensorManager.SENSOR_DELAY_NORMAL
-		
+	    isAccelListening = true;
 	}
 	//TODO: add sampleRate from preferences
-	private int sampleRate = 1000*1000; //in microsecondi
 	
 	public void Paused(View view) { //Cambia pulsanti visibili, chiude il FileWriter se aperto
 		Toast.makeText(getApplicationContext(), "Recording paused", Toast.LENGTH_SHORT).show();	
@@ -305,7 +308,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}	}
-		mSensorManager.unregisterListener(this);
+		mSensorManager.unregisterListener(this, mAccelerometer);
 
 		//Ottengo la data e l'ora corrente
 		 c = Calendar.getInstance();
@@ -342,6 +345,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		databaseHelper.close();
 		
 		UnlockScreenRotation(); //Permetto rotazione
+		isAccelListening = false;
 		Intent intent = new Intent(getApplicationContext(), UI1.class);
 		startActivity(intent);
 		finish();

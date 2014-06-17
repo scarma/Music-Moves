@@ -65,7 +65,8 @@ public class UI1Adapter extends ArrayAdapter<String> {
         
         ImageView iv = (ImageView)convertView.findViewById(R.id.immagine_vista);
         //Scala dimensioni Bitmap e la mostra
-        Bitmap bitmapScaled = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(cursor.getString(5)+list_music[position]+".png"), 50, 50, false);
+        int w = parent.getWidth();
+        Bitmap bitmapScaled = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(cursor.getString(5)+list_music[position]+".png"), w/5, w/5, false);
         iv.setImageBitmap(bitmapScaled);
 
 		TextView name = (TextView)convertView.findViewById(R.id.textName);

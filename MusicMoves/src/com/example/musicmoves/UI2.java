@@ -5,8 +5,10 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +29,7 @@ public class UI2 extends ActionBarActivity {
 		setContentView(R.layout.activity_ui2);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onStart() {
 		super.onStart();
@@ -38,7 +41,9 @@ public class UI2 extends ActionBarActivity {
 		cursor = databaseHelper.fetchSessionByFilter(message);
 		cursor.moveToFirst();
 		ImageView iv = (ImageView) findViewById(R.id.imageThumb);
-		Bitmap bitmapScaled = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(cursor.getString(5)+message+".png"), 100, 100, false);
+		Display display = getWindowManager().getDefaultDisplay();
+		int w = display.getWidth();
+	    Bitmap bitmapScaled = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(cursor.getString(5)+message+".png"), 2*w/5, 2*w/5, false);
         iv.setImageBitmap(bitmapScaled);
 		//Modifica campo textView
 		TextView textView = (TextView) findViewById(R.id.textViewFileName);
