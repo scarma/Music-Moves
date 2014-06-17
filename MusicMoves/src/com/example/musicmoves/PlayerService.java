@@ -6,10 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import database.DBAdapter;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.database.Cursor;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -28,7 +30,9 @@ public class PlayerService extends Service {
 	 private String sessionName ="";
 	 private boolean initialized = false;
 	 private boolean isPlaying = false; 
-
+	 private DBAdapter databaseHelper;
+	 private Cursor cursor;
+	 
 	 @Override 
 	 public IBinder onBind(Intent intent) 
 	 { 
@@ -71,37 +75,37 @@ public class PlayerService extends Service {
 		
 		if(isPlaying) return; 
 		isPlaying = true; 
-
+		
 		if(!initialized)	 {
 			proSoundGenerator(Environment.getExternalStorageDirectory().getPath()+"/MusicMoves", sessionName);
 		}				     
-				     if(audioX.getState()==AudioTrack.STATE_INITIALIZED &&
-				    	audioY.getState()==AudioTrack.STATE_INITIALIZED &&
-				    	audioZ.getState()==AudioTrack.STATE_INITIALIZED){
-				        audioX.play();
-				        audioY.play();
-				        audioZ.play();	
-				        initialized = true;
-				        
-				     }
-				     else {
-						    Log.d("AudioTrack", "Audiotrack not initialized");
-					    }
-				 // Runs this service in the foreground, 
-				 // supplying the ongoing notification to be shown to the user 
-				 Intent intent = new Intent(this, UI4.class);
-				 intent.putExtra(UI1.EXTRA_MESSAGE, message);
-				 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP); 
-				 PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0); 
-				 Notification notification = new NotificationCompat.Builder(getApplicationContext()) 
-				 .setContentTitle("MusicMoves") 
-				 .setContentText(sessionName) 
-				 .setSmallIcon(R.drawable.ic_launcher) 
-				 .setContentIntent(pi) // Required on Gingerbread and below 
-				 .build(); 
-				 final int notificationID = 7071727; //An ID for this notification unique within the app 
-				 startForeground(notificationID, notification); 
-				 
+	     if(audioX.getState()==AudioTrack.STATE_INITIALIZED &&
+	    	audioY.getState()==AudioTrack.STATE_INITIALIZED &&
+	    	audioZ.getState()==AudioTrack.STATE_INITIALIZED){
+	        audioX.play();
+	        audioY.play();
+	        audioZ.play();	
+	        initialized = true;
+	        
+	     }
+	     else {
+			    Log.d("AudioTrack", "Audiotrack not initialized");
+		    }
+		 // Runs this service in the foreground, 
+		 // supplying the ongoing notification to be shown to the user 
+		 Intent intent = new Intent(this, UI4.class);
+		 intent.putExtra(UI1.EXTRA_MESSAGE, message);
+		 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP); 
+		 PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0); 
+		 Notification notification = new NotificationCompat.Builder(getApplicationContext()) 
+		 .setContentTitle("MusicMoves") 
+		 .setContentText(sessionName) 
+		 .setSmallIcon(R.drawable.ic_launcher) 
+		 .setContentIntent(pi) // Required on Gingerbread and below 
+		 .build(); 
+		 final int notificationID = 7071727; //An ID for this notification unique within the app 
+		 startForeground(notificationID, notification); 
+		 
 	}
 	
 	 private void stop() { 
@@ -138,6 +142,17 @@ public class PlayerService extends Service {
 	 static AudioTrack audioZ;
 	 
 		public void proSoundGenerator(String filepath, String textFile) {//Legge file come stringa e modifica dato accel
+			databaseHelper = new DBAdapter(this);
+			databaseHelper.open();
+			cursor = databaseHelper.fetchSessionByFilter(message);
+			cursor.moveToFirst();
+		    upsampling = cursor.getInt(6);
+		    int UseX = cursor.getInt(7);
+		    int UseY = cursor.getInt(8);
+		    int UseZ = cursor.getInt(9);
+		    databaseHelper.close();
+			cursor.close();
+			
 			String line="";									 			//aggiungendo una certa frequenza
 	        double[] x;
 	        double[] y;
@@ -155,10 +170,17 @@ public class PlayerService extends Service {
 	        		{
 	        		line = in.readLine();
 	        		String[] coord = line.split(",");
-	        		x[i] = (Double.parseDouble(coord[0])*10) + 440.0 ; //aggiunge freq La4 ai dati dell'asse x
-	        		y[i] = (Double.parseDouble(coord[1])*10) + 698.0; //aggiunge freq Fa5 ai dati dell'asse y
-	        		z[i] = (Double.parseDouble(coord[2])*10) + 880.0; //aggiunge freq La5 ai dati dell'asse z
+	        		if (UseX == 1)
+	        			x[i] = (Double.parseDouble(coord[0])*10) + 440.0 ; //aggiunge freq La4 ai dati dell'asse x
+	        		else x[i] = 0.0;
+	        		if (UseY == 1)
+	        			y[i] = (Double.parseDouble(coord[1])*10) + 698.0; //aggiunge freq Fa5 ai dati dell'asse y
+	        		else y[i] =	 0.0;
+	        		if (UseZ == 1)	
+	        			z[i] = (Double.parseDouble(coord[2])*10) + 880.0; //aggiunge freq La5 ai dati dell'asse z
+	        		else z[i] =	 0.0;
 	        	}
+	        	
 	        	audioX = playSound(genTone(x,cnt)); //Genera suono per l'asse x
 	        	audioY = playSound(genTone(y,cnt)); //Genera suono per l'asse y
 	        	audioZ = playSound(genTone(z,cnt)); //Genera suono per l'asse z
@@ -182,7 +204,7 @@ public class PlayerService extends Service {
 //	    private double sample[] = new double[numSamples];
 	    private double freqOfTone; // hz //200-3000 range consigliato
 	    static int sampleRate = 8000;
-	    private int upsampling = 200;
+	    public int upsampling = 200;
 	    Handler handler = new Handler(); 
 	    private byte[] generatedArray;
 	    private static int time;

@@ -260,9 +260,11 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	    mSensorManager.registerListener(this, mAccelerometer , SensorManager.SENSOR_DELAY_NORMAL);
+	    mSensorManager.registerListener(this, mAccelerometer , sampleRate);//SensorManager.SENSOR_DELAY_NORMAL
 		
 	}
+	//TODO: add sampleRate from preferences
+	private int sampleRate = 1000*1000; //in microsecondi
 	
 	public void Paused(View view) { //Cambia pulsanti visibili, chiude il FileWriter se aperto
 		Toast.makeText(getApplicationContext(), "Recording paused", Toast.LENGTH_SHORT).show();	
