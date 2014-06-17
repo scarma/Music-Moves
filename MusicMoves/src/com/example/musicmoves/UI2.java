@@ -12,6 +12,7 @@ import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -19,7 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import database.DBAdapter;
 
-public class UI2 extends ActionBarActivity {
+public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeListener {
 	private String message;
 	private DBAdapter databaseHelper;
 	private Cursor cursor;
@@ -34,6 +35,19 @@ public class UI2 extends ActionBarActivity {
 	protected void onStart() {
 		super.onStart();
 		// Get the message from the intent
+		
+	}
+	
+	
+	@Override
+	protected void onPause() {
+	//TODO: Salvare lo stato
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
 		Intent intent = getIntent();
 	    message = intent.getStringExtra(UI1.EXTRA_MESSAGE);
 	    databaseHelper = new DBAdapter(this);
@@ -61,21 +75,14 @@ public class UI2 extends ActionBarActivity {
 	    SeekBar bar = (SeekBar)findViewById(R.id.seekBarUpsampling);
 	    bar.setProgress(cursor.getInt(6)-100);
 	    int tempor = cursor.getInt(6);
-	   Toast.makeText(getApplicationContext(), ""+tempor, Toast.LENGTH_LONG).show();
-	   	TextView text = (TextView)findViewById(R.id.textViewUpsampling);
+	    TextView text = (TextView)findViewById(R.id.textViewUpsampling);
 	   	text.setText("Upsampling: "+tempor);
-	}
-	
-	@Override
-	protected void onPause() {
-	//TODO: Salvare lo stato
-		super.onPause();
-	}
-
-	@Override
-	protected void onResume() {
-	//TODO: Ripristinare lo stato
-		super.onResume();
+	   	Toast.makeText(getApplicationContext(), ""+tempor, Toast.LENGTH_LONG).show();
+	   	bar.setOnSeekBarChangeListener(this);
+	   	
+	   	databaseHelper.close();
+		cursor.close();
+		
 	}
 	
 	@Override
@@ -102,14 +109,19 @@ public class UI2 extends ActionBarActivity {
 	
 	//Metodo unico per i checkbox, per il momento li riconosce e se li clicchiamo manda un toast
 	public void aggiorna (View view){
-		
+		databaseHelper = new DBAdapter(getApplicationContext());
+		databaseHelper.open();
 		CheckBox checkBox = (CheckBox)view;
 		
 		if(checkBox.getId()==R.id.checkX){
 			if(checkBox.isChecked()){
+				cursor = databaseHelper.updateX(message, 1);
 				Toast.makeText(getApplicationContext(), "X_Attivo", Toast.LENGTH_LONG).show();
 			}
-			else Toast.makeText(getApplicationContext(), "X_Inattivo", Toast.LENGTH_LONG).show();
+			else{ 	
+				cursor = databaseHelper.updateX(message, 0);
+				Toast.makeText(getApplicationContext(), "X_Inattivo", Toast.LENGTH_LONG).show();
+			}
 		}//fine asse x
 		
 		else if(checkBox.getId()==R.id.checkY){
@@ -125,8 +137,31 @@ public class UI2 extends ActionBarActivity {
 			}
 			else Toast.makeText(getApplicationContext(), "Z_Inattivo", Toast.LENGTH_LONG).show();
 		}//fine asse z
-	
+		
+		databaseHelper.close();
+		cursor.close();
+		
+//		finish();
+//		startActivity(getIntent());
 	}//fine aggiona
+	
+	
+	//metodi che devono essere implementati
+	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+		
+		progress+=100;
+		TextView text = (TextView)findViewById(R.id.textViewUpsampling);
+	   	text.setText("Upsampling: "+progress);
+
+	}
+	@Override
+	public void onStartTrackingTouch(SeekBar seekBar) {
+	}
+
+	@Override
+	public void onStopTrackingTouch(SeekBar seekBar) {
+	}
+	
 	
 	public void toUI4(View view) 
 	{
