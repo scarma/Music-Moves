@@ -9,6 +9,7 @@
         android:layout_alignLeft="@+id/checkX"
         android:layout_alignRight="@+id/checkZ"
         android:layout_below="@+id/textViewUpsampling"
+        android:max="300"
         android:layout_centerVertical="true" />
 
     <CheckBox
@@ -17,7 +18,6 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/imageThumb"
         android:layout_below="@+id/textViewAxes"
-        android:checked="true"
         android:onClick="aggiorna"
         android:text="x" />
 
@@ -28,7 +28,6 @@
         android:layout_alignBaseline="@+id/checkX"
         android:layout_alignBottom="@+id/checkX"
         android:layout_centerHorizontal="true"
-        android:checked="true"
         android:onClick="aggiorna"
         android:text="y" />
 
@@ -40,7 +39,6 @@
         android:layout_alignBottom="@+id/checkY"
         android:layout_alignParentRight="true"
         android:layout_marginRight="25dp"
-        android:checked="true"
         android:onClick="aggiorna"
         android:text="z" />
 

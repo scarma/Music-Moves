@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import database.DBAdapter;
@@ -44,6 +45,18 @@ public class UI2 extends ActionBarActivity {
 	    textView.setTextColor(Color.rgb(255, 153, 0));
 	    textView.setText(message+ "\nDate Creation: "+cursor.getString(3)+ "\nLast Modified: "+cursor.getString(4));
 	    this.setTitle(message);
+	    //setta checkboxes in base al database
+	    CheckBox x = (CheckBox)findViewById(R.id.checkX);
+	    if(cursor.getInt(7)==1)x.setChecked(true);
+	    CheckBox y = (CheckBox)findViewById(R.id.checkY);
+	    if(cursor.getInt(8)==1)y.setChecked(true);
+	    CheckBox z = (CheckBox)findViewById(R.id.checkZ);
+	    if(cursor.getInt(9)==1)z.setChecked(true);
+	    //setta barra upsampling
+	    SeekBar bar = (SeekBar)findViewById(R.id.seekBarUpsampling);
+	    bar.setProgress(cursor.getInt(6)-100);
+	    int tempor = cursor.getInt(6);
+	   Toast.makeText(getApplicationContext(), ""+tempor, Toast.LENGTH_LONG).show();
 	}
 	
 	@Override

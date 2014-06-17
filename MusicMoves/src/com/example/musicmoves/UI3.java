@@ -119,7 +119,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 				cursor.close();
 				
 				if(count != 0){
-					//avviso l'utente che è già esistente una sessione con il nome che vuole inserire
+					//avviso l'utente che ï¿½ giï¿½ esistente una sessione con il nome che vuole inserire
 					Toast.makeText(getApplicationContext(), "Name not avaiable, please choose a different name", Toast.LENGTH_LONG).show();
 					finish();
 					startActivity(getIntent());
@@ -336,7 +336,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		//Inserimento dati nel database
 		databaseHelper = new DBAdapter(getApplicationContext());
 		databaseHelper.open();
-		databaseHelper.createSession(filename, filepath+"/", date, date_m, filepath+"/", upsampl, x1, y1, z1);
+		databaseHelper.createSession(filename, filepath+"/", date, date_m, filepath+"/", upsampl*10, x1, y1, z1);
 		databaseHelper.close();
 		
 		UnlockScreenRotation(); //Permetto rotazione
