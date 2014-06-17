@@ -3,6 +3,7 @@ package com.example.musicmoves;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,6 +18,9 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -108,10 +112,10 @@ public class UI1 extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
-		System.out.println("x="+preferences.getBoolean("x", false));
-		System.out.println(""
-				+ "="+preferences.getInt("upsampling", 2));
+//		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
+//		System.out.println("x="+preferences.getBoolean("x", false));
+//		System.out.println(""
+//				+ "="+preferences.getInt("upsampling", 2));
 		//TODO: Ripristinare lo stato
 	}
 	
@@ -297,6 +301,9 @@ public class UI1 extends ListActivity {
 			    
 			    date = day +"/"+ month+"/"+ year +" - "+ hour+":"+ minute +":"+ second;
 				
+			    //creazione nuova immagine
+			    creaThumbNail(day, month, year, hour, minute, second, loc_o, new_filename);
+			    
 			    databaseHelper.createSession(new_filename, loc_o, date, date, image_o, sample_o, x_o, y_o, z_o);
 			    
 				databaseHelper.close();
@@ -350,8 +357,12 @@ public class UI1 extends ListActivity {
 		cursor.moveToFirst();
 		pos = cursor.getInt(0);
 		loc = cursor.getString(1);
+		//cancello il file txt registrato
 		File file = new File(loc, list_music[position]+".txt");
 		file.delete();
+		//cancello il file della sua immagine corrispondente
+		File file_im = new File(loc, list_music[position]+".png");
+		file_im.delete();
 		databaseHelper.deleteSession(pos);
 		databaseHelper.close();
 		cursor.close();
@@ -436,6 +447,10 @@ public class UI1 extends ListActivity {
 				File from = new File(loc_o,name_o+".txt");
 				File to = new File(loc_o,new_filename+".txt");
 				from.renameTo(to);
+
+				File from_im = new File(loc_o,name_o+".png");
+				File to_im = new File(loc_o,new_filename+".png");
+				from_im.renameTo(to_im);
 				
 				finish();
 				startActivity(getIntent());
@@ -468,19 +483,88 @@ public class UI1 extends ListActivity {
 	    startActivity(intent);	
 	}
 
-//	private void LockScreenRotation() { // Sets screen rotation as fixed to current rotation setting
-//		switch (this.getResources().getConfiguration().orientation)
-//		{   case Configuration.ORIENTATION_PORTRAIT:     
-//				this.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-//				break;   
-//			case Configuration.ORIENTATION_LANDSCAPE:
-//				this.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-//				break;
-//		} 
-//	}
-//	
-//	private void UnlockScreenRotation(){ // allow screen rotations
-//		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-//	}
-	
+	 //crea la thumbnail
+		public void creaThumbNail(int da, int m, int y, int h, int mi, int s, String filepath, String filename) {
+			
+			 Bitmap bitmap = null;
+			 Bitmap temp1;
+			// Variabili che variano da 0 a 255
+			int a, b, c, d, e, f;
+			
+			e= da*255/31;
+			d= m*255/12;
+			a= y%255;
+			c= h*255/60;
+			b= mi*255/60;
+			f= s*255/60;
+		
+			//	Log.d("Valori:",a+" "+b+" "+c+" "+d+" "+e+" "+f);
+			
+			// Inizializza colori
+			int primo, secondo, terzo, quarto, quinto, sesto;
+//			primo =   Color.rgb(a, b, c); //sfondo
+//			secondo = Color.rgb(d, e, f); //2
+//			terzo =   Color.rgb(a, c, e); //3
+//			quarto =  Color.rgb(b, d, f); //1
+//			quinto =  Color.rgb(f, e, c); //altoparlante interno
+//			sesto =   Color.rgb(a, d, b); //altoparlante
+			primo =   Color.rgb(a, b, f); //sfondo
+			secondo = Color.rgb(d, e, f); //2
+			terzo =   Color.rgb(c, f, e); //3
+			quarto =  Color.rgb(f, d, b); //1
+			quinto =  Color.rgb(f, e, c); //altoparlante interno
+			sesto =   Color.rgb(a, d, b); //altoparlante
+		
+			//Prende la bitmap dalla cartella res/raw/
+		    try {
+		      bitmap = BitmapFactory.decodeResource(getResources(),R.raw.icon_trasp);
+		    	} 
+		    catch (Exception ex) {
+		      ex.printStackTrace();
+		    }	
+		    
+		   temp1 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+		   
+		   //Scrive nuova bitmap in base ai colori
+		   int pixels[]= new int[bitmap.getWidth()*bitmap.getHeight()];
+		   bitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+		    for (int i=0; i<pixels.length; i++){
+		    	if (pixels[i]==Color.WHITE){
+		    		pixels[i]=primo;
+		    	}
+		    	else if (pixels[i]==Color.BLUE){
+		    		pixels[i]=secondo;
+		    	}
+		    	else if (pixels[i]==Color.GREEN){
+		    		pixels[i]=terzo;
+		    	}
+		    	else if (pixels[i]==Color.YELLOW){
+		    		pixels[i]=quarto;
+		    	}
+		    	else if (pixels[i]==Color.BLACK){
+		    		pixels[i]=quinto;
+		    	}
+		    	else if (pixels[i]==Color.RED){
+		    		pixels[i]=sesto;
+		    	}
+		    	else if (pixels[i]==Color.TRANSPARENT){
+		    		pixels[i]=Color.TRANSPARENT;
+		    	}
+		    	else pixels[i]=primo;
+		    	
+		    }
+		    temp1.setPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+		    
+		    File pictureFile = new File(filepath, filename + ".png");
+			
+			try {
+			FileOutputStream fos = new FileOutputStream(pictureFile);
+			if (!temp1.compress(Bitmap.CompressFormat.PNG, 100, fos))
+				Log.d("storeImage", "Error compressing file");
+			fos.close();
+			}
+			catch (IOException ex) {
+			}//fine Try Catch
+		}
+		
 }

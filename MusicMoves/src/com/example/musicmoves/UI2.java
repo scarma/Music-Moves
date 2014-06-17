@@ -37,7 +37,7 @@ public class UI2 extends ActionBarActivity {
 		cursor = databaseHelper.fetchSessionByFilter(message);
 		cursor.moveToFirst();
 		ImageView iv = (ImageView) findViewById(R.id.imageThumb);
-		Bitmap bitmapScaled = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(cursor.getString(5)+message+".png"), 200, 200, false);
+		Bitmap bitmapScaled = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(cursor.getString(5)+message+".png"), 100, 100, false);
         iv.setImageBitmap(bitmapScaled);
 		//Modifica campo textView
 		TextView textView = (TextView) findViewById(R.id.textViewFileName);
