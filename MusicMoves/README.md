@@ -31,8 +31,6 @@ Membri progetto: Andrea Scarmagnan, Emanuele Fabian, Giovanni Zampieri
   
 Cose da fare  
 •	Database  
-	o	Clonazione traccia da sistemare  
-	o	Rinominare traccia da sistemare    
 •	Salvare lo stato  
 	o	UI1  
 	o	UI2  
@@ -43,4 +41,3 @@ Cose da fare
 	o	UI2, Salvataggio preferenze  
 	o	Database, utilizzo preferenze salvate  
 •	Gestione vista landscape   
-•	UI4 Mostrare info traccia  
