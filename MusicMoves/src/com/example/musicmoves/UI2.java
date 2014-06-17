@@ -1,6 +1,5 @@
 package com.example.musicmoves;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -11,8 +10,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import database.DBAdapter;
 
 public class UI2 extends ActionBarActivity {
@@ -78,6 +79,34 @@ public class UI2 extends ActionBarActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	//Metodo unico per i checkbox, per il momento li riconosce e se li clicchiamo manda un toast
+	public void aggiorna (View view){
+		
+		CheckBox checkBox = (CheckBox)view;
+		
+		if(checkBox.getId()==R.id.checkX){
+			if(checkBox.isChecked()){
+				Toast.makeText(getApplicationContext(), "X_Attivo", Toast.LENGTH_LONG).show();
+			}
+			else Toast.makeText(getApplicationContext(), "X_Inattivo", Toast.LENGTH_LONG).show();
+		}//fine asse x
+		
+		else if(checkBox.getId()==R.id.checkY){
+			if(checkBox.isChecked()){
+				Toast.makeText(getApplicationContext(), "Y_Attivo", Toast.LENGTH_LONG).show();
+			}
+			else Toast.makeText(getApplicationContext(), "Y_Inattivo", Toast.LENGTH_LONG).show();
+		}//fine asse y
+		
+		else if(checkBox.getId()==R.id.checkZ){
+			if(checkBox.isChecked()){
+				Toast.makeText(getApplicationContext(), "Z_Attivo", Toast.LENGTH_LONG).show();
+			}
+			else Toast.makeText(getApplicationContext(), "Z_Inattivo", Toast.LENGTH_LONG).show();
+		}//fine asse z
+	
+	}//fine aggiona
 	
 	public void toUI4(View view) 
 	{
