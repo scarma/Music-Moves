@@ -57,6 +57,8 @@ public class UI2 extends ActionBarActivity {
 	    bar.setProgress(cursor.getInt(6)-100);
 	    int tempor = cursor.getInt(6);
 	   Toast.makeText(getApplicationContext(), ""+tempor, Toast.LENGTH_LONG).show();
+	   	TextView text = (TextView)findViewById(R.id.textViewUpsampling);
+	   	text.setText("Upsampling: "+tempor);
 	}
 	
 	@Override
