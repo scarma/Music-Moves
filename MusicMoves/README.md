@@ -42,6 +42,5 @@ Cose da fare
 •	Preferenze  
 	o	UI2, Salvataggio preferenze  
 	o	Database, utilizzo preferenze salvate  
-•	Gestione vista landscape  
-•	UI2 Mostrare date e immagine  
+•	Gestione vista landscape   
 •	UI4 Mostrare info traccia  

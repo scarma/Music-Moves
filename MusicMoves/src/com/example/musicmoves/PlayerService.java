@@ -182,7 +182,7 @@ public class PlayerService extends Service {
 //	    private double sample[] = new double[numSamples];
 	    private double freqOfTone; // hz //200-3000 range consigliato
 	    static int sampleRate = 8000;
-	    private int upsampling = 200;
+	    public int upsampling = 200;
 	    Handler handler = new Handler(); 
 	    private byte[] generatedArray;
 	    private static int time;
