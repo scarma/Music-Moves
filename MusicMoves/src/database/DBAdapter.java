@@ -98,4 +98,19 @@ public class DBAdapter {
 	  public Cursor NameSessionAsExist(String name){
 		  return database.rawQuery("select count(*) from " + FeedEntry.TABLE_NAME + " where " + FeedEntry.COLUMN_NAME_TITLE + "=?", new String[] {name});
 	  }
+	  
+	  //update axe x on checkbox
+	  public Cursor updateX(String name, int x){
+//		  return database.update(FeedEntry.TABLE_NAME, "(" + FeedEntry.COLUMN_NAME_X + ") " + "values('"+ x +"')", "where "+ FeedEntry.COLUMN_NAME_TITLE + "=" + name, null);
+//		  String sql=String.format("update %s SET %s=%d where %s='%s'" ,  FeedEntry.TABLE_NAME,
+//				  FeedEntry.COLUMN_NAME_X,x,
+//				  FeedEntry.COLUMN_NAME_TITLE,name);
+		  String sql=String.format("update %s SET %s=%d where 1" ,  FeedEntry.TABLE_NAME,
+				  FeedEntry.COLUMN_NAME_X,x
+				  );
+		  System.out.println(sql);
+		  Cursor cursor = database.rawQuery(sql,null);
+		  return cursor;
+		  //return database.rawQuery("update " + FeedEntry.TABLE_NAME + " SET " + FeedEntry.COLUMN_NAME_X + " = " + x + " where " + FeedEntry.COLUMN_NAME_TITLE + "=?",  new String[] {name});
+	  }
 }
