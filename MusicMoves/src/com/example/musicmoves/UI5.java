@@ -38,7 +38,7 @@ public class UI5 extends PreferenceActivity {
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			SharedPreferences mPreferences= PreferenceManager.getDefaultSharedPreferences (this);
-			PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
+			
 			SharedPreferences.Editor editor = mPreferences.edit();
 			editor.clear();
 			editor.commit();

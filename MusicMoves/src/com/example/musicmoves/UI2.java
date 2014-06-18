@@ -50,7 +50,7 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 		super.onResume();
 		Intent intent = getIntent();
 	    message = intent.getStringExtra(UI1.EXTRA_MESSAGE);
-	    databaseHelper = new DBAdapter(this);
+	    databaseHelper = new DBAdapter(getApplicationContext());
 		databaseHelper.open();
 		cursor = databaseHelper.fetchSessionByFilter(message);
 		cursor.moveToFirst();
@@ -115,11 +115,11 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 		
 		if(checkBox.getId()==R.id.checkX){
 			if(checkBox.isChecked()){
-				cursor = databaseHelper.updateX(message, 1);
+				databaseHelper.updateX(message, 1);
 				Toast.makeText(getApplicationContext(), "X_Attivo", Toast.LENGTH_LONG).show();
 			}
 			else{ 	
-				cursor = databaseHelper.updateX(message, 0);
+				databaseHelper.updateX(message, 0);
 				Toast.makeText(getApplicationContext(), "X_Inattivo", Toast.LENGTH_LONG).show();
 			}
 		}//fine asse x
@@ -139,7 +139,6 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 		}//fine asse z
 		
 		databaseHelper.close();
-		cursor.close();
 		
 //		finish();
 //		startActivity(getIntent());

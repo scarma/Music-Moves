@@ -113,6 +113,7 @@ public class UI1 extends ListActivity {
 	protected void onResume() {
 		super.onResume();
 //		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
 //		System.out.println("x="+preferences.getBoolean("x", false));
 //		System.out.println(""
 //				+ "="+preferences.getInt("upsampling", 2));

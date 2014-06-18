@@ -1,5 +1,7 @@
 package database;
 
+import java.util.Locale;
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -100,17 +102,17 @@ public class DBAdapter {
 	  }
 	  
 	  //update axe x on checkbox
-	  public Cursor updateX(String name, int x){
+	  public void updateX(String name, int x){
 //		  return database.update(FeedEntry.TABLE_NAME, "(" + FeedEntry.COLUMN_NAME_X + ") " + "values('"+ x +"')", "where "+ FeedEntry.COLUMN_NAME_TITLE + "=" + name, null);
 //		  String sql=String.format("update %s SET %s=%d where %s='%s'" ,  FeedEntry.TABLE_NAME,
 //				  FeedEntry.COLUMN_NAME_X,x,
 //				  FeedEntry.COLUMN_NAME_TITLE,name);
-		  String sql=String.format("update %s SET %s=%d where 1" ,  FeedEntry.TABLE_NAME,
+		  String sql=String.format(Locale.US,"update %s SET %s=%d" ,  FeedEntry.TABLE_NAME,
 				  FeedEntry.COLUMN_NAME_X,x
 				  );
 		  System.out.println(sql);
-		  Cursor cursor = database.rawQuery(sql,null);
-		  return cursor;
+		  database.execSQL(sql);
+		  return;
 		  //return database.rawQuery("update " + FeedEntry.TABLE_NAME + " SET " + FeedEntry.COLUMN_NAME_X + " = " + x + " where " + FeedEntry.COLUMN_NAME_TITLE + "=?",  new String[] {name});
 	  }
 }
