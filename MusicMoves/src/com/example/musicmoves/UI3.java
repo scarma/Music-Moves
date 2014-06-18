@@ -285,7 +285,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}	}
-	    mSensorManager.unregisterListener(this);
+	    mSensorManager.unregisterListener(this, mAccelerometer);
 	}
 	
 	public void Stopped(View view) { //Cambia pulsanti visibili, chiude il FileWriter se aperto,
@@ -346,9 +346,10 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		
 		UnlockScreenRotation(); //Permetto rotazione
 		isAccelListening = false;
-		Intent intent = new Intent(getApplicationContext(), UI1.class);
-		startActivity(intent);
-		finish();
+		if(view!=null)
+			{Intent intent = new Intent(getApplicationContext(), UI1.class);
+			startActivity(intent);
+			finish();}
 	}
 
 	@Override

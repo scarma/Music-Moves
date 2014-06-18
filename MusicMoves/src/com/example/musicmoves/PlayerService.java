@@ -6,11 +6,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import database.DBAdapter;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.media.AudioFormat;
 import android.media.AudioManager;
@@ -18,8 +18,10 @@ import android.media.AudioTrack;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import database.DBAdapter;
 
 public class PlayerService extends Service {
 	
@@ -32,7 +34,7 @@ public class PlayerService extends Service {
 	 private boolean isPlaying = false; 
 	 private DBAdapter databaseHelper;
 	 private Cursor cursor;
-	 
+	
 	 @Override 
 	 public IBinder onBind(Intent intent) 
 	 { 
@@ -162,6 +164,7 @@ public class PlayerService extends Service {
 	        	BufferedReader in = new BufferedReader(new FileReader(new File(filepath, textFile+".txt")));
 	        	while ((line = in.readLine()) != null)
 	        	{cnt++;}
+	        	if (cnt==0){cnt++;}//se file vuoto
 	        	x = new double[cnt];
 	        	y = new double[cnt];
 	        	z = new double[cnt];
@@ -189,8 +192,11 @@ public class PlayerService extends Service {
 	        	Log.d("FileNotFoundException", "File:"+filepath+"/"+textFile);
 	        } catch (IOException e) {
 	        
+	        } catch (NullPointerException e) {
+	        	Log.d("NullPointerException", "File empty");
+	        } catch (NumberFormatException e) {
+	        	Log.d("NumberFormatException", "File not valid");
 	        } 
-	      
 	    }
 		
 //		public int getDuration()	{return duration;}
@@ -199,7 +205,7 @@ public class PlayerService extends Service {
 //		public void setDuration(int dur)	{if(dur>=1 && dur<=100) duration=dur; else duration=3;}
 //		public void setSampleRate(int sampleR)	{if(sampleR>=4000 && sampleR<=10000) sampleRate=sampleR; else sampleRate=8000;}
 //		public void setFreq(int freq)	{if(freq>=200 && freq<=3000) freqOfTone=freq; else freqOfTone=440;}
-//	    private int duration = 3; // seconds
+	    private int maxduration = 100; // secondi
 //	   
 //	    private double sample[] = new double[numSamples];
 	    private double freqOfTone; // hz //200-3000 range consigliato
@@ -212,14 +218,18 @@ public class PlayerService extends Service {
 	    
 	    public byte[] genTone(double[] x, int cnt){
 	        // fill out the array
+	    	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+	    	maxduration = preferences.getInt("maxRecTime", 10);
 	    	numSamples = 10*cnt*upsampling;
-	        double sample[] = new double[numSamples];
-	    	for (int i = 0; i < (10*cnt*upsampling); ++i) { 
+	        if(numSamples > maxduration*sampleRate)
+	        	{numSamples = maxduration*sampleRate;}
+	    	double sample[] = new double[numSamples];
+	    	for (int i = 0; i < (numSamples); ++i) { 
 	        	if ((i%(10*upsampling))==0) //inserisce dati accelerometro nell'array
 	        		{ freqOfTone = x[i/(10*upsampling)];}
 	            sample[i] = Math.sin(2 * Math.PI * i / (sampleRate/freqOfTone));
 	        }
-	    	byte generatedSnd[] = new byte[2 * 10*cnt*upsampling];
+	    	byte generatedSnd[] = new byte[2 * numSamples];
 	        // convert to 16 bit pcm sound array
 	        // assumes the sample buffer is normalised.
 	        int idx = 0;

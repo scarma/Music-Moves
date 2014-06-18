@@ -40,13 +40,13 @@
          android:title="Maximum recording duration" 
          android:summary="Maximum duration of a recording session" 
          android:defaultValue="10" 
-         android:max="10"
+         android:max="1000"
          android:progress="0"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"
-         musicmoves:min="2"
+         musicmoves:min="10"
          musicmoves:unitsLeft=""
-         musicmoves:unitsRight=" minutes"
+         musicmoves:unitsRight=" seconds"
          />
      <com.example.musicmoves.SeekBarPreference
           android:key="sampleRate" 
