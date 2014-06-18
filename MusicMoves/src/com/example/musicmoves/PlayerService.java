@@ -219,7 +219,7 @@ public class PlayerService extends Service {
 	    public byte[] genTone(double[] x, int cnt){
 	        // fill out the array
 	    	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-	    	maxduration = preferences.getInt("maxRecTime", 10);
+	    	maxduration = preferences.getInt("maxPlayTime", 10);
 	    	numSamples = 10*cnt*upsampling;
 	        if(numSamples > maxduration*sampleRate)
 	        	{numSamples = maxduration*sampleRate;}

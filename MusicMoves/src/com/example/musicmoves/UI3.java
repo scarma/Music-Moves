@@ -64,7 +64,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
     private VerticalProgressBar progressBarZ;
     private boolean isAccelListening=false;
     Calendar c;
-   
+    private int maxDurationRec;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -234,7 +234,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 
 	public void Recording(View view) { //Cambia pulsanti visibili, crea il FileWriter, ascolta i dati accelerometro
 		Toast.makeText(getApplicationContext(), "Recording", Toast.LENGTH_SHORT).show();
-
 	    progressBarX = (VerticalProgressBar) findViewById(R.id.progressX);
 		progressBarY = (VerticalProgressBar) findViewById(R.id.progressY);
 		progressBarZ = (VerticalProgressBar) findViewById(R.id.progressZ);
@@ -263,7 +262,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			e.printStackTrace();
 		}
 	    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
-		int sampleRate = 1000*1000/preferences.getInt("sampleRate", 5);
+		maxDurationRec = preferences.getInt("maxRecTime", 10);
+	    int sampleRate = 1000*1000/preferences.getInt("sampleRate", 5);
 	    mSensorManager.registerListener(this, mAccelerometer , sampleRate);//SensorManager.SENSOR_DELAY_NORMAL
 	    isAccelListening = true;
 	}
@@ -346,10 +346,9 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		
 		UnlockScreenRotation(); //Permetto rotazione
 		isAccelListening = false;
-		if(view!=null)
-			{Intent intent = new Intent(getApplicationContext(), UI1.class);
-			startActivity(intent);
-			finish();}
+		Intent intent = new Intent(getApplicationContext(), UI1.class);
+		startActivity(intent);
+		finish();
 	}
 
 	@Override
@@ -379,7 +378,10 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    
 	    progressBarX.postInvalidate();
 	    progressBarY.postInvalidate();
-	    progressBarZ.postInvalidate(); 
+	    progressBarZ.postInvalidate();
+	    
+	    if(sampleCnt>maxDurationRec)
+        {Stopped(null);}
 	}
 
 	public String readFileAsString(String fileName) {//Legge file come stringa
@@ -397,6 +399,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
         } 
         
         return stringBuilder.toString();
+        
     }
 	
 	
