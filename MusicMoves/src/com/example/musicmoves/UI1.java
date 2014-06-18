@@ -16,6 +16,7 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -52,7 +53,7 @@ public class UI1 extends ListActivity {
 	private String[] list_music;
 	private UI1Adapter adapter;
 	private int pos;
-	private int p; //posizione nella lista, non sapevo se c'era già una variabile che potevo usare
+	private int p; //posizione nella lista, non sapevo se c'era giï¿½ una variabile che potevo usare
 	private String loc;
 	private String new_filename;
 	private int hour = 0;
@@ -71,39 +72,6 @@ public class UI1 extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ui1);
 		     
-        //lettura dal database        
-        databaseHelper = new DBAdapter(getApplicationContext());
-		databaseHelper.open();
-		cursor = databaseHelper.fetchAllSession();
-		cursor.moveToFirst();
-        list_music =new String[cursor.getCount()];
-		for (int i = 0; i < cursor.getCount(); i++) {
-			if (cursor.isAfterLast())
-				break;
-			list_music[i] = cursor.getString(1);
-			cursor.moveToNext();
-
-		}
-		databaseHelper.close();
-		cursor.close();
-        
-        adapter = new UI1Adapter(this, R.layout.riga_lista, list_music);
-        setListAdapter(adapter);
-        //da qui inseriamo il codice utile a mostrare un messaggio al click
-        ListView listaV = getListView();
-        listaV.setTextFilterEnabled(true);
-        registerForContextMenu(listaV);
-        
-        listaV.setOnItemClickListener(new OnItemClickListener() {
-            
-        	@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        		// vado a UI2 toccando elemento della lista
-                Intent intent = new Intent(UI1.this, UI2.class);
-        	    intent.putExtra(EXTRA_MESSAGE, list_music[position]);
-        	    startActivity(intent);	
-            }
-        });  
         
 
         
@@ -112,12 +80,44 @@ public class UI1 extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-//		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
-//		System.out.println("x="+preferences.getBoolean("x", false));
-//		System.out.println(""
-//				+ "="+preferences.getInt("upsampling", 2));
-		//TODO: Ripristinare lo stato
+
+		//lettura dal database        
+		databaseHelper = new DBAdapter(getApplicationContext());
+		databaseHelper.open();
+		cursor = databaseHelper.fetchAllSession();
+		cursor.moveToFirst();
+		list_music =new String[cursor.getCount()];
+		for (int i = 0; i < cursor.getCount(); i++) {
+			if (cursor.isAfterLast())
+				break;
+			list_music[i] = cursor.getString(1);
+			cursor.moveToNext();
+			
+		}
+		databaseHelper.close();
+		cursor.close();
+		
+		adapter = new UI1Adapter(this, R.layout.riga_lista, list_music);
+		setListAdapter(adapter);
+		//da qui inseriamo il codice utile a mostrare un messaggio al click
+		ListView listaV = getListView();
+		listaV.setTextFilterEnabled(true);
+		registerForContextMenu(listaV);
+		
+		listaV.setOnItemClickListener(new OnItemClickListener() {
+			
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				// vado a UI2 toccando elemento della lista
+				Intent intent = new Intent(UI1.this, UI2.class);
+				intent.putExtra(EXTRA_MESSAGE, list_music[position]);
+				startActivity(intent);	
+			}
+		});  
+		
+		
+		
 	}
 	
 	@Override
@@ -280,13 +280,13 @@ public class UI1 extends ListActivity {
 				int x_o = cursor.getInt(7);
 				int y_o = cursor.getInt(8);
 				int z_o = cursor.getInt(9);
-				//Controllo che il nuovo nome non sia già presente nel db
+				//Controllo che il nuovo nome non sia giï¿½ presente nel db
 				cursor = databaseHelper.NameSessionAsExist(value);
 				cursor.moveToFirst();
 				int count = cursor.getInt(0);
 				
 				if(count != 0){
-					//avviso l'utente che è già esistente una sessione con il nome che vuole inserire
+					//avviso l'utente che ï¿½ giï¿½ esistente una sessione con il nome che vuole inserire
 					Toast.makeText(getApplicationContext(), "Name not avaiable, please choose a different name", Toast.LENGTH_LONG).show();
 					cloneRec(p);
 					return;
@@ -387,19 +387,20 @@ public class UI1 extends ListActivity {
 		// Set an EditText view to get user input 
 		final EditText input = new EditText(this);
 		//Input filter to accept only letter or digit
-		InputFilter filter = new InputFilter() { 
-			public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) { 
-				for (int i = start; i < end; i++) { 
-					if (!Character.isLetterOrDigit(source.charAt(i))) { 
-						return ""; 
-					} 
-				} 
-				return null; 
-			} 
-		};
-		//Input filter per accettare file al massimo di 10 caratteri
-		InputFilter lenghtfilter = new InputFilter.LengthFilter(10);
-		input.setFilters(new InputFilter[]{filter,lenghtfilter});
+//		InputFilter filter = new InputFilter() { 
+//			public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) { 
+//				for (int i = start; i < end; i++) { 
+//					if (!Character.isLetterOrDigit(source.charAt(i))) { 
+//						return ""; 
+//					} 
+//				} 
+//				return null; 
+//			} 
+//		};
+//		//Input filter per accettare file al massimo di 10 caratteri
+//		InputFilter lenghtfilter = new InputFilter.LengthFilter(10);
+//		input.setFilters(new InputFilter[]{filter,lenghtfilter});
+		input.setFilters(getFilter());
 		builder.setView(input);
 		
 		builder.setPositiveButton(android.R.string.yes,new OnClickListener() {
@@ -429,13 +430,13 @@ public class UI1 extends ListActivity {
 				int y_o = cursor.getInt(8);
 				int z_o = cursor.getInt(9);
 				
-				//Controllo che il nuovo nome non sia già presente nel db
+				//Controllo che il nuovo nome non sia giï¿½ presente nel db
 				cursor = databaseHelper.NameSessionAsExist(value);
 				cursor.moveToFirst();
 				int count = cursor.getInt(0);
 				
 				if(count != 0){
-					//avviso l'utente che è già esistente una sessione con il nome che vuole inserire
+					//avviso l'utente che ï¿½ giï¿½ esistente una sessione con il nome che vuole inserire
 					Toast.makeText(getApplicationContext(), "Name not avaiable, please choose a different name", Toast.LENGTH_LONG).show();
 					renameRec(p);
 					return;
@@ -469,6 +470,23 @@ public class UI1 extends ListActivity {
 		AlertDialog dialog = builder.create();
 		
 		dialog.show();
+	}
+	//pisello
+	
+	public static InputFilter[] getFilter(){
+		InputFilter filter = new InputFilter() { 
+			public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) { 
+				for (int i = start; i < end; i++) { 
+					if (!Character.isLetterOrDigit(source.charAt(i))) { 
+						return ""; 
+					} 
+				} 
+				return null; 
+			} 
+		};
+		//Input filter per accettare file al massimo di 10 caratteri
+		InputFilter lenghtfilter = new InputFilter.LengthFilter(10);
+		return new InputFilter[]{filter,lenghtfilter};
 	}
 	
 	private void playRec(int position) {
