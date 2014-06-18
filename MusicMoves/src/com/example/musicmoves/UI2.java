@@ -5,19 +5,17 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import database.DBAdapter;
 
 public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeListener {
@@ -50,6 +48,10 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 		super.onResume();
 		Intent intent = getIntent();
 	    message = intent.getStringExtra(UI1.EXTRA_MESSAGE);
+	    
+	    RelativeLayout focuslayout = (RelativeLayout) findViewById(R.id.RelativeLayout);
+	    focuslayout.requestFocus();
+	    
 	    databaseHelper = new DBAdapter(getApplicationContext());
 		databaseHelper.open();
 		cursor = databaseHelper.fetchSessionByFilter(message);
@@ -160,7 +162,10 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 		progress+=100;
 		TextView text = (TextView)findViewById(R.id.textViewUpsampling);
 	   	text.setText("Upsampling: "+progress);
-
+	   	databaseHelper = new DBAdapter(getApplicationContext());
+		databaseHelper.open();
+		databaseHelper.updateUpsampling(message, progress);
+		databaseHelper.close();
 	}
 	@Override
 	public void onStartTrackingTouch(SeekBar seekBar) {

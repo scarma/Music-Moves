@@ -132,4 +132,13 @@ public class DBAdapter {
 		  return;
 	  }
 	  
+	//update upsampling on checkbox
+	  public void updateUpsampling(String name, int up){
+		  String sql=String.format(Locale.US,"update %s SET %s=%d" ,  FeedEntry.TABLE_NAME,
+				  FeedEntry.COLUMN_NAME_UPSAMPLING,up
+				  );
+		  System.out.println(sql);
+		  database.execSQL(sql);
+		  return;
+	  }
 }
