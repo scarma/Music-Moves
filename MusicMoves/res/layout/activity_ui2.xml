@@ -4,8 +4,11 @@
     android:layout_height="fill_parent" >
 
 <RelativeLayout 
+    android:id="@+id/RelativeLayout"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:focusableInTouchMode="true" >
 
     <SeekBar
         android:id="@+id/seekBarUpsampling"
@@ -112,6 +115,7 @@
         android:layout_alignBaseline="@+id/editTextRename"
         android:layout_alignBottom="@+id/editTextRename"
         android:layout_alignRight="@+id/seekBarUpsampling"
+        android:onClick="rinomina"
         android:text="@android:string/ok" />
 
 </RelativeLayout>
