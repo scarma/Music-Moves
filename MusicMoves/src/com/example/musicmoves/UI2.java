@@ -77,7 +77,7 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 	    int tempor = cursor.getInt(6);
 	    TextView text = (TextView)findViewById(R.id.textViewUpsampling);
 	   	text.setText("Upsampling: "+tempor);
-	   	Toast.makeText(getApplicationContext(), ""+tempor, Toast.LENGTH_LONG).show();
+//	   	Toast.makeText(getApplicationContext(), ""+tempor, Toast.LENGTH_LONG).show();
 	   	bar.setOnSeekBarChangeListener(this);
 	   	
 	   	databaseHelper.close();
@@ -116,26 +116,35 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 		if(checkBox.getId()==R.id.checkX){
 			if(checkBox.isChecked()){
 				databaseHelper.updateX(message, 1);
-				Toast.makeText(getApplicationContext(), "X_Attivo", Toast.LENGTH_LONG).show();
+//				Toast.makeText(getApplicationContext(), "X_Attivo", Toast.LENGTH_LONG).show();
 			}
 			else{ 	
 				databaseHelper.updateX(message, 0);
-				Toast.makeText(getApplicationContext(), "X_Inattivo", Toast.LENGTH_LONG).show();
+//				Toast.makeText(getApplicationContext(), "X_Inattivo", Toast.LENGTH_LONG).show();
 			}
 		}//fine asse x
 		
 		else if(checkBox.getId()==R.id.checkY){
 			if(checkBox.isChecked()){
-				Toast.makeText(getApplicationContext(), "Y_Attivo", Toast.LENGTH_LONG).show();
+				databaseHelper.updateY(message, 1);
+//				Toast.makeText(getApplicationContext(), "Y_Attivo", Toast.LENGTH_LONG).show();
 			}
-			else Toast.makeText(getApplicationContext(), "Y_Inattivo", Toast.LENGTH_LONG).show();
+			else{
+				databaseHelper.updateY(message, 0);
+//				Toast.makeText(getApplicationContext(), "Y_Inattivo", Toast.LENGTH_LONG).show();
+			}
 		}//fine asse y
 		
 		else if(checkBox.getId()==R.id.checkZ){
 			if(checkBox.isChecked()){
-				Toast.makeText(getApplicationContext(), "Z_Attivo", Toast.LENGTH_LONG).show();
+				databaseHelper.updateZ(message, 1);
+//				Toast.makeText(getApplicationContext(), "Z_Attivo", Toast.LENGTH_LONG).show();
 			}
-			else Toast.makeText(getApplicationContext(), "Z_Inattivo", Toast.LENGTH_LONG).show();
+			else{
+				databaseHelper.updateZ(message, 0);
+//				Toast.makeText(getApplicationContext(), "Z_Inattivo", Toast.LENGTH_LONG).show();
+			}
+				
 		}//fine asse z
 		
 		databaseHelper.close();
