@@ -182,7 +182,9 @@ public class UI1 extends ListActivity {
 	        .setPositiveButton(android.R.string.yes, new OnClickListener() {
 
 	            public void onClick(DialogInterface arg0, int arg1) {
-	                UI1.super.onBackPressed();
+	            	Intent i = new Intent(getApplicationContext(),PlayerService.class); 
+	        		stopService(i);
+	            	UI1.super.onBackPressed();
 	            }
 	        }).create().show();
 	}

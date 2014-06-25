@@ -18,6 +18,7 @@
         <activity
             android:name="com.example.musicmoves.UI1"
             android:label="@string/app_name"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleInstance" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
