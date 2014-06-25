@@ -103,8 +103,8 @@ public class DBAdapter {
 	  
 	  //update axe x on checkbox
 	  public void updateX(String name, int x){
-		  String sql=String.format(Locale.US,"update %s SET %s=%d" ,  FeedEntry.TABLE_NAME,
-				  FeedEntry.COLUMN_NAME_X,x
+		  String sql=String.format(Locale.US,"update %s SET %s=%d WHERE %s='%s'" ,  FeedEntry.TABLE_NAME,
+				  FeedEntry.COLUMN_NAME_X,x,FeedEntry.COLUMN_NAME_TITLE,name
 				  );
 		  System.out.println(sql);
 		  database.execSQL(sql);
@@ -114,8 +114,8 @@ public class DBAdapter {
 	  
 	//update axe y on checkbox
 	  public void updateY(String name, int y){
-		  String sql=String.format(Locale.US,"update %s SET %s=%d" ,  FeedEntry.TABLE_NAME,
-				  FeedEntry.COLUMN_NAME_Y,y
+		  String sql=String.format(Locale.US,"update %s SET %s=%d WHERE %s='%s'" ,  FeedEntry.TABLE_NAME,
+				  FeedEntry.COLUMN_NAME_Y,y,FeedEntry.COLUMN_NAME_TITLE,name
 				  );
 		  System.out.println(sql);
 		  database.execSQL(sql);
@@ -124,8 +124,8 @@ public class DBAdapter {
 	  
 	//update axe x on checkbox
 	  public void updateZ(String name, int z){
-		  String sql=String.format(Locale.US,"update %s SET %s=%d" ,  FeedEntry.TABLE_NAME,
-				  FeedEntry.COLUMN_NAME_Z,z
+		  String sql=String.format(Locale.US,"update %s SET %s=%d WHERE %s='%s'" ,  FeedEntry.TABLE_NAME,
+				  FeedEntry.COLUMN_NAME_Z,z,FeedEntry.COLUMN_NAME_TITLE,name
 				  );
 		  System.out.println(sql);
 		  database.execSQL(sql);
@@ -134,8 +134,8 @@ public class DBAdapter {
 	  
 	//update upsampling on checkbox
 	  public void updateUpsampling(String name, int up){
-		  String sql=String.format(Locale.US,"update %s SET %s=%d" ,  FeedEntry.TABLE_NAME,
-				  FeedEntry.COLUMN_NAME_UPSAMPLING,up
+		  String sql=String.format(Locale.US,"update %s SET %s=%d WHERE %s='%s'" ,  FeedEntry.TABLE_NAME,
+				  FeedEntry.COLUMN_NAME_UPSAMPLING,up,FeedEntry.COLUMN_NAME_TITLE,name
 				  );
 		  System.out.println(sql);
 		  database.execSQL(sql);
