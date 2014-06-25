@@ -3,6 +3,7 @@ package com.example.musicmoves;
 import java.util.Locale;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
 import android.media.AudioManager;
@@ -143,6 +144,11 @@ public class UI4 extends ActionBarActivity {
 //		Context context = getApplicationContext();
 //		super.onResume();   
 		
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
 	}
 	
 	public void PauseMusic(View view) { //Pause button
