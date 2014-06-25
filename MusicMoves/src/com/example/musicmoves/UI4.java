@@ -205,4 +205,8 @@ public class UI4 extends ActionBarActivity {
 		 return t;
 	   }
 
+	public void onBackPressed() {
+		super.onBackPressed();
+	}
+	
 }
