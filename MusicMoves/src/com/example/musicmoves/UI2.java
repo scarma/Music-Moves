@@ -69,7 +69,8 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 	}
 	
 	private void pppp() {
-		  RelativeLayout focuslayout = (RelativeLayout) findViewById(R.id.RelativeLayout);
+		 	//Cambia focus
+		  	RelativeLayout focuslayout = (RelativeLayout) findViewById(R.id.RelativeLayout);
 		    focuslayout.requestFocus();
 		    
 		    databaseHelper = new DBAdapter(getApplicationContext());
@@ -256,7 +257,7 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 					    //ritorna correttamente alla UI1
 					    startActivity(intent);
 						
-//						pppp(); //ricordarsi di rinominare
+//						pppp(); //TODO: ricordarsi di rinominare
 			
 			
 			//fine copia incolla da ui1
