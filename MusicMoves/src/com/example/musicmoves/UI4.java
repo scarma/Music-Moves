@@ -152,7 +152,7 @@ public class UI4 extends ActionBarActivity {
 						}
 					});
 					try {
-						Thread.sleep(100);
+						Thread.sleep(200);
 					} catch (InterruptedException e) {
 						isStopped = true;
 					}
