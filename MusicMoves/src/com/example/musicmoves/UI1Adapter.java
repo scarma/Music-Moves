@@ -95,6 +95,7 @@ public class UI1Adapter extends ArrayAdapter<String> {
 			public void onClick(View v) {
 				Intent intent = new Intent(ctx, UI4.class);
 			    intent.putExtra(EXTRA_MESSAGE, list_music[position]);
+			    intent.putExtra("my",true);
 			    ctx.startActivity(intent);
 			}
 		});

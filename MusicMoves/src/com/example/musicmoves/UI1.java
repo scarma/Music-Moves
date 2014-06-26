@@ -53,7 +53,7 @@ public class UI1 extends ListActivity {
 	private String[] list_music;
 	private UI1Adapter adapter;
 	private int pos;
-	private int p; //posizione nella lista, non sapevo se c'era giï¿½ una variabile che potevo usare
+	private int p; //posizione nella lista, non sapevo se c'era già una variabile che potevo usare
 	private String loc;
 	private String new_filename;
 	private int hour = 0;
@@ -71,15 +71,18 @@ public class UI1 extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ui1);
-		     
-        
-
-        
     }
+	
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+	}
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
 
 		//lettura dal database        
@@ -110,9 +113,7 @@ public class UI1 extends ListActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// vado a UI2 toccando elemento della lista
-				Intent intent = new Intent(UI1.this, UI2.class);
-				intent.putExtra(EXTRA_MESSAGE, list_music[position]);
-				startActivity(intent);	
+				runUI2(position);
 			}
 		});  
 		
@@ -128,7 +129,6 @@ public class UI1 extends ListActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.ui1, menu);
 		return true;
@@ -182,7 +182,9 @@ public class UI1 extends ListActivity {
 	        .setPositiveButton(android.R.string.yes, new OnClickListener() {
 
 	            public void onClick(DialogInterface arg0, int arg1) {
-	                UI1.super.onBackPressed();
+	            	Intent i = new Intent(getApplicationContext(),PlayerService.class);
+	            	stopService(i);
+	            	UI1.super.onBackPressed();
 	            }
 	        }).create().show();
 	}
@@ -430,7 +432,7 @@ public class UI1 extends ListActivity {
 				int y_o = cursor.getInt(8);
 				int z_o = cursor.getInt(9);
 				
-				//Controllo che il nuovo nome non sia giï¿½ presente nel db
+				//Controllo che il nuovo nome non sia già presente nel db
 				cursor = databaseHelper.NameSessionAsExist(value);
 				cursor.moveToFirst();
 				int count = cursor.getInt(0);
@@ -490,16 +492,24 @@ public class UI1 extends ListActivity {
 	}
 	
 	private void playRec(int position) {
-		Intent intent = new Intent(getApplicationContext(), UI4.class);
-	    intent.putExtra(EXTRA_MESSAGE, list_music[position]);
-	    startActivity(intent);
-	  
+		runUI4(position);
 	}
 	
 	private void detailsRec(int position) {
-		Intent intent = new Intent(getApplicationContext(), UI2.class);
+		runUI2(position);
+	}
+	
+	private void runUI2(int position){
+		Intent intent = new Intent(UI1.this, UI2.class);
+		intent.putExtra(EXTRA_MESSAGE, list_music[position]);
+		startActivity(intent);	
+	}
+	
+	private void runUI4(int position){
+		Intent intent = new Intent(getApplicationContext(), UI4.class);
 	    intent.putExtra(EXTRA_MESSAGE, list_music[position]);
-	    startActivity(intent);	
+	    intent.putExtra("my",true);
+	    startActivity(intent);
 	}
 
 	 //crea la thumbnail

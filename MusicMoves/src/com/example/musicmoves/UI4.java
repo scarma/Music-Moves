@@ -3,6 +3,7 @@ package com.example.musicmoves;
 import java.util.Locale;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
 import android.media.AudioManager;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class UI4 extends ActionBarActivity {
 	
@@ -25,7 +27,9 @@ public class UI4 extends ActionBarActivity {
 	private TextView tPlaybackPosition;
 	private TextView tDuration;
 	private ProgressBar tBar;
-    
+    private Thread thread;
+    public boolean isStopped;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		setVolumeControlStream(AudioManager.STREAM_MUSIC); //aumenta volume musica anche se in pausa
@@ -43,6 +47,10 @@ public class UI4 extends ActionBarActivity {
 	protected void onResume() {
 	//TODO: Ripristinare lo stato
 		super.onResume();
+//		Intent intent = getIntent();
+//		boolean startedbyme=intent.getBooleanExtra("my", false);
+//		if (startedbyme)
+//			Toast.makeText(this, "Lanciato da me", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
@@ -51,6 +59,11 @@ public class UI4 extends ActionBarActivity {
 		// Get the message from the intent
 		Intent intent = getIntent();
 	    sessionName = intent.getStringExtra(UI1.EXTRA_MESSAGE);
+	    
+//		boolean startedbyme=intent.getBooleanExtra("my", false);
+//		if (startedbyme)
+//			Toast.makeText(this, "Lanciato da me", 1).show();
+	    
 		//Modifica campo textView
 		TextView textView = (TextView) findViewById(R.id.textViewSessionName);
 	    textView.setTextColor(Color.rgb(255, 153, 0));
@@ -108,41 +121,61 @@ public class UI4 extends ActionBarActivity {
 		i.putExtra(PlayerService.PLAY, true); 
 		i.putExtra(EXTRA_MESSAGE, sessionName);
 		startService(i); 
-	    Thread thread = new Thread(new Runnable() {
-	        public void run() {
-	        	 while(!Thread.currentThread().isInterrupted()){
-	                 try {runOnUiThread(new Runnable()  {
-	                	        public void run() {
-	                	            try{
-	                	           	 tPlaybackPosition = (TextView) findViewById(R.id.textViewPlaybackPosition);
-	                	           	 tDuration = (TextView) findViewById(R.id.textViewDuration);
-	                	           	 tBar = (ProgressBar) findViewById(R.id.progressBarMusic);
-	                	           	 int time= PlayerService.getTime();
-	                	           	 int current=PlayerService.audioX.getPlaybackHeadPosition()/PlayerService.sampleRate;
-	                	             String curTime = intToTime(current);
-	           	                	 String totTime = intToTime(time);
-	                				 tPlaybackPosition.setText(curTime);
-	           	                	 tDuration.setText(totTime);
-	           	                	 tBar.setMax(time);
-	           	                	 tBar.setProgress(current);
-	           	                	 tBar.getProgressDrawable().setColorFilter(Color.rgb(255, 209, 179), Mode.MULTIPLY);
-	                	            }catch (IllegalStateException e) {Thread.currentThread().interrupt();}
-	                	        }
-	                	    });
-	                	 Thread.sleep(1000);
-	                 } 
-	                 catch (Exception e) {
-	                        Thread.currentThread().interrupt();
-	                        Log.d("Thread", "Time thread interrupted");
-	                 }
-	        	 }
-	        }
+		isStopped=false;
+	    thread = new Thread(new Runnable() {
+			public void run() {
+				while (!isStopped) {
+					runOnUiThread(new Runnable() {
+						public void run() {
+							try {
+								tPlaybackPosition = (TextView) findViewById(R.id.textViewPlaybackPosition);
+								tDuration = (TextView) findViewById(R.id.textViewDuration);
+								tBar = (ProgressBar) findViewById(R.id.progressBarMusic);
+								int time = PlayerService.getTime();
+								int current = 1000
+										* PlayerService.audioX
+												.getPlaybackHeadPosition()
+										/ PlayerService.sampleRate;
+								String curTime = intToTime(current / 1000);
+								String totTime = intToTime(time);
+								tPlaybackPosition.setText(curTime);
+								tDuration.setText(totTime);
+								tBar.setMax(time * 1000);
+								tBar.setProgress(current);
+								tBar.getProgressDrawable()
+										.setColorFilter(
+												Color.rgb(255, 209, 179),
+												Mode.MULTIPLY);
+							} catch (IllegalStateException e) {
+								isStopped=true;
+							}
+						}
+					});
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						isStopped = true;
+					}
+				}
+				runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						tPlaybackPosition.setText("00:00");
+						tBar.setProgress(0);
+					}
+				});
+			}
 		});
 		thread.start();
         
 //		Context context = getApplicationContext();
 //		super.onResume();   
 		
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
 	}
 	
 	public void PauseMusic(View view) { //Pause button
@@ -168,6 +201,8 @@ public class UI4 extends ActionBarActivity {
 		stopSel.setVisibility(View.INVISIBLE);
 		stopUns.setVisibility(View.VISIBLE);
 		
+		isStopped=true;
+		
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
 		stopService(i); 
 	}
@@ -179,4 +214,19 @@ public class UI4 extends ActionBarActivity {
 		 return t;
 	   }
 
+	public void onBackPressed() {
+//		String s = "my";
+//		Intent intent = getIntent();
+//		boolean back = intent.getBooleanExtra(s, false);
+//		String back = getIntent().getExtras().getString("my");
+		
+		Bundle extras=getIntent().getExtras();
+		boolean back = extras.getBoolean("my",false);
+		
+		if(back)
+			super.onBackPressed();
+		else
+			startActivity(new Intent(UI4.this, UI1.class));
+	}
+	
 }

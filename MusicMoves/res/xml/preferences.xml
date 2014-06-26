@@ -9,17 +9,17 @@
         android:key="x"
         android:title="@string/x"
         android:defaultValue="true" 
-        android:summary="Enable/disable X axe"/>
+        android:summary="Enable/disable X axes"/>
     <CheckBoxPreference 
         android:key="y"
         android:title="@string/y"
         android:defaultValue="true" 
-        android:summary="Enable/disable Y axe"/>
+        android:summary="Enable/disable Y axes"/>
     <CheckBoxPreference
 		android:key="z"
 		android:title="@string/z"
 		android:defaultValue="true" 
-		android:summary="Enable/disable Z axe"/>
+		android:summary="Enable/disable Z axes"/>
     
     
     <com.example.musicmoves.SeekBarPreference
