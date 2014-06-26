@@ -33,18 +33,17 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 	private DBAdapter databaseHelper;
 	private Cursor cursor;
 	private Intent intent;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ui2);
+		
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	protected void onStart() {
 		super.onStart();
-		// Get the message from the intent
-		
 	}
 	
 	
@@ -60,6 +59,9 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 //		if (intent==null){
 			intent = getIntent();
 			message=intent.getStringExtra(UI1.EXTRA_MESSAGE);
+//			boolean startedbyme=intent.getBooleanExtra("my", false);
+//			if (startedbyme)
+//				Toast.makeText(this, "Lanciato da me", 1).show();
 //		}
 	    
 	    pppp();
@@ -290,6 +292,7 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 	{
 	    Intent intent = new Intent(getApplicationContext(), UI4.class);
 	    intent.putExtra(UI1.EXTRA_MESSAGE, message);
+	    intent.putExtra("my",true);
 	    startActivity(intent);
 	    
 	}

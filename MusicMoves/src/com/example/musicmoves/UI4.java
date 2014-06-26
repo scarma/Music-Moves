@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class UI4 extends ActionBarActivity {
 	
@@ -46,6 +47,10 @@ public class UI4 extends ActionBarActivity {
 	protected void onResume() {
 	//TODO: Ripristinare lo stato
 		super.onResume();
+//		Intent intent = getIntent();
+//		boolean startedbyme=intent.getBooleanExtra("my", false);
+//		if (startedbyme)
+//			Toast.makeText(this, "Lanciato da me", Toast.LENGTH_SHORT).show();
 	}
 
 	@Override
@@ -54,6 +59,11 @@ public class UI4 extends ActionBarActivity {
 		// Get the message from the intent
 		Intent intent = getIntent();
 	    sessionName = intent.getStringExtra(UI1.EXTRA_MESSAGE);
+	    
+//		boolean startedbyme=intent.getBooleanExtra("my", false);
+//		if (startedbyme)
+//			Toast.makeText(this, "Lanciato da me", 1).show();
+	    
 		//Modifica campo textView
 		TextView textView = (TextView) findViewById(R.id.textViewSessionName);
 	    textView.setTextColor(Color.rgb(255, 153, 0));
@@ -193,7 +203,6 @@ public class UI4 extends ActionBarActivity {
 		
 		isStopped=true;
 		
-		
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
 		stopService(i); 
 	}
@@ -206,7 +215,18 @@ public class UI4 extends ActionBarActivity {
 	   }
 
 	public void onBackPressed() {
-		super.onBackPressed();
+//		String s = "my";
+//		Intent intent = getIntent();
+//		boolean back = intent.getBooleanExtra(s, false);
+//		String back = getIntent().getExtras().getString("my");
+		
+		Bundle extras=getIntent().getExtras();
+		boolean back = extras.getBoolean("my",false);
+		
+		if(back)
+			super.onBackPressed();
+		else
+			startActivity(new Intent(UI4.this, UI1.class));
 	}
 	
 }

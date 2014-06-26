@@ -97,6 +97,7 @@ public class PlayerService extends Service {
 		 // supplying the ongoing notification to be shown to the user 
 		 Intent intent = new Intent(this, UI4.class);
 		 intent.putExtra(UI1.EXTRA_MESSAGE, message);
+//		 intent.putExtra("my", "false");
 		 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP); 
 		 PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0); 
 		 Notification notification = new NotificationCompat.Builder(getApplicationContext()) 
