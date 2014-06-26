@@ -2,14 +2,13 @@ package com.example.musicmoves;
 
 import java.util.Locale;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class UI4 extends ActionBarActivity {
+public class UI4 extends Activity {
 	
 	public final static String EXTRA_MESSAGE = "com.example.MusicMoves.MESSAGE";
 	
@@ -29,12 +28,20 @@ public class UI4 extends ActionBarActivity {
 	private ProgressBar tBar;
     private Thread thread;
     public boolean isStopped;
-	
+	public boolean isPlaying;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		setVolumeControlStream(AudioManager.STREAM_MUSIC); //aumenta volume musica anche se in pausa
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ui4);	
+		// Get the message from the intent
+		Intent intent = getIntent();
+	    sessionName = intent.getStringExtra(UI1.EXTRA_MESSAGE);
+		//Modifica campo textView
+		TextView textView = (TextView) findViewById(R.id.textViewSessionName);
+	    textView.setTextColor(Color.rgb(255, 153, 0));
+	    textView.setText(sessionName);
+	    PlayMusic(null);
 	}
 	
 	@Override
@@ -52,25 +59,7 @@ public class UI4 extends ActionBarActivity {
 //		if (startedbyme)
 //			Toast.makeText(this, "Lanciato da me", Toast.LENGTH_SHORT).show();
 	}
-
-	@Override
-	protected void onStart() {
-		super.onStart();
-		// Get the message from the intent
-		Intent intent = getIntent();
-	    sessionName = intent.getStringExtra(UI1.EXTRA_MESSAGE);
-	    
-//		boolean startedbyme=intent.getBooleanExtra("my", false);
-//		if (startedbyme)
-//			Toast.makeText(this, "Lanciato da me", 1).show();
-	    
-		//Modifica campo textView
-		TextView textView = (TextView) findViewById(R.id.textViewSessionName);
-	    textView.setTextColor(Color.rgb(255, 153, 0));
-	    textView.setText(sessionName);
-//	    proSoundGenerator(filepath, sessionName);
-	    PlayMusic(null);
-	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -167,16 +156,12 @@ public class UI4 extends ActionBarActivity {
 			}
 		});
 		thread.start();
-        
+        isPlaying=true;
 //		Context context = getApplicationContext();
 //		super.onResume();   
 		
 	}
 	
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		super.onConfigurationChanged(newConfig);
-	}
 	
 	public void PauseMusic(View view) { //Pause button
 		ImageButton play = (ImageButton) findViewById(R.id.playB);
@@ -187,6 +172,7 @@ public class UI4 extends ActionBarActivity {
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
 		i.putExtra(PlayerService.PAUSE, true); 
 		startService(i); 
+		isPlaying=false;
 		
 	}
 	
@@ -215,18 +201,29 @@ public class UI4 extends ActionBarActivity {
 	   }
 
 	public void onBackPressed() {
+		//TODO: CHE ROBA è! SISTEMARE ON BACK PRESSED Grazie
 //		String s = "my";
 //		Intent intent = getIntent();
 //		boolean back = intent.getBooleanExtra(s, false);
 //		String back = getIntent().getExtras().getString("my");
 		
-		Bundle extras=getIntent().getExtras();
-		boolean back = extras.getBoolean("my",false);
-		
-		if(back)
+//		Bundle extras=getIntent().getExtras();
+//		boolean back = extras.getBoolean("my",false);
+//		
+//		if(back)
 			super.onBackPressed();
-		else
-			startActivity(new Intent(UI4.this, UI1.class));
+//		else
+//			startActivity(new Intent(UI4.this, UI1.class));
 	}
-	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+	  super.onConfigurationChanged(newConfig);
+	  setContentView(R.layout.activity_ui4);
+	  if(!isPlaying) {
+		  ImageButton play = (ImageButton) findViewById(R.id.playB);
+		  ImageButton pause = (ImageButton) findViewById(R.id.pauseB);
+		  play.setVisibility(View.VISIBLE);
+		  pause.setVisibility(View.INVISIBLE);
+	  }
+	}
 }

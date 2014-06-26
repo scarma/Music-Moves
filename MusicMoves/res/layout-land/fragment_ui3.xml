@@ -1,0 +1,107 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.example.musicmoves.UI4$PlaceholderFragment" >
+
+    <TextView
+        android:id="@+id/textViewNewRecName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true" />
+
+    <ImageButton
+        android:id="@+id/pauseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/recButton"
+        android:layout_alignTop="@+id/recButton"
+        android:onClick="Paused"
+        android:src="@drawable/ic_m_pause_selected"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/textViewSampleCounter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textViewNewRecName" />
+
+    <com.example.musicmoves.VerticalProgressBar
+        android:id="@+id/progressX"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignTop="@+id/progressZ"
+        android:layout_marginRight="20dp"
+        android:layout_toLeftOf="@+id/progressY"
+        android:indeterminate="false"
+        android:max="40"
+        android:progress="0"
+        android:visibility="invisible" />
+
+    <com.example.musicmoves.VerticalProgressBar
+        android:id="@+id/progressY"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignTop="@+id/progressZ"
+        android:layout_marginRight="20dp"
+        android:layout_toLeftOf="@+id/progressZ"
+        android:indeterminate="false"
+        android:max="40"
+        android:progress="0"
+        android:visibility="invisible" />
+
+    <com.example.musicmoves.VerticalProgressBar
+        android:id="@+id/progressZ"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignRight="@+id/textViewSampleCounter"
+        android:layout_alignTop="@+id/textViewNewRecName"
+        android:indeterminate="false"
+        android:max="40"
+        android:progress="0"
+        android:visibility="invisible" />
+
+    <ImageButton
+        android:id="@+id/stop_selectedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/stop_unselectedButton"
+        android:layout_alignTop="@+id/stop_unselectedButton"
+        android:onClick="Stopped"
+        android:src="@drawable/ic_m_stop_selected"
+        android:visibility="invisible" />
+
+    <ImageButton
+        android:id="@+id/recButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewSampleCounter"
+        android:layout_alignTop="@+id/stop_unselectedButton"
+        android:layout_marginLeft="56dp"
+        android:onClick="Recording"
+        android:src="@drawable/ic_m_rec_selected"
+        android:visibility="visible" />
+
+    <ImageButton
+        android:id="@+id/stop_unselectedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/progressX"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:clickable="false"
+        android:src="@drawable/ic_m_stop_unselected"
+        android:visibility="visible" />
+
+</RelativeLayout>

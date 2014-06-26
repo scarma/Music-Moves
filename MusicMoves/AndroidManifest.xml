@@ -40,9 +40,9 @@
         </activity>
         <activity
             android:name="com.example.musicmoves.UI4"
-             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_ui4"
-            android:launchMode="singleInstance" >
+            android:launchMode="singleInstance"
+            android:configChanges="keyboardHidden|orientation" >
         </activity>
         <activity
             android:name="com.example.musicmoves.UI5"
