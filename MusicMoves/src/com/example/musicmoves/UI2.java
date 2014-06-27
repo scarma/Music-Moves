@@ -69,6 +69,7 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 		    
 		    databaseHelper = new DBAdapter(getApplicationContext());
 			databaseHelper.open();
+			
 			cursor = databaseHelper.fetchSessionByFilter(message);
 			cursor.moveToFirst();
 			ImageView iv = (ImageView) findViewById(R.id.imageThumb);
@@ -188,18 +189,13 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 			//faccio un semplice update
 				databaseHelper.open();
 				cursor = databaseHelper.fetchASession(message);
-	
-				        // Do something with value!   
+	 
 						String value="";
 						value = editText.getText().toString().toLowerCase(Locale.getDefault());
 						
 						try { value = value.substring(0,1).toUpperCase(Locale.getDefault()) + value.substring(1).toLowerCase(Locale.getDefault());}
 						catch(java.lang.StringIndexOutOfBoundsException e)//caso stringa vuota
 							{ value = "Rec";	}
-						
-//						new_filename = value;
-//						if (cursor.getCount()==0)
-//							return;
 						
 						cursor.moveToFirst();
 						
@@ -214,13 +210,13 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 						int y_o = cursor.getInt(8);
 						int z_o = cursor.getInt(9);
 						
-						//Controllo che il nuovo nome non sia giï¿½ presente nel db
+						//Controllo che il nuovo nome non sia già presente nel db
 						cursor = databaseHelper.NameSessionAsExist(value);
 						cursor.moveToFirst();
 						int count = cursor.getInt(0);
 						
 						if(count != 0){
-							//avviso l'utente che ï¿½ giï¿½ esistente una sessione con il nome che vuole inserire
+							//avviso l'utente che è già esistente una sessione con il nome che vuole inserire
 							Toast.makeText(getApplicationContext(), "Name not avaiable, please choose a different name", Toast.LENGTH_LONG).show();
 							//renameRec(p);
 							return;
@@ -238,8 +234,6 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 						File to_im = new File(loc_o,value+".png");
 						from_im.renameTo(to_im);
 						
-//						finish();
-//						startActivity(getIntent());
 						message=value;
 						
 						Intent intent = new Intent(getApplicationContext(), UI2.class);
@@ -249,6 +243,7 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 					    //se noi quindi andiamo a premere il tasto back lui tenta di riaprire la precedente ui2 pero' nel frattempo abbiamo rinominato quindi crasha nel caricare la bitmap
 					    //set flag mi assicura che nello stack venga inserita solo una istanza (l'ultima) per ogni activity. insomma cancella dallo stack la vecchia UI2 quindi se premo back
 					    //ritorna correttamente alla UI1
+					    finish();
 					    startActivity(intent);
 						
 			//fine copia incolla da ui1

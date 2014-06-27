@@ -23,10 +23,10 @@ Membri progetto: Andrea Scarmagnan, Emanuele Fabian, Giovanni Zampieri
 
 Cose ancora da fare DEFAULT  
 •	Salvare lo stato  
-	o	UI3: salvare stato testo AlertDialog  
-	o	UI2, UI4, UI5: onBackPressed da mettere a posto (controllare AndroidManifest.xml)  
+	o	UI3: salvare stato testo AlertDialog    
 •	Sistemazioni aggiuntive  
 	o	Service per la registrazione  
+	o	Sistemare service che lancia file sbagliato
 	
 *PLUS*  
 •	Implementazione Volume  

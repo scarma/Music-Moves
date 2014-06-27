@@ -31,6 +31,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -65,6 +66,9 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
     private boolean isAccelListening=false;
     Calendar c;
     private int maxDurationRec;
+    public EditText input;
+    Bundle savedState;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
@@ -82,7 +86,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		alert.setMessage("Insert Session Name");
 
 		// Set an EditText view to get user input 
-		final EditText input = new EditText(this);
+		input = new EditText(this);
 		//Input filter to accept only letter or digit
 		InputFilter filter = new InputFilter() { 
 	        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) { 
@@ -97,7 +101,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		InputFilter lenghtfilter = new InputFilter.LengthFilter(10);
 		input.setFilters(new InputFilter[]{filter,lenghtfilter}); 
 		alert.setView(input);
-
 		alert.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				LockScreenRotation(); 
@@ -171,6 +174,10 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	
 	@Override
 	protected void onPause() {
+//		String textfield=input.getText().toString();
+//		Log.d("textpau", ""+input.getText());
+//		savedState.putString("alert", textfield);
+//		
 	//TODO: Salvare lo stato
 		super.onPause();
 	}
@@ -179,6 +186,13 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	protected void onResume() {
 	//TODO: Ripristinare lo stato
 		super.onResume();
+//		if(savedState!=null) {
+//			String textfield = savedState.getString("alert");
+//			Log.d("textres", textfield);
+//			if(textfield!=null)
+//				input.append(textfield);
+//			Log.d("input", input.toString());
+//		}
 	}
 
 	@Override
