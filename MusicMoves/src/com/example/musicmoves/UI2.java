@@ -38,7 +38,6 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ui2);
-		
 	}
 	
 	@Override
@@ -64,11 +63,6 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 //				Toast.makeText(this, "Lanciato da me", 1).show();
 //		}
 	    
-	    pppp();
-		
-	}
-	
-	private void pppp() {
 		 	//Cambia focus
 		  	RelativeLayout focuslayout = (RelativeLayout) findViewById(R.id.RelativeLayout);
 		    focuslayout.requestFocus();
@@ -257,9 +251,6 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 					    //ritorna correttamente alla UI1
 					    startActivity(intent);
 						
-//						pppp(); //TODO: ricordarsi di rinominare
-			
-			
 			//fine copia incolla da ui1
 	//	}
 		 
