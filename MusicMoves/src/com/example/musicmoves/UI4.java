@@ -29,6 +29,7 @@ public class UI4 extends Activity {
     private Thread thread;
     public static boolean isStopped;
 	public boolean isPlaying;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		setVolumeControlStream(AudioManager.STREAM_MUSIC); //aumenta volume musica anche se in pausa
@@ -191,6 +192,7 @@ public class UI4 extends Activity {
 		
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
 		stopService(i); 
+		onBackPressed();
 	}
 	
 	public String intToTime (int time){ 	
@@ -225,5 +227,10 @@ public class UI4 extends Activity {
 		  play.setVisibility(View.VISIBLE);
 		  pause.setVisibility(View.INVISIBLE);
 	  }
+	//Modifica campo textView
+		TextView textView = (TextView) findViewById(R.id.textViewSessionName);
+	    textView.setTextColor(Color.rgb(255, 153, 0));
+	    textView.setText(sessionName);
+	  
 	}
 }
