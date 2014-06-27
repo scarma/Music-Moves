@@ -27,7 +27,7 @@ public class UI4 extends Activity {
 	private TextView tDuration;
 	private ProgressBar tBar;
     private Thread thread;
-    public boolean isStopped;
+    public static boolean isStopped;
 	public boolean isPlaying;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

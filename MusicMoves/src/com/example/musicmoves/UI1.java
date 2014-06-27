@@ -183,6 +183,7 @@ public class UI1 extends ListActivity {
 
 	            public void onClick(DialogInterface arg0, int arg1) {
 	            	Intent i = new Intent(getApplicationContext(),PlayerService.class);
+	            	UI4.isStopped=true;
 	            	stopService(i);
 	            	UI1.super.onBackPressed();
 	            }
