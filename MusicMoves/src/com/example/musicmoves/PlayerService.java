@@ -57,7 +57,7 @@ public class PlayerService extends Service {
 	 } 
 	 
 	
-	 private void pause() {
+	 private synchronized void pause() {
 		if (!isPlaying) return;
 		isPlaying = false;
 //		if (myPlayer != null)	
@@ -99,7 +99,7 @@ public class PlayerService extends Service {
 		 intent.putExtra(UI1.EXTRA_MESSAGE, message);
 //		 intent.putExtra("my", "false");//
 		 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP); 
-		 PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0); 
+		 PendingIntent pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT); 
 		 Notification notification = new NotificationCompat.Builder(getApplicationContext()) 
 		 .setContentTitle("MusicMoves") 
 		 .setContentText(sessionName) 
