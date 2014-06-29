@@ -547,7 +547,7 @@ public class UI1 extends ListActivity {
 		
 			//Prende la bitmap dalla cartella res/raw/
 		    try {
-		      bitmap = BitmapFactory.decodeResource(getResources(),R.raw.icon_trasp);
+		      bitmap = BitmapFactory.decodeResource(getResources(),R.raw.icon_trasp_play);
 		    	} 
 		    catch (Exception ex) {
 		      ex.printStackTrace();
