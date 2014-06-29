@@ -23,6 +23,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 import database.DBAdapter;
 
 public class PlayerService extends Service {
@@ -57,8 +58,12 @@ public class PlayerService extends Service {
 		 	sessionName = message;
 	 	  	play(); }
 	 if(intent.getBooleanExtra(PAUSE, false)) pause();
-	 return Service.START_STICKY;
+	
 	 
+	
+	 if(intent.getBooleanExtra(ECHO, false)){ echo();}
+	 
+	 return Service.START_STICKY;
 	 } 
 	 
 	
@@ -285,7 +290,8 @@ public class PlayerService extends Service {
 		
 		
 		synchronized void echo(){
-			if (isPlaying == true){
+			Toast.makeText(getApplicationContext(), "Single click", Toast.LENGTH_SHORT).show();
+		/*	if (isPlaying == true){
 				
 				short temp = (short) 100;
 			
@@ -301,7 +307,7 @@ public class PlayerService extends Service {
 				audioX.release();
 				audioY.release();
 				audioZ.release();
-				*/
+				
 			}
-		}
+		*/}
 }

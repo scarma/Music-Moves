@@ -285,7 +285,7 @@ public class UI4 extends Activity {
 	        }
 	        
 	        public boolean onSingleTapConfirmed(MotionEvent event){
-	        	Toast.makeText(getApplicationContext(), "Single click", Toast.LENGTH_SHORT).show();
+	        	
 	        	echo();
 	        	return true;
 	        }
@@ -332,7 +332,8 @@ public class UI4 extends Activity {
 
 	public void echo(){
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
-		i.putExtra(PlayerService.ECHO, true); 
+		i.putExtra(PlayerService.ECHO, true);
+		i.putExtra(EXTRA_MESSAGE, sessionName);
 		startService(i); 
 		
 	}
