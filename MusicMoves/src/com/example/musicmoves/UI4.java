@@ -9,10 +9,14 @@ import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.support.v4.view.GestureDetectorCompat;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +33,8 @@ public class UI4 extends Activity {
     private Thread thread;
     public static boolean isStopped;
 	public boolean isPlaying;
+	public float x1, x2 , y1 , y2;
+	private GestureDetectorCompat mDetector;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +49,14 @@ public class UI4 extends Activity {
 	    textView.setTextColor(Color.rgb(255, 153, 0));
 	    textView.setText(sessionName);
 	    PlayMusic(null);
-	}
+	    
+	 //   ImageView background = (ImageView)findViewById(R.id.imageView1);
+	   // trova un modo perchè funga background.setOnTouchListener(this);
+	    mDetector = new GestureDetectorCompat(this, new MyGestureListener());
+
+   }
+	
+	
 	
 	@Override
 	protected void onPause() {
@@ -233,4 +246,73 @@ public class UI4 extends Activity {
 	    textView.setText(sessionName);
 	  
 	}
+	
+	
+	 @Override 
+	    public boolean onTouchEvent(MotionEvent event){ 
+	        this.mDetector.onTouchEvent(event);
+	        return super.onTouchEvent(event);
+	    }
+	    
+	    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+	      
+	    	
+	        
+	        public boolean onDoubleTap(MotionEvent event){
+	        	Toast.makeText(getApplicationContext(), "Double tap", Toast.LENGTH_SHORT).show();
+	        	return true;
+	        }
+	        
+	        @Override
+	        public boolean onDown(MotionEvent event) { 
+	        	//fa qualcosa MENTRE il dito è premuto sullo schermo
+	        	//diverso da longpress
+	            return true;
+	        }
+	        
+	        public boolean onSingleTapConfirmed(MotionEvent event){
+	        	Toast.makeText(getApplicationContext(), "Single click", Toast.LENGTH_SHORT).show();
+	        	return true;
+	        }
+	        //occhio, si potrebbe usare anche onScroll, farò una prova
+	        @Override
+	        public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
+	        	  x1=event1.getX();
+	        	  x2=event2.getX();
+	        	  y1=event1.getY();
+	        	  y2=event2.getY();
+	        	  //per il momento la velocità la trascuriamo e ci limitiamo ad usare la distanza tra i punti per gestire gli effetti
+	        	  //si può usare in qualunque momento grazie a velocityX e velocityY
+	        	        // right to left
+	        	        if(x1 - x2 > 20 && Math.abs(y1-y2) < 100 ) {
+	        	           Toast.makeText(getApplicationContext(), "drag a sinistra", Toast.LENGTH_SHORT).show();
+
+	        	            return true;
+	        	        }
+	        	        // left to right
+	        	        else if (x2-x1 > 20 && Math.abs(y1-y2) < 100) {
+	        	        	Toast.makeText(getApplicationContext(), "drag a destra", Toast.LENGTH_SHORT).show();
+
+	        	            return true; 
+	        	        }
+	        	        
+	        	        //fixati i parametri perchè fa un pelino fatica a riconoscere i movimenti giusti
+	        	        else if (y1-y2 > 20 && Math.abs(x1-x2) < 100){
+	        	        	Toast.makeText(getApplicationContext(), "drag su", Toast.LENGTH_SHORT).show();
+	        	        	
+	        	        	return true;
+	        	        }
+	        	        
+	        	        else if (y2-y1 > 20 && Math.abs(x1-x2) < 100){
+	        	        	Toast.makeText(getApplicationContext(), "drag giu", Toast.LENGTH_SHORT).show();
+	        	        
+	        	        	return true;
+	        	        }
+	        	       return true;
+	        }
+	        	
+	    }
+
+	
+	
 }
