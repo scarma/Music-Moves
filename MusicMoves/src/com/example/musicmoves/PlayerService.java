@@ -15,6 +15,8 @@ import android.database.Cursor;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.media.audiofx.AudioEffect;
+import android.media.audiofx.EnvironmentalReverb;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
@@ -29,6 +31,9 @@ public class PlayerService extends Service {
 	 public static String PLAY = "BGPlay";
 	 public static String PAUSE = "BGPause";
 	 public static String STOP = "BGStop"; // Not used 
+	 //aggiunto
+	 public static String ECHO = "BGEcho";
+	 //
 	 private String sessionName ="";
 	 private boolean initialized = false;
 	 private boolean isPlaying = false; 
@@ -276,5 +281,27 @@ public class PlayerService extends Service {
 
 		public void setTime(int time) {
 			PlayerService.time = time;
+		}
+		
+		
+		synchronized void echo(){
+			if (isPlaying == true){
+				
+				short temp = (short) 100;
+			
+				EnvironmentalReverb echo = new EnvironmentalReverb(1, 0);
+				
+				echo.setDiffusion(temp);
+				
+				audioX.attachAuxEffect(echo.getId());
+				audioY.attachAuxEffect(echo.getId());
+				audioZ.attachAuxEffect(echo.getId());
+				/*
+				echo.release();
+				audioX.release();
+				audioY.release();
+				audioZ.release();
+				*/
+			}
 		}
 }

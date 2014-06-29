@@ -9,12 +9,12 @@ import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
 import android.media.AudioManager;
 import android.os.Bundle;
-import android.support.v4.view.GestureDetectorCompat;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -33,8 +33,10 @@ public class UI4 extends Activity {
     private Thread thread;
     public static boolean isStopped;
 	public boolean isPlaying;
+	
+	//plus
 	public float x1, x2 , y1 , y2;
-	private GestureDetectorCompat mDetector;
+	private GestureDetector mDetector;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +52,17 @@ public class UI4 extends Activity {
 	    textView.setText(sessionName);
 	    PlayMusic(null);
 	    
-	 //   ImageView background = (ImageView)findViewById(R.id.imageView1);
+	    //plus 
+	    mDetector = new GestureDetector(this, new MyGestureListener());
+	    ImageView background = (ImageView)findViewById(R.id.imageView1);
 	   // trova un modo perchè funga background.setOnTouchListener(this);
-	    mDetector = new GestureDetectorCompat(this, new MyGestureListener());
+	    background.setOnTouchListener(new OnTouchListener() {
+	        @Override
+	        public boolean onTouch(final View view, final MotionEvent event) {
+	           return mDetector.onTouchEvent(event);
+	        }
+	     });
+	    
 
    }
 	
@@ -248,6 +258,10 @@ public class UI4 extends Activity {
 	}
 	
 	
+	
+	
+	//parte per il plus
+	
 	 @Override 
 	    public boolean onTouchEvent(MotionEvent event){ 
 	        this.mDetector.onTouchEvent(event);
@@ -272,6 +286,7 @@ public class UI4 extends Activity {
 	        
 	        public boolean onSingleTapConfirmed(MotionEvent event){
 	        	Toast.makeText(getApplicationContext(), "Single click", Toast.LENGTH_SHORT).show();
+	        	echo();
 	        	return true;
 	        }
 	        //occhio, si potrebbe usare anche onScroll, farò una prova
@@ -281,38 +296,69 @@ public class UI4 extends Activity {
 	        	  x2=event2.getX();
 	        	  y1=event1.getY();
 	        	  y2=event2.getY();
-	        	  //per il momento la velocità la trascuriamo e ci limitiamo ad usare la distanza tra i punti per gestire gli effetti
-	        	  //si può usare in qualunque momento grazie a velocityX e velocityY
+	        	  //fixati i parametri perchè faceva un pelino fatica a riconoscere i movimenti giusti
+	        	  
 	        	        // right to left
 	        	        if(x1 - x2 > 20 && Math.abs(y1-y2) < 100 ) {
-	        	           Toast.makeText(getApplicationContext(), "drag a sinistra", Toast.LENGTH_SHORT).show();
-
+	        	           Toast.makeText(getApplicationContext(), "drag a sinistra " + (velocityX), Toast.LENGTH_SHORT).show();
+	        	//           	speed(false, Math.abs(velocityX));
 	        	            return true;
 	        	        }
 	        	        // left to right
 	        	        else if (x2-x1 > 20 && Math.abs(y1-y2) < 100) {
-	        	        	Toast.makeText(getApplicationContext(), "drag a destra", Toast.LENGTH_SHORT).show();
-
+	        	        	Toast.makeText(getApplicationContext(), "drag a destra " + (velocityX), Toast.LENGTH_SHORT).show();
+	        	//        	speed(true, Math.abs(velocityX));
 	        	            return true; 
 	        	        }
 	        	        
-	        	        //fixati i parametri perchè fa un pelino fatica a riconoscere i movimenti giusti
+	        	        
 	        	        else if (y1-y2 > 20 && Math.abs(x1-x2) < 100){
-	        	        	Toast.makeText(getApplicationContext(), "drag su", Toast.LENGTH_SHORT).show();
-	        	        	
+	        	        	Toast.makeText(getApplicationContext(), "drag su " + (velocityY), Toast.LENGTH_SHORT).show();
+	        	//        	volume(true, Math.abs(velocityY));
 	        	        	return true;
 	        	        }
 	        	        
 	        	        else if (y2-y1 > 20 && Math.abs(x1-x2) < 100){
-	        	        	Toast.makeText(getApplicationContext(), "drag giu", Toast.LENGTH_SHORT).show();
-	        	        
+	        	        	Toast.makeText(getApplicationContext(), "drag giu " + (velocityY), Toast.LENGTH_SHORT).show();
+	        	//        	volume(false, Math.abs(velocityY));
 	        	        	return true;
 	        	        }
 	        	       return true;
 	        }
 	        	
-	    }
+	    }//fine classe
+	    
 
+
+	public void echo(){
+		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
+		i.putExtra(PlayerService.ECHO, true); 
+		startService(i); 
+		
+	}
+/*	
+	public void delay(){
+		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
+		i.putExtra(PlayerService.DELAY); 
+		startService(i); 
+		
+	}
 	
+	public void volume(boolean up, float intensity){
+		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
+		i.putExtra(PlayerService.VOLUME, up); 
+		startService(i); 
+	}
+	
+	public void speed(boolean up, float intensity){
+		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
+		i.putExtra(PlayerService.SPEED, up); 
+		startService(i); 
+	}
+	
+	
+	
+*/	
+
 	
 }
