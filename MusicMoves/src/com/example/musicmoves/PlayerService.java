@@ -34,6 +34,9 @@ public class PlayerService extends Service {
 	 public static String STOP = "BGStop"; // Not used 
 	 //aggiunto
 	 public static String ECHO = "BGEcho";
+	 public static String VOLUME = "BGVolume";
+	 public static String SPEED = "BGSpeed";
+	 public static String DELAY = "BGDelay";
 	 //
 	 private String sessionName ="";
 	 private boolean initialized = false;
@@ -59,9 +62,10 @@ public class PlayerService extends Service {
 	 	  	play(); }
 	 if(intent.getBooleanExtra(PAUSE, false)) pause();
 	
-	 
-	
 	 if(intent.getBooleanExtra(ECHO, false)){ echo();}
+	 if(intent.getBooleanExtra(VOLUME, false)){ volume();}
+	 if(intent.getBooleanExtra(SPEED, false)){ speed();}
+	 if(intent.getBooleanExtra(DELAY, false)){ delay();}
 	 
 	 return Service.START_STICKY;
 	 } 
@@ -310,4 +314,18 @@ public class PlayerService extends Service {
 				
 			}
 		*/}
+		
+		synchronized void volume(){
+			
+		}
+		synchronized void speed(){
+			
+		}
+		synchronized void delay(){
+			Toast.makeText(getApplicationContext(), "Double tap", Toast.LENGTH_SHORT).show();
+		}
+		
+		
+		
+		
 }

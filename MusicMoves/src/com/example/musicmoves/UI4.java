@@ -273,7 +273,8 @@ public class UI4 extends Activity {
 	    	
 	        
 	        public boolean onDoubleTap(MotionEvent event){
-	        	Toast.makeText(getApplicationContext(), "Double tap", Toast.LENGTH_SHORT).show();
+	        	
+	        	delay();
 	        	return true;
 	        }
 	        
@@ -337,29 +338,32 @@ public class UI4 extends Activity {
 		startService(i); 
 		
 	}
-/*	
+	
 	public void delay(){
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
-		i.putExtra(PlayerService.DELAY); 
+		i.putExtra(PlayerService.DELAY, true); 
+		i.putExtra(EXTRA_MESSAGE, sessionName);
 		startService(i); 
 		
 	}
 	
 	public void volume(boolean up, float intensity){
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
-		i.putExtra(PlayerService.VOLUME, up); 
+		i.putExtra(PlayerService.VOLUME, true); 
+		i.putExtra(EXTRA_MESSAGE, sessionName);
 		startService(i); 
 	}
 	
 	public void speed(boolean up, float intensity){
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
-		i.putExtra(PlayerService.SPEED, up); 
+		i.putExtra(PlayerService.SPEED, true); 
+		i.putExtra(EXTRA_MESSAGE, sessionName);
 		startService(i); 
 	}
 	
 	
 	
-*/	
+	
 
 	
 }
