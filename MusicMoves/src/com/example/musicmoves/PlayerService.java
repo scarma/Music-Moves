@@ -295,25 +295,44 @@ public class PlayerService extends Service {
 		
 		synchronized void echo(){
 			Toast.makeText(getApplicationContext(), "Single click", Toast.LENGTH_SHORT).show();
-		/*	if (isPlaying == true){
+			if (isPlaying == true){
 				
-				short temp = (short) 100;
+				
+				
+				//short temp = (short) 100;
 			
 				EnvironmentalReverb echo = new EnvironmentalReverb(1, 0);
 				
-				echo.setDiffusion(temp);
 				
-				audioX.attachAuxEffect(echo.getId());
-				audioY.attachAuxEffect(echo.getId());
-				audioZ.attachAuxEffect(echo.getId());
-				/*
-				echo.release();
-				audioX.release();
-				audioY.release();
-				audioZ.release();
+				  	echo.setDecayHFRatio((short) 100);
+		            echo.setDecayTime(20000);
+		            echo.setDensity((short) 500);
+		            echo.setDiffusion((short) 100);
+		            echo.setReverbLevel((short) -1000);
+		            echo.setEnabled(true);
+		            
+				if (audioX.STATE_INITIALIZED==1) {
+					audioX.attachAuxEffect(echo.getId());
+					audioX.setAuxEffectSendLevel(0.7f);
+					
+				}
+				if (audioY.STATE_INITIALIZED==1){
+					audioY.attachAuxEffect(echo.getId());
+					audioY.setAuxEffectSendLevel(0.7f);
+					
+				}
+				if (audioZ.STATE_INITIALIZED==1){
+					audioZ.attachAuxEffect(echo.getId());
+					audioZ.setAuxEffectSendLevel(0.7f);
+					
+				}
+				
+				
+				
+				
 				
 			}
-		*/}
+	}
 		
 		synchronized void volume(){
 			
