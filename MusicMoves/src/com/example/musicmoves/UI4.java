@@ -115,6 +115,7 @@ public class UI4 extends Activity {
 		}
 		if (id == R.id.action_list) {
 			Intent intent = new Intent(getApplicationContext(), UI1.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			startActivity(intent);
 			finish();
 			return true;

@@ -57,7 +57,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private String date = null;
 	private DBAdapter databaseHelper;
 	private Cursor cursor;
-	private int recCounter = 0; //salvare stato
 	private int sampleCnt = 0;
 	private VerticalProgressBar progressBarX;
     private VerticalProgressBar progressBarY;
@@ -110,7 +109,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 				value = input.getText().toString().toLowerCase(Locale.getDefault());
 				try {value = value.substring(0,1).toUpperCase(Locale.getDefault()) + value.substring(1).toLowerCase(Locale.getDefault());}
 				catch(java.lang.StringIndexOutOfBoundsException e){
-					value = "Rec_"+recCounter;
+					value = "Rec";
 					}
 				
 				//controllo che il nuovo nome non sia gi� presente nel db
@@ -140,13 +139,13 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			    year = c.get(Calendar.YEAR);
 			    
 			    date = day +"/"+ month+"/"+ year +" - "+ hour+":"+ minute +":"+ second;
-				value = value +"\n"+ day +"/"+ month +"/"+ year +" - "+ hour+":"+ minute +":"+ second +"\n" +"Rec "+ recCounter;
+				value = value +"\n"+ day +"/"+ month +"/"+ year +" - "+ hour+":"+ minute +":"+ second;
 				
 				TextView textView = (TextView) findViewById(R.id.textViewNewRecName);
 			    textView.setTextSize(25);
 			    textView.setText(value);
 			    textView.setTextColor(Color.rgb(255, 153, 0));
-			    recCounter++;
+			    
 			  }
 			});
 
