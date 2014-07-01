@@ -22,11 +22,13 @@ Membri progetto: Andrea Scarmagnan, Emanuele Fabian, Giovanni Zampieri
 •	Implementazione delle preferenze e salvataggio dello stato  
 
 Cose ancora da fare DEFAULT  
-•	Salvare lo stato  
-	o	UI3: salvare stato testo AlertDialog    
 •	Sistemazioni aggiuntive  
+<<<<<<< HEAD
 	o	Service per la registrazione  
-	o	Sistemare service che lancia 
+	o	Conferma cambio dato UI2  
+=======
+	o	Service per la registrazione 
+>>>>>>> branch 'master' of https://github.com/scarma/Music-Moves.git
 	
 *PLUS*  
 •	Implementazione Volume  

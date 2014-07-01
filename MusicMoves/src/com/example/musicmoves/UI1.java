@@ -300,7 +300,7 @@ public class UI1 extends ListActivity {
 			    minute = c.get(Calendar.MINUTE);
 			    second = c.get(Calendar.SECOND);
 			    day = c.get(Calendar.DATE);
-			    month = c.get(Calendar.MONTH);
+			    month = c.get(Calendar.MONTH)+1;
 			    year = c.get(Calendar.YEAR);
 			    
 			    date = day +"/"+ month+"/"+ year +" - "+ hour+":"+ minute +":"+ second;
