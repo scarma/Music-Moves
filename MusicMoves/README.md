@@ -22,12 +22,9 @@ Membri progetto: Andrea Scarmagnan, Emanuele Fabian, Giovanni Zampieri
 •	Implementazione delle preferenze e salvataggio dello stato  
 
 Cose ancora da fare DEFAULT  
-•	Salvare lo stato  
-	o	UI3: salvare stato testo AlertDialog    
 •	Sistemazioni aggiuntive  
 	o	Service per la registrazione  
-	o	Conferma cambio dato UI2
-	o	Immagine modificata in base a dati accelerometro    
+	o	Conferma cambio dato UI2  
 	
 *PLUS*  
 •	Implementazione Volume  

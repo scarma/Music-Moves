@@ -31,7 +31,6 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
 import android.text.Spanned;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -67,17 +66,19 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
     Calendar c;
     private int maxDurationRec;
     public EditText input;
-    Bundle savedState;
+//    Bundle savedState;
+	private AlertDialog dialog;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-
+	protected void onCreate(Bundle savedInstancestate) {
+		super.onCreate(savedInstancestate);
 		//Crea cartella in cui salvare i file
 		File folder = new File(filepath);
 	    if (!folder.exists()) {
 	        Toast.makeText(UI3.this, "Directory Does Not Exist, I Create It", Toast.LENGTH_SHORT).show();
 	        folder.mkdir();
 	    }
+	    setContentView(R.layout.activity_ui3);
 	    
 	  //Pop up dialog
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -160,12 +161,24 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			public void onCancel(DialogInterface dialog){onBackPressed();}
 		});
 		
-		alert.show();
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_ui3);
+		dialog=alert.show();
+		
+		
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 	    mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 	        
+	    
+	    if (savedInstancestate != null) {
+	        // Restore value of members from saved state
+	    	String value=savedInstancestate.getString("alert");
+	    	if (value!=null){
+	    		input.setText(value);
+	    		input.setSelection(value.length());
+	    	}
+	    } else {
+	        // Probably initialize members with default values for a new instance
+	    }
+	    
 //		if (savedInstanceState == null) {	//duplicava il layout con questo
 //			getSupportFragmentManager().beginTransaction()
 //					.add(R.id.container, new PlaceholderFragment()).commit();
@@ -174,14 +187,25 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	
 	@Override
 	protected void onPause() {
-//		String textfield=input.getText().toString();
-//		Log.d("textpau", ""+input.getText());
-//		savedState.putString("alert", textfield);
+		
 //		
 	//TODO: Salvare lo stato
 		super.onPause();
+		if (dialog!=null && dialog.isShowing())
+			dialog.dismiss();
+//		String textfield=input.getText().toString();
+//		Log.d("textpau", ""+input.getText());
+//		bundle=new Bundle();
+//		bundle.putString("alert", textfield);
 	}
 
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		String textfield=input.getText().toString();
+		outState.putString("alert", textfield);
+		super.onSaveInstanceState(outState);
+	}
+	
 	@Override
 	protected void onResume() {
 	//TODO: Ripristinare lo stato
