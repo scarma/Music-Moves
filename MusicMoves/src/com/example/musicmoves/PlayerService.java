@@ -15,12 +15,15 @@ import android.database.Cursor;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
+import android.media.audiofx.AudioEffect;
+import android.media.audiofx.EnvironmentalReverb;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 import database.DBAdapter;
 
 public class PlayerService extends Service {
@@ -29,6 +32,12 @@ public class PlayerService extends Service {
 	 public static String PLAY = "BGPlay";
 	 public static String PAUSE = "BGPause";
 	 public static String STOP = "BGStop"; // Not used 
+	 //aggiunto
+	 public static String ECHO = "BGEcho";
+	 public static String VOLUME = "BGVolume";
+	 public static String SPEED = "BGSpeed";
+	 public static String DELAY = "BGDelay";
+	 //
 	 private String sessionName ="";
 	 private boolean initialized = false;
 	 private boolean isPlaying = false; 
@@ -52,8 +61,13 @@ public class PlayerService extends Service {
 		 	sessionName = message;
 	 	  	play(); }
 	 if(intent.getBooleanExtra(PAUSE, false)) pause();
-	 return Service.START_STICKY;
+	
+	 if(intent.getBooleanExtra(ECHO, false)){ echo();}
+	 if(intent.getBooleanExtra(VOLUME, false)){ volume();}
+	 if(intent.getBooleanExtra(SPEED, false)){ speed();}
+	 if(intent.getBooleanExtra(DELAY, false)){ delay();}
 	 
+	 return Service.START_STICKY;
 	 } 
 	 
 	
@@ -277,4 +291,60 @@ public class PlayerService extends Service {
 		public void setTime(int time) {
 			PlayerService.time = time;
 		}
+		
+		
+		synchronized void echo(){
+			Toast.makeText(getApplicationContext(), "Single click", Toast.LENGTH_SHORT).show();
+			if (isPlaying == true){
+				
+				
+				
+				//short temp = (short) 100;
+			
+				EnvironmentalReverb echo = new EnvironmentalReverb(1, 0);
+				
+				
+				  	echo.setDecayHFRatio((short) 100);
+		            echo.setDecayTime(20000);
+		            echo.setDensity((short) 500);
+		            echo.setDiffusion((short) 100);
+		            echo.setReverbLevel((short) -1000);
+		            echo.setEnabled(true);
+		            
+				if (audioX.STATE_INITIALIZED==1) {
+					audioX.attachAuxEffect(echo.getId());
+					audioX.setAuxEffectSendLevel(0.7f);
+					
+				}
+				if (audioY.STATE_INITIALIZED==1){
+					audioY.attachAuxEffect(echo.getId());
+					audioY.setAuxEffectSendLevel(0.7f);
+					
+				}
+				if (audioZ.STATE_INITIALIZED==1){
+					audioZ.attachAuxEffect(echo.getId());
+					audioZ.setAuxEffectSendLevel(0.7f);
+					
+				}
+				
+				
+				
+				
+				
+			}
+	}
+		
+		synchronized void volume(){
+			
+		}
+		synchronized void speed(){
+			
+		}
+		synchronized void delay(){
+			Toast.makeText(getApplicationContext(), "Double tap", Toast.LENGTH_SHORT).show();
+		}
+		
+		
+		
+		
 }

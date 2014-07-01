@@ -9,10 +9,14 @@ import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +34,10 @@ public class UI4 extends Activity {
     public static boolean isStopped;
 	public boolean isPlaying;
 	
+	//plus
+	public float x1, x2 , y1 , y2;
+	private GestureDetector mDetector;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		setVolumeControlStream(AudioManager.STREAM_MUSIC); //aumenta volume musica anche se in pausa
@@ -43,7 +51,22 @@ public class UI4 extends Activity {
 	    textView.setTextColor(Color.rgb(255, 153, 0));
 	    textView.setText(sessionName);
 	    PlayMusic(null);
-	}
+	    
+	    //plus 
+	    mDetector = new GestureDetector(this, new MyGestureListener());
+	    ImageView background = (ImageView)findViewById(R.id.imageView1);
+	   // trova un modo perchè funga background.setOnTouchListener(this);
+	    background.setOnTouchListener(new OnTouchListener() {
+	        @Override
+	        public boolean onTouch(final View view, final MotionEvent event) {
+	           return mDetector.onTouchEvent(event);
+	        }
+	     });
+	    
+
+   }
+	
+	
 	
 	@Override
 	protected void onPause() {
@@ -233,4 +256,114 @@ public class UI4 extends Activity {
 	    textView.setText(sessionName);
 	  
 	}
+	
+	
+	
+	
+	//parte per il plus
+	
+	 @Override 
+	    public boolean onTouchEvent(MotionEvent event){ 
+	        this.mDetector.onTouchEvent(event);
+	        return super.onTouchEvent(event);
+	    }
+	    
+	    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+	      
+	    	
+	        
+	        public boolean onDoubleTap(MotionEvent event){
+	        	
+	        	delay();
+	        	return true;
+	        }
+	        
+	        @Override
+	        public boolean onDown(MotionEvent event) { 
+	        	//fa qualcosa MENTRE il dito è premuto sullo schermo
+	        	//diverso da longpress
+	            return true;
+	        }
+	        
+	        public boolean onSingleTapConfirmed(MotionEvent event){
+	        	
+	        	echo();
+	        	return true;
+	        }
+	        //occhio, si potrebbe usare anche onScroll, farò una prova
+	        @Override
+	        public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
+	        	  x1=event1.getX();
+	        	  x2=event2.getX();
+	        	  y1=event1.getY();
+	        	  y2=event2.getY();
+	        	  //fixati i parametri perchè faceva un pelino fatica a riconoscere i movimenti giusti
+	        	  
+	        	        // right to left
+	        	        if(x1 - x2 > 20 && Math.abs(y1-y2) < 100 ) {
+	        	           Toast.makeText(getApplicationContext(), "drag a sinistra " + (velocityX), Toast.LENGTH_SHORT).show();
+	        	//           	speed(false, Math.abs(velocityX));
+	        	            return true;
+	        	        }
+	        	        // left to right
+	        	        else if (x2-x1 > 20 && Math.abs(y1-y2) < 100) {
+	        	        	Toast.makeText(getApplicationContext(), "drag a destra " + (velocityX), Toast.LENGTH_SHORT).show();
+	        	//        	speed(true, Math.abs(velocityX));
+	        	            return true; 
+	        	        }
+	        	        
+	        	        
+	        	        else if (y1-y2 > 20 && Math.abs(x1-x2) < 100){
+	        	        	Toast.makeText(getApplicationContext(), "drag su " + (velocityY), Toast.LENGTH_SHORT).show();
+	        	//        	volume(true, Math.abs(velocityY));
+	        	        	return true;
+	        	        }
+	        	        
+	        	        else if (y2-y1 > 20 && Math.abs(x1-x2) < 100){
+	        	        	Toast.makeText(getApplicationContext(), "drag giu " + (velocityY), Toast.LENGTH_SHORT).show();
+	        	//        	volume(false, Math.abs(velocityY));
+	        	        	return true;
+	        	        }
+	        	       return true;
+	        }
+	        	
+	    }//fine classe
+	    
+
+
+	public void echo(){
+		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
+		i.putExtra(PlayerService.ECHO, true);
+		i.putExtra(EXTRA_MESSAGE, sessionName);
+		startService(i); 
+		
+	}
+	
+	public void delay(){
+		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
+		i.putExtra(PlayerService.DELAY, true); 
+		i.putExtra(EXTRA_MESSAGE, sessionName);
+		startService(i); 
+		
+	}
+	
+	public void volume(boolean up, float intensity){
+		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
+		i.putExtra(PlayerService.VOLUME, true); 
+		i.putExtra(EXTRA_MESSAGE, sessionName);
+		startService(i); 
+	}
+	
+	public void speed(boolean up, float intensity){
+		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
+		i.putExtra(PlayerService.SPEED, true); 
+		i.putExtra(EXTRA_MESSAGE, sessionName);
+		startService(i); 
+	}
+	
+	
+	
+	
+
+	
 }
