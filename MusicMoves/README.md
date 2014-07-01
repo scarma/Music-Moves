@@ -25,8 +25,7 @@ Cose ancora da fare DEFAULT
 •	Salvare lo stato  
 	o	UI3: salvare stato testo AlertDialog    
 •	Sistemazioni aggiuntive  
-	o	Service per la registrazione  
-	o	Sistemare service che lancia 
+	o	Service per la registrazione 
 	
 *PLUS*  
 •	Implementazione Volume  
