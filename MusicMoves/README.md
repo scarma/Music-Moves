@@ -26,7 +26,8 @@ Cose ancora da fare DEFAULT
 	o	UI3: salvare stato testo AlertDialog    
 •	Sistemazioni aggiuntive  
 	o	Service per la registrazione  
-	o	Sistemare service che lancia 
+	o	Conferma cambio dato UI2
+	o	Immagine modificata in base a dati accelerometro    
 	
 *PLUS*  
 •	Implementazione Volume  
