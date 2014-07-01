@@ -56,7 +56,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private int year;
 	private String date = null;
 	private DBAdapter databaseHelper;
-	private Cursor cursor;
+	private Cursor cursor; //salvare stato
 	private int sampleCnt = 0;
 	private VerticalProgressBar progressBarX;
     private VerticalProgressBar progressBarY;
@@ -145,7 +145,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			    textView.setTextSize(25);
 			    textView.setText(value);
 			    textView.setTextColor(Color.rgb(255, 153, 0));
-			    
+			  
 			  }
 			});
 
