@@ -15,8 +15,8 @@ import android.database.Cursor;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.media.audiofx.AudioEffect;
 import android.media.audiofx.EnvironmentalReverb;
+import android.media.audiofx.PresetReverb;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
@@ -37,6 +37,7 @@ public class PlayerService extends Service {
 	 public static String VOLUME = "BGVolume";
 	 public static String SPEED = "BGSpeed";
 	 public static String DELAY = "BGDelay";
+	 public static String VOLUME_UP = "BGVolume_UP";
 	 //
 	 private String sessionName ="";
 	 private boolean initialized = false;
@@ -63,7 +64,10 @@ public class PlayerService extends Service {
 	 if(intent.getBooleanExtra(PAUSE, false)) pause();
 	
 	 if(intent.getBooleanExtra(ECHO, false)){ echo();}
-	 if(intent.getBooleanExtra(VOLUME, false)){ volume();}
+	 if(intent.getBooleanExtra(VOLUME, false)) {
+		 int intensity=intent.getIntExtra(VOLUME_UP, 1);
+		 volume(true, intensity);
+	 }
 	 if(intent.getBooleanExtra(SPEED, false)){ speed();}
 	 if(intent.getBooleanExtra(DELAY, false)){ delay();}
 	 
@@ -295,65 +299,179 @@ public class PlayerService extends Service {
 		
 		
 		synchronized void echo(){
-			Toast.makeText(getApplicationContext(), "Single click", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "Echo on single click", Toast.LENGTH_SHORT).show();
 			if (isPlaying == true){
 				
+				EnvironmentalReverb nulleffect, echo;
+				nulleffect= new EnvironmentalReverb(0, 0); //effetto che non contiene nessuna modifica
+				nulleffect.setEnabled(true);
 				
 				
-				//short temp = (short) 100;
-			
-				EnvironmentalReverb echo = new EnvironmentalReverb(1, 0);
+				audioX.attachAuxEffect(nulleffect.getId()); //toglie eventuali effetti aggiunti in precedenza
+				audioY.attachAuxEffect(nulleffect.getId());	//aggiungendo ad ogni audiotrack un effetto nullo
+				audioZ.attachAuxEffect(nulleffect.getId());	//come suggerito dalla documentazione
+				
+//				PresetReverb mReverb = new PresetReverb(1,audioX.getAudioSessionId());//<<<<<<<<<<<<<
+//			    mReverb.setPreset(PresetReverb.PRESET_LARGEROOM);
+//			    mReverb.setEnabled(true);
+//			    audioX.attachAuxEffect(mReverb.getId());
+//			    audioX.setAuxEffectSendLevel(1.0f);
+			    
+				echo = new EnvironmentalReverb(1, audioX.getAudioSessionId());
 				
 				
-				  	echo.setDecayHFRatio((short) 100);
-		            echo.setDecayTime(20000);
+				  	echo.setDecayHFRatio((short) 1000);
+		            echo.setDecayTime(15000);
 		            echo.setDensity((short) 500);
-		            echo.setDiffusion((short) 100);
-		            echo.setReverbLevel((short) -1000);
+		            echo.setDiffusion((short) 700);
+		            echo.setReverbLevel((short) 1000);
 		            echo.setEnabled(true);
+		           
+		            
+		           // Toast.makeText(getApplicationContext(), ""+echo.setEnabled(true), Toast.LENGTH_SHORT).show();
+		            //in realta' il toast restituisce 0 a dimostrazione che lo attacca effettivamente. pero non sisentono differenze 
 		            
 				if (audioX.STATE_INITIALIZED==1) {
 					audioX.attachAuxEffect(echo.getId());
-					audioX.setAuxEffectSendLevel(0.7f);
+					audioX.setAuxEffectSendLevel(1.0f);
+					Toast.makeText(getApplicationContext(), "inizializzata " + audioX.setAuxEffectSendLevel(1.0f), Toast.LENGTH_SHORT).show();
 					
 				}
 				if (audioY.STATE_INITIALIZED==1){
 					audioY.attachAuxEffect(echo.getId());
-					audioY.setAuxEffectSendLevel(0.7f);
+					audioY.setAuxEffectSendLevel(1.0f);
 					
 				}
 				if (audioZ.STATE_INITIALIZED==1){
 					audioZ.attachAuxEffect(echo.getId());
-					audioZ.setAuxEffectSendLevel(0.7f);
+					audioZ.setAuxEffectSendLevel(1.0f);
 					
 				}
-				
-				
-				
-				
+				/* questi metodi fermano la riproduzione, quello che io definisco drop dell'audiotrack
+				echo.release();
+				audioX.release();
+				audioY.release();
+				audioZ.release();
+				*/
 				
 			}
 	}
-		
-		synchronized void volume(){
+	
+		int posX, posY, posZ;
+		synchronized void volume(boolean up, double variabileintensita){
+
 //			Bisogna: modificare la variabile amplitude, 
 //			ottenere posizione riproduzione, stoppare audiotrack
 //			ricreare le audiotrack(basta chiamare proSoundGenerator) 
 //			e impostare la riproduzione a dov'era arrivato(probabilmente sarà necessario modificare
 //			leggermente proSoundGenerator per far questo),
 			
-		}
+			
+			if(isPlaying == true){
+			posX = audioX.getPlaybackHeadPosition();
+			posY = audioY.getPlaybackHeadPosition();
+			posZ = audioZ.getPlaybackHeadPosition();
+			}//fine isplaying==true
+		}//fine volume
+		
+		
+		
 		synchronized void speed(){
 //			Stessa cosa che per il metodo volume. Solo che al posto di amplitude modificare sampleRate
 //			Oppure provate a usare setPlaybackRate(int sampleRateInHz) di AudioTrack
 //			
 			 
 		}
+		
+		public boolean isDelaying = false;
+		
 		synchronized void delay(){
-			Toast.makeText(getApplicationContext(), "Double tap", Toast.LENGTH_SHORT).show();
-		}
+			
+			if (isPlaying == true){
+					
+				EnvironmentalReverb nulleffect, delayX, delayY, delayZ;
+				
+					if (isDelaying == false){
+				Toast.makeText(getApplicationContext(), "Delay on", Toast.LENGTH_SHORT).show();
+				
+					isDelaying = true;
+					
+					
+		    
+					//correggere i parametri in modo che risulti il delay che vogliamo nelle specifiche
+					delayX = new EnvironmentalReverb(1, audioX.getAudioSessionId());
+					delayY = new EnvironmentalReverb(1, audioY.getAudioSessionId());
+					delayZ = new EnvironmentalReverb(1, audioZ.getAudioSessionId());
+					
+					  	delayX.setDecayHFRatio((short) 1000);
+					  	delayX.setDensity((short) 500);
+					  	delayX.setDiffusion((short) 700);
+					  	delayX.setReverbLevel((short) 1000);
+					  	delayX.setEnabled(true);
+					  	
+					  	delayY.setDecayHFRatio((short) 1000);
+					  	delayY.setDensity((short) 500);
+					  	delayY.setDiffusion((short) 700);
+					  	delayY.setReverbLevel((short) 1000);
+					  	delayY.setEnabled(true);
+					  	
+					  	delayZ.setDecayHFRatio((short) 1000);
+					  	delayZ.setDensity((short) 500);
+					  	delayZ.setDiffusion((short) 700);
+					  	delayZ.setReverbLevel((short) 1000);
+					  	delayZ.setEnabled(true);
+			           
+			            
+			           // Toast.makeText(getApplicationContext(), ""+echo.setEnabled(true), Toast.LENGTH_SHORT).show();
+			            //in realta' il toast restituisce 0 a dimostrazione che lo attacca effettivamente. pero non sisentono differenze 
+			            
+					if (audioX.STATE_INITIALIZED==1) {
+						audioX.attachAuxEffect(delayX.getId());
+						audioX.setAuxEffectSendLevel(1.0f);
+						Toast.makeText(getApplicationContext(), "inizializzata " + audioX.setAuxEffectSendLevel(1.0f), Toast.LENGTH_SHORT).show();
+						
+					}
+					if (audioY.STATE_INITIALIZED==1){
+						audioY.attachAuxEffect(delayY.getId());
+						audioY.setAuxEffectSendLevel(1.0f);
+						
+					}
+					if (audioZ.STATE_INITIALIZED==1){
+						audioZ.attachAuxEffect(delayZ.getId());
+						audioZ.setAuxEffectSendLevel(1.0f);
+						
+					}
+					/* questi metodi fermano la riproduzione, quello che io definisco drop dell'audiotrack
+					echo.release();
+					audioX.release();
+					audioY.release();
+					audioZ.release();
+					*/
+					
+				}//fine isdelaying == false
+					
+					
+				else {
+					Toast.makeText(getApplicationContext(), "Delay off", Toast.LENGTH_SHORT).show();
+					nulleffect= new EnvironmentalReverb(1, audioX.getAudioSessionId()); //effetto che non contiene nessuna modifica
+					nulleffect.setEnabled(true);
+					audioX.attachAuxEffect(nulleffect.getId()); //toglie eventuali effetti aggiunti in precedenza
+					
+					nulleffect= new EnvironmentalReverb(1, audioY.getAudioSessionId());
+					nulleffect.setEnabled(true);
+					audioY.attachAuxEffect(nulleffect.getId());	//aggiungendo ad ogni audiotrack un effetto nullo
+					
+					nulleffect= new EnvironmentalReverb(1, audioZ.getAudioSessionId());
+					nulleffect.setEnabled(true);
+					audioZ.attachAuxEffect(nulleffect.getId());	//come suggerito dalla documentazione
+					isDelaying = false;
+					
+				}//fine else
+					
+			}//fine isplaying
+		}//fine delay
 		
 		
 		
 		
-}
+}//fine class
