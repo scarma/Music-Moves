@@ -37,6 +37,7 @@ public class UI4 extends Activity {
 	//plus
 	public float x1, x2 , y1 , y2;
 	private GestureDetector mDetector;
+	private View.OnTouchListener gestureListener;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +56,22 @@ public class UI4 extends Activity {
 	    //plus 
 	    mDetector = new GestureDetector(this, new MyGestureListener());
 	    ImageView background = (ImageView)findViewById(R.id.imageView1);
-	   // trova un modo perchè funga background.setOnTouchListener(this);
-	    background.setOnTouchListener(new OnTouchListener() {
+	   // trova un modo perchï¿½ funga background.setOnTouchListener(this);
+	    gestureListener = new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                mDetector.onTouchEvent(event);
+                return true;
+            }
+        };
+	    
+	    
+/*	    background.setOnTouchListener(new OnTouchListener() {
 	        @Override
 	        public boolean onTouch(final View view, final MotionEvent event) {
 	           return mDetector.onTouchEvent(event);
 	        }
-	     });
-	    
+	     });*/
+	    background.setOnTouchListener(gestureListener);
 
    }
 	
@@ -226,7 +235,7 @@ public class UI4 extends Activity {
 	   }
 
 	public void onBackPressed() {
-		//TODO: CHE ROBA è! SISTEMARE ON BACK PRESSED Grazie
+		//TODO: CHE ROBA ï¿½! SISTEMARE ON BACK PRESSED Grazie
 //		String s = "my";
 //		Intent intent = getIntent();
 //		boolean back = intent.getBooleanExtra(s, false);
@@ -262,25 +271,32 @@ public class UI4 extends Activity {
 	
 	//parte per il plus
 	
+	
+	/*
+	 * 
+	 * questo metodo gestirebbe tutti gli eventi possibili che non sono gia' gestiti da altri metodi
+	 * percio' restituisce tantissimi toast quando clicckiamo fuori dall'imageview
 	 @Override 
 	    public boolean onTouchEvent(MotionEvent event){ 
-	        this.mDetector.onTouchEvent(event);
-	        return super.onTouchEvent(event);
+//	        this.mDetector.onTouchEvent(event);
+//	        return super.onTouchEvent(event);
+     	Toast.makeText(getApplicationContext(), "Evento non gestito ", Toast.LENGTH_SHORT).show();
+
+		 return true;
 	    }
-	    
+	   */ 
 	    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
 	      
 	    	
 	        
 	        public boolean onDoubleTap(MotionEvent event){
-	        	
 	        	delay();
 	        	return true;
 	        }
 	        
 	        @Override
 	        public boolean onDown(MotionEvent event) { 
-	        	//fa qualcosa MENTRE il dito è premuto sullo schermo
+	        	//fa qualcosa MENTRE il dito ï¿½ premuto sullo schermo
 	        	//diverso da longpress
 	            return true;
 	        }
@@ -290,14 +306,14 @@ public class UI4 extends Activity {
 	        	echo();
 	        	return true;
 	        }
-	        //occhio, si potrebbe usare anche onScroll, farò una prova
+	        //occhio, si potrebbe usare anche onScroll, farï¿½ una prova
 	        @Override
 	        public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
 	        	  x1=event1.getX();
 	        	  x2=event2.getX();
 	        	  y1=event1.getY();
 	        	  y2=event2.getY();
-	        	  //fixati i parametri perchè faceva un pelino fatica a riconoscere i movimenti giusti
+	        	  //fixati i parametri perchï¿½ faceva un pelino fatica a riconoscere i movimenti giusti
 	        	  
 	        	        // right to left
 	        	        if(x1 - x2 > 20 && Math.abs(y1-y2) < 100 ) {
