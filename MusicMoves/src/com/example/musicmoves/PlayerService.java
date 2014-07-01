@@ -230,6 +230,7 @@ public class PlayerService extends Service {
 	    private byte[] generatedArray;
 	    private static int time;
 	    static int numSamples;
+	    private int amplitude=1; //ampiezza del file audio. Se >1 distorge (clipping). Dev'essere compreso tra 0 e 1
 	    
 	    public byte[] genTone(double[] x, int cnt){
 	        // fill out the array
@@ -242,7 +243,7 @@ public class PlayerService extends Service {
 	    	for (int i = 0; i < (numSamples); ++i) { 
 	        	if ((i%(10*upsampling))==0) //inserisce dati accelerometro nell'array
 	        		{ freqOfTone = x[i/(10*upsampling)];}
-	            sample[i] = Math.sin(2 * Math.PI * i / (sampleRate/freqOfTone));
+	            sample[i] = amplitude*Math.sin(2 * Math.PI * i / (sampleRate/freqOfTone));
 	        }
 	    	byte generatedSnd[] = new byte[2 * numSamples];
 	        // convert to 16 bit pcm sound array
@@ -335,10 +336,18 @@ public class PlayerService extends Service {
 	}
 		
 		synchronized void volume(){
+//			Bisogna: modificare la variabile amplitude, 
+//			ottenere posizione riproduzione, stoppare audiotrack
+//			ricreare le audiotrack(basta chiamare proSoundGenerator) 
+//			e impostare la riproduzione a dov'era arrivato(probabilmente sarà necessario modificare
+//			leggermente proSoundGenerator per far questo),
 			
 		}
 		synchronized void speed(){
-			
+//			Stessa cosa che per il metodo volume. Solo che al posto di amplitude modificare sampleRate
+//			Oppure provate a usare setPlaybackRate(int sampleRateInHz) di AudioTrack
+//			
+			 
 		}
 		synchronized void delay(){
 			Toast.makeText(getApplicationContext(), "Double tap", Toast.LENGTH_SHORT).show();

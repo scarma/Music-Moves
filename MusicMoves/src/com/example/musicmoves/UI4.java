@@ -319,13 +319,13 @@ public class UI4 extends Activity {
 	        	        // right to left
 	        	        if(x1 - x2 > 20 && Math.abs(y1-y2) < 100 ) {
 	        	           Toast.makeText(getApplicationContext(), "drag a sinistra " + (velocityX), Toast.LENGTH_SHORT).show();
-	        	//           	speed(false, Math.abs(velocityX));
+	        	           	speed(false, Math.abs(velocityX));
 	        	            return true;
 	        	        }
 	        	        // left to right
 	        	        else if (x2-x1 > 20 && Math.abs(y1-y2) < 100) {
 	        	        	Toast.makeText(getApplicationContext(), "drag a destra " + (velocityX), Toast.LENGTH_SHORT).show();
-	        	//        	speed(true, Math.abs(velocityX));
+	        	        	speed(true, Math.abs(velocityX));
 	        	            return true; 
 	        	        }
 	        	        
