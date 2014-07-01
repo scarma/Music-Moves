@@ -52,7 +52,22 @@ public class UI4 extends Activity {
 	    textView.setTextColor(Color.rgb(255, 153, 0));
 	    textView.setText(sessionName);
 	    PlayMusic(null);
-	    
+	  
+   }
+	
+	
+	
+	@Override
+	protected void onPause() {
+	//TODO: Salvare lo stato
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+	//TODO: Ripristinare lo stato
+		
+		  
 	    //plus 
 	    mDetector = new GestureDetector(this, new MyGestureListener());
 	    ImageView background = (ImageView)findViewById(R.id.imageView1);
@@ -73,24 +88,17 @@ public class UI4 extends Activity {
 	     });*/
 	    background.setOnTouchListener(gestureListener);
 
-   }
-	
-	
-	
-	@Override
-	protected void onPause() {
-	//TODO: Salvare lo stato
-		super.onPause();
-	}
-
-	@Override
-	protected void onResume() {
-	//TODO: Ripristinare lo stato
+		
+		
 		super.onResume();
 //		Intent intent = getIntent();
 //		boolean startedbyme=intent.getBooleanExtra("my", false);
 //		if (startedbyme)
 //			Toast.makeText(this, "Lanciato da me", Toast.LENGTH_SHORT).show();
+		
+		
+		
+		
 	}
 	
 	@Override
@@ -363,7 +371,8 @@ public class UI4 extends Activity {
 		
 	}
 	
-	public void volume(boolean up, float intensity){
+	public void volume(boolean up, double intensity){
+		
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
 		i.putExtra(PlayerService.VOLUME, true); 
 		i.putExtra(EXTRA_MESSAGE, sessionName);
