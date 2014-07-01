@@ -142,7 +142,7 @@ public class UI4 extends Activity {
 						}
 					});
 					try {
-						Thread.sleep(200);
+						Thread.sleep(100);
 					} catch (InterruptedException e) {
 						isStopped = true;
 					}
