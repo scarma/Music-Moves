@@ -23,8 +23,12 @@ Membri progetto: Andrea Scarmagnan, Emanuele Fabian, Giovanni Zampieri
 
 Cose ancora da fare DEFAULT  
 •	Sistemazioni aggiuntive  
+<<<<<<< HEAD
 	o	Service per la registrazione  
 	o	Conferma cambio dato UI2  
+=======
+	o	Service per la registrazione 
+>>>>>>> branch 'master' of https://github.com/scarma/Music-Moves.git
 	
 *PLUS*  
 •	Implementazione Volume  
