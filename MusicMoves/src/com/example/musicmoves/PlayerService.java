@@ -323,7 +323,8 @@ public class PlayerService extends Service {
 //			    mReverb.setEnabled(true);
 //			    audioX.attachAuxEffect(mReverb.getId());
 //			    audioX.setAuxEffectSendLevel(1.0f);
-			    
+			    if(echo!=null)
+				{echo.release();}
 				echo = new EnvironmentalReverb(1, audioX.getAudioSessionId());
 				
 				  	echo.setDecayHFRatio((short) 1000);
@@ -342,7 +343,7 @@ public class PlayerService extends Service {
 				if (audioX.STATE_INITIALIZED==1) {
 					audioX.attachAuxEffect(echo.getId());
 					audioX.setAuxEffectSendLevel(1.0f);
-					Toast.makeText(getApplicationContext(), "inizializzata " + audioX.setAuxEffectSendLevel(1.0f), Toast.LENGTH_SHORT).show();
+//					Toast.makeText(getApplicationContext(), "inizializzata " + audioX.setAuxEffectSendLevel(1.0f), Toast.LENGTH_SHORT).show();
 					
 				}
 //				if (audioY.STATE_INITIALIZED==1){
@@ -417,9 +418,9 @@ public class PlayerService extends Service {
 			posY = audioY.getPlaybackHeadPosition();
 			posZ = audioZ.getPlaybackHeadPosition();
 			//rilascio le audiotrack per farne di nuove
-			audioX.flush();
-			audioY.flush();
-			audioZ.flush();
+			audioX.release();
+			audioY.release();
+			audioZ.release();
 			
 			proSoundGenerator(Environment.getExternalStorageDirectory().getPath()+"/MusicMoves", sessionName);
 			//ripartiamio da dove li abbiamo lasciati
@@ -469,9 +470,9 @@ public class PlayerService extends Service {
 			posY = audioY.getPlaybackHeadPosition();
 			posZ = audioZ.getPlaybackHeadPosition();
 			//rilascio le audiotrack per farne di nuove
-			audioX.flush();
-			audioY.flush();
-			audioZ.flush();
+			audioX.release();
+			audioY.release();
+			audioZ.release();
 			
 			proSoundGenerator(Environment.getExternalStorageDirectory().getPath()+"/MusicMoves", sessionName);
 			//ripartiamio da dove li abbiamo lasciati
@@ -514,7 +515,7 @@ synchronized void delay(){
 					if (audioX.STATE_INITIALIZED==1) {
 						audioX.attachAuxEffect(delay.getId());
 						audioX.setAuxEffectSendLevel(1.0f);
-						Toast.makeText(getApplicationContext(), "inizializzata " + audioX.setAuxEffectSendLevel(1.0f), Toast.LENGTH_SHORT).show();
+//						Toast.makeText(getApplicationContext(), "inizializzata " + audioX.setAuxEffectSendLevel(1.0f), Toast.LENGTH_SHORT).show();
 						
 					}
 //					if (audioY.STATE_INITIALIZED==1){
