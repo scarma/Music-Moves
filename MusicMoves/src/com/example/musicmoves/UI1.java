@@ -74,7 +74,8 @@ public class UI1 extends ListActivity {
 		setContentView(R.layout.activity_ui1);
 		
 		//Visualizzo spazio rimanente
-		StatFs statFs = new StatFs(getFilesDir().getAbsolutePath());
+		StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+//		StatFs statFs = new StatFs(getFilesDir().getAbsolutePath());
 		@SuppressWarnings("deprecation")
 		int   Free   = (int)(statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
 		if (Free >= 5)
@@ -96,6 +97,7 @@ public class UI1 extends ListActivity {
 		super.onResume();
 		
 		//Visualizzo spazio rimanente
+//		StatFs statFs = new StatFs(getFilesDir().getAbsolutePath());
 		StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
 		@SuppressWarnings("deprecation")
 		int   Free   = (int)(statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;

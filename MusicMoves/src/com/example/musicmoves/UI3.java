@@ -47,7 +47,6 @@ import database.DBAdapter;
 public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private String filename;
 	String filepath;
-	//per memoria esterna: String filepath= Environment.getExternalStorageDirectory().getPath()+"/MusicMoves";
 	private SensorManager mSensorManager;
 	private Sensor mAccelerometer;
 	private FileWriter writer;
@@ -75,7 +74,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	@Override
 	protected void onCreate(Bundle savedInstancestate) {
 		super.onCreate(savedInstancestate);
-		filepath= getFilesDir().getAbsolutePath();
+		filepath= Environment.getExternalStorageDirectory().getPath()+"/MusicMoves";
+//		filepath= getFilesDir().getAbsolutePath();
 		//Crea cartella in cui salvare i file
 		File folder = new File(filepath);
 	    if (!folder.exists()) {
