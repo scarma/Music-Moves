@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.security.cert.LDAPCertStoreParameters;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -27,6 +28,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StatFs;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
@@ -45,7 +47,6 @@ import database.DBAdapter;
 public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private String filename;
 	String filepath;
-	//per memoria esterna: String filepath= Environment.getExternalStorageDirectory().getPath()+"/MusicMoves";
 	private SensorManager mSensorManager;
 	private Sensor mAccelerometer;
 	private FileWriter writer;
@@ -73,7 +74,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	@Override
 	protected void onCreate(Bundle savedInstancestate) {
 		super.onCreate(savedInstancestate);
-		filepath= getFilesDir().getAbsolutePath();
+		filepath= Environment.getExternalStorageDirectory().getPath()+"/MusicMoves";
+//		filepath= getFilesDir().getAbsolutePath();
 		//Crea cartella in cui salvare i file
 		File folder = new File(filepath);
 	    if (!folder.exists()) {
@@ -111,10 +113,14 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 				String value="";
 				
 				value = input.getText().toString().toLowerCase(Locale.getDefault());
-				try {value = value.substring(0,1).toUpperCase(Locale.getDefault()) + value.substring(1).toLowerCase(Locale.getDefault());}
-				catch(java.lang.StringIndexOutOfBoundsException e){
+				try {
+					value = value.substring(0, 1).toUpperCase(
+							Locale.getDefault())
+							+ value.substring(1).toLowerCase(
+									Locale.getDefault());
+				} catch (java.lang.StringIndexOutOfBoundsException e) {
 					value = "Rec";
-					}
+				}
 				
 				//controllo che il nuovo nome non sia gi� presente nel db
 				databaseHelper = new DBAdapter(getApplicationContext());
@@ -269,11 +275,11 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		super.onResume();
 		
 	    try {
-
 			writer = new FileWriter(new File(filepath, filename+".txt"), true);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+			Log.d("Recording", e.getMessage());
 		}
 	    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
 		maxDurationRec = preferences.getInt("maxRecTime", 10);
@@ -298,6 +304,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Log.d("wtiter.close", e.getMessage());
 		}	}
 	    mSensorManager.unregisterListener(this, mAccelerometer);
 	}
@@ -321,6 +328,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				Log.d("writer.close", e.getMessage());
 			}	}
 		mSensorManager.unregisterListener(this, mAccelerometer);
 
@@ -381,6 +389,15 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		
+			Log.d("onSensorChanged", e.getMessage());
+			//Visualizzo spazio rimanente
+			StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+			@SuppressWarnings("deprecation")
+			int   Free   = (int)(statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
+			if(Free <= 5)
+				Toast.makeText(getApplicationContext(), "Space free to disk: "+ Free + " MB", Toast.LENGTH_LONG).show();
+			
 		}
 	    sampleCnt++;
 	    TextView sampleCounter = (TextView)findViewById(R.id.textViewSampleCounter); //Contatore Samples
@@ -394,6 +411,15 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    progressBarY.postInvalidate();
 	    progressBarZ.postInvalidate();
 	    
+		//check spazio rimanente
+		StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+		@SuppressWarnings("deprecation")
+		int   Free   = (int)(statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
+		if (Free <= 5)
+			Toast.makeText(getApplicationContext(),
+					"Warning, low disk space: " + Free + " MB", Toast.LENGTH_SHORT)
+					.show();
+
 	    if(sampleCnt>maxDurationRec)
         {Stopped(null);}
 	}
@@ -407,9 +433,9 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
             while ((line = in.readLine()) != null) stringBuilder.append(line+"\n");
             in.close();
         } catch (FileNotFoundException e) {
-           
+           Log.d("readFileAsString", e.getMessage());
         } catch (IOException e) {
-            
+        	Log.d("readFileAsString", e.getMessage()); 
         } 
         
         return stringBuilder.toString();
@@ -445,6 +471,13 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		fos.close();
 		}
 		catch (IOException e) {
+			Log.d("storeImage", e.getMessage());
+			//Visualizzo spazio rimanente
+			StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+			@SuppressWarnings("deprecation")
+			int   Free   = (int)(statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
+			if(Free <= 5)
+				Toast.makeText(getApplicationContext(), "Space free to disk: "+ Free + " MB", Toast.LENGTH_LONG).show();
 		}//fine Try Catch
 	}//fine storeImage
 	

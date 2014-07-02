@@ -102,7 +102,8 @@ public class PlayerService extends Service {
 		isPlaying = true; 
 		
 		if(!initialized)	 {
-			proSoundGenerator(getFilesDir().getAbsolutePath(), sessionName);
+			proSoundGenerator(Environment.getExternalStorageDirectory().getPath()+"/MusicMoves", sessionName);
+//			proSoundGenerator(getFilesDir().getAbsolutePath(), sessionName);
 		}				     
 	     if(audioX.getState()==AudioTrack.STATE_INITIALIZED &&
 	    	audioY.getState()==AudioTrack.STATE_INITIALIZED &&
@@ -510,6 +511,4 @@ public class PlayerService extends Service {
  * gestire l'esaurimento dello spazio di memoria
  * bisogna catturare l'eccezione lanciata da file stream
  * l'idea e':catturare, salvare tutto, lanciare un messaggio all'utente e forzare larresto dell'input
- * 
- * 
  */

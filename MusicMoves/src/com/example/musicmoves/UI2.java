@@ -199,9 +199,13 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 		String value="";
 		value = editText.getText().toString().toLowerCase(Locale.getDefault());
 		
-		try { value = value.substring(0,1).toUpperCase(Locale.getDefault()) + value.substring(1).toLowerCase(Locale.getDefault());}
-		catch(java.lang.StringIndexOutOfBoundsException e)//caso stringa vuota
-			{ value = "Rec";	}
+		try {
+			value = value.substring(0, 1).toUpperCase(Locale.getDefault())
+					+ value.substring(1).toLowerCase(Locale.getDefault());
+		} catch (java.lang.StringIndexOutOfBoundsException e)// caso stringa vuota
+		{
+			value = "Rec";
+		}
 		
 		cursor.moveToFirst();
 		
