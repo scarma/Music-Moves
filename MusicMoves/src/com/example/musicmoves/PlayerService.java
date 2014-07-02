@@ -97,7 +97,7 @@ public class PlayerService extends Service {
 		isPlaying = true; 
 		
 		if(!initialized)	 {
-			proSoundGenerator(Environment.getExternalStorageDirectory().getPath()+"/MusicMoves", sessionName);
+			proSoundGenerator(getFilesDir().getAbsolutePath(), sessionName);
 		}				     
 	     if(audioX.getState()==AudioTrack.STATE_INITIALIZED &&
 	    	audioY.getState()==AudioTrack.STATE_INITIALIZED &&

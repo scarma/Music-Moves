@@ -26,7 +26,6 @@ public class UI4 extends Activity {
 	public final static String EXTRA_MESSAGE = "com.example.MusicMoves.MESSAGE";
 	
 	private String sessionName;
-//	private String filepath = Environment.getExternalStorageDirectory().getPath()+"/MusicMoves";
 	private TextView tPlaybackPosition;
 	private TextView tDuration;
 	private ProgressBar tBar;
