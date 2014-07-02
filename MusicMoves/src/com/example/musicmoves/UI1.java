@@ -358,7 +358,7 @@ public class UI1 extends ListActivity {
 					cloneFileToFile(loc_o, name_o+".txt");
 					writer.close();
 				} catch (IOException e) {
-					Log.d("FileWriter","IOException");
+					Log.d("FileWriter",e.getMessage());
 					e.printStackTrace();
 				}
 								
@@ -391,7 +391,7 @@ public class UI1 extends ListActivity {
         } catch (FileNotFoundException e) {
            Log.d("cloneFileToFile", "File Not Found!");
         } catch (IOException e) {
-            Log.d("cloneFileToFile", "Clone failed!");
+            Log.d("cloneFileToFile", e.getMessage());
         } 
     }
 
@@ -638,7 +638,7 @@ public class UI1 extends ListActivity {
 					Log.d("storeImage", "Error compressing file!");
 				fos.close();
 			} catch (IOException ex) {
-				Log.d("storeImage", "Bitmap compress error!");
+				Log.d("storeImage", ex.getMessage());
 			}// fine Try Catch
 		}
 		

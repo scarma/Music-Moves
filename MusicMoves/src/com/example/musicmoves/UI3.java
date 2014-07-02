@@ -113,10 +113,14 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 				String value="";
 				
 				value = input.getText().toString().toLowerCase(Locale.getDefault());
-				try {value = value.substring(0,1).toUpperCase(Locale.getDefault()) + value.substring(1).toLowerCase(Locale.getDefault());}
-				catch(java.lang.StringIndexOutOfBoundsException e){
+				try {
+					value = value.substring(0, 1).toUpperCase(
+							Locale.getDefault())
+							+ value.substring(1).toLowerCase(
+									Locale.getDefault());
+				} catch (java.lang.StringIndexOutOfBoundsException e) {
 					value = "Rec";
-					}
+				}
 				
 				//controllo che il nuovo nome non sia gi� presente nel db
 				databaseHelper = new DBAdapter(getApplicationContext());
@@ -300,6 +304,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			Log.d("wtiter.close", e.getMessage());
 		}	}
 	    mSensorManager.unregisterListener(this, mAccelerometer);
 	}
@@ -323,6 +328,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				Log.d("writer.close", e.getMessage());
 			}	}
 		mSensorManager.unregisterListener(this, mAccelerometer);
 
@@ -427,9 +433,9 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
             while ((line = in.readLine()) != null) stringBuilder.append(line+"\n");
             in.close();
         } catch (FileNotFoundException e) {
-           
+           Log.d("readFileAsString", e.getMessage());
         } catch (IOException e) {
-            
+        	Log.d("readFileAsString", e.getMessage()); 
         } 
         
         return stringBuilder.toString();
