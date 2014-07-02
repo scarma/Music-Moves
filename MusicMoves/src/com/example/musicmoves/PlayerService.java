@@ -333,7 +333,6 @@ public class PlayerService extends Service {
 		            echo.setReflectionsLevel((short) 1000);
 		            echo.setReverbLevel((short) 2000);
 		            echo.setReflectionsDelay(100);
-		            echo.setRoomHFLevel((short) -10);
 		            echo.setRoomLevel((short) -10);
 		            echo.setEnabled(true);
 		            
@@ -401,18 +400,18 @@ public class PlayerService extends Service {
 			String vol;
 			if(up) vol = "Up touch strenght: ";
 			else vol = "Down touch strenght: ";
-			Toast.makeText(getApplicationContext(), vol + (int)(100*intensity)/maxintensity+"%", Toast.LENGTH_SHORT).show();
 			//variamo amplitude di un valore 
 			
 			if (up==true){
 				amplitude = amplitude + intensity/maxintensity;
-				if(amplitude >1)amplitude=1; //valore max 1
+				if(amplitude >10)amplitude=10; //valore max 1
 			}
 			else {
 				amplitude = amplitude - intensity/maxintensity;
 				if(amplitude<0) amplitude=0; //valore min 0
 			}
-
+			Toast.makeText(getApplicationContext(), vol + (int)(100*intensity)/maxintensity+"% , Amplitude: "+amplitude, Toast.LENGTH_SHORT).show();
+			
 			//salvo la posizione degli audiotrack
 			posX = audioX.getPlaybackHeadPosition();
 			posY = audioY.getPlaybackHeadPosition();
@@ -506,7 +505,7 @@ synchronized void delay(){
 //					  	delay.setDiffusion((short) 700);
 					  	delay.setReverbLevel((short) 1000);
 					  	delay.setRoomLevel ((short)-10);
-					  	delay.setReflectionsDelay(300);
+					  	delay.setRoomHFLevel((short) -10);
 					  	delay.setReverbDelay (100);
 					  	delay.setEnabled(true);
 					 // Toast.makeText(getApplicationContext(), ""+echo.setEnabled(true), Toast.LENGTH_SHORT).show();
