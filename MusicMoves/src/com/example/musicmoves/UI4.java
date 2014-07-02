@@ -323,6 +323,9 @@ public class UI4 extends Activity {
 	        	  y2=event2.getY();
 	        	  int quantity = (int)Math.abs(x2-x1)+1000;
 	        	  if (quantity > 2000) quantity =2000;
+	        	  
+	        	  int volume = (int)Math.abs(y2-y1);
+	
 	        	  //fixati i parametri perch� faceva un pelino fatica a riconoscere i movimenti giusti
 	        	  
 	        	        // right to left
@@ -338,14 +341,14 @@ public class UI4 extends Activity {
 	        	        
 	        	        
 	        	        else if (y1-y2 > 20 && Math.abs(x1-x2) < 100){
-	        	        	Toast.makeText(getApplicationContext(), "drag su " + (velocityY), Toast.LENGTH_SHORT).show();
-	        	//        	volume(true, Math.abs(velocityY));
+	        	        	//Toast.makeText(getApplicationContext(), "drag su " + (velocityY), Toast.LENGTH_SHORT).show();
+	        	        	volume(true, volume);
 	        	        	return true;
 	        	        }
 	        	        
 	        	        else if (y2-y1 > 20 && Math.abs(x1-x2) < 100){
-	        	        	Toast.makeText(getApplicationContext(), "drag giu " + (velocityY), Toast.LENGTH_SHORT).show();
-	        	//        	volume(false, Math.abs(velocityY));
+	        	        	//Toast.makeText(getApplicationContext(), "drag giu " + (velocityY), Toast.LENGTH_SHORT).show();
+	        	        	volume(false, volume);
 	        	        	return true;
 	        	        }
 	        	       return true;
@@ -371,20 +374,20 @@ public class UI4 extends Activity {
 		
 	}
 	
-	public void volume(boolean up, double intensity){
+	public void volume(boolean up, int intensity){
 		
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
-		i.putExtra(PlayerService.VOLUME, true); //al posto di passare true meglio passare il valore intero direttamente! :)
-		i.putExtra(EXTRA_MESSAGE, sessionName);
-		i.putExtra(PlayerService.VOLUME_UP, 10); //cosi ad esempio
+		i.putExtra(PlayerService.VOLUME, true); 
+		i.putExtra("up", up);
+		i.putExtra("intensity", intensity);
 		startService(i); 
 	}
 
 	public void speed(boolean up, int intensity){
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
+		i.putExtra(PlayerService.SPEED, true);
 		i.putExtra("up", up); 
 		i.putExtra("intensity", intensity);
-		i.putExtra(PlayerService.SPEED, true);
 		startService(i); 
 	}
 	

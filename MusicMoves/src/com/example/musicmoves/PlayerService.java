@@ -32,12 +32,11 @@ public class PlayerService extends Service {
 	 public static String PLAY = "BGPlay";
 	 public static String PAUSE = "BGPause";
 	 public static String STOP = "BGStop"; // Not used 
-	 //aggiunto
+	 //aggiunto per plus
 	 public static String ECHO = "BGEcho";
 	 public static String VOLUME = "BGVolume";
 	 public static String SPEED = "BGSpeed";
 	 public static String DELAY = "BGDelay";
-	 public static String VOLUME_UP = "BGVolume_UP";
 	 //
 	 private String sessionName ="";
 	 private boolean initialized = false;
@@ -65,8 +64,9 @@ public class PlayerService extends Service {
 	
 	 if(intent.getBooleanExtra(ECHO, false)){ echo();}
 	 if(intent.getBooleanExtra(VOLUME, false)) {
-		 int intensity=intent.getIntExtra(VOLUME_UP, 1);
-		 volume(true, intensity);
+		 boolean up = intent.getBooleanExtra("up", false);
+		 int intensity = intent.getIntExtra("intensity", -1);
+		 volume(up, intensity);
 	 }
 	 if(intent.getBooleanExtra(SPEED, false)){
 		 boolean up = intent.getBooleanExtra("up", false);
@@ -364,7 +364,7 @@ public class PlayerService extends Service {
 	}
 	
 		int posX, posY, posZ;
-		synchronized void volume(boolean up, double variabileintensita){
+		synchronized void volume(boolean up, int intensity){
 
 //			Bisogna: modificare la variabile amplitude, 
 //			ottenere posizione riproduzione, stoppare audiotrack
@@ -379,7 +379,7 @@ public class PlayerService extends Service {
 			posZ = audioZ.getPlaybackHeadPosition();
 			
 			
-			//audioX.
+			Toast.makeText(getApplicationContext(), (up) +" "+ (intensity), Toast.LENGTH_SHORT).show();
 			
 			
 			
