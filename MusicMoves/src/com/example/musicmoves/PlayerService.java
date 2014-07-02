@@ -45,6 +45,7 @@ public class PlayerService extends Service {
 	 private Cursor cursor;
 	 EnvironmentalReverb nulleffect, delay, echo;
 	 private byte[] genArrayX,genArrayY, genArrayZ; 
+	 AudioTrack audioXe, audioYe, audioZe, audioXd, audioYd, audioZd;
 	 @Override 
 	 public IBinder onBind(Intent intent) 
 	 { 
@@ -91,10 +92,32 @@ public class PlayerService extends Service {
 			        	audioX.pause();
 			        	audioY.pause();
 			        	audioZ.pause();	
-	    }   
-	    else {
+		
+	    }   else {
 		    Log.d("AudioTrack", "Audiotrack not initialized");
-	    }
+	    } 
+		try{
+			if (audioXe.getState()==AudioTrack.STATE_INITIALIZED &&
+		    	audioYe.getState()==AudioTrack.STATE_INITIALIZED &&
+		    	audioZe.getState()==AudioTrack.STATE_INITIALIZED){
+			audioXe.pause();
+			audioYe.pause();
+			audioZe.pause();
+			
+		}
+		if (audioXd.getState()==AudioTrack.STATE_INITIALIZED &&
+			   	audioYd.getState()==AudioTrack.STATE_INITIALIZED &&
+			   	audioZd.getState()==AudioTrack.STATE_INITIALIZED){
+				        	audioXd.pause();
+				        	audioYd.pause();
+				        	audioZd.pause();	
+			
+		    } 
+		}
+		catch(NullPointerException e){
+			//Gli effetti non sono attivi, non serve metterli in pausa
+		}
+	   
 	}
 
 	private void play() {
@@ -143,28 +166,49 @@ public class PlayerService extends Service {
 			try{if (audioX.getState()==AudioTrack.STATE_INITIALIZED &&
 		    	audioY.getState()==AudioTrack.STATE_INITIALIZED &&
 		    	audioZ.getState()==AudioTrack.STATE_INITIALIZED){
-	        	audioX.stop();
-	        	audioY.stop();
-	        	audioZ.stop();	
-	        	audioX.release();
-	        	audioY.release();
-	        	audioZ.release();	
-	        	audioX.flush();
-	        	audioY.flush();
-	        	audioZ.flush();
-	        	audioXe.stop();
-	        	audioYe.stop();
-	        	audioZe.stop();
-	        	audioXe.release();
-	        	audioYe.release();
-	        	audioZe.release();	
-	        	audioXe.flush();
-	        	audioYe.flush();
-	        	audioZe.flush();
-	        	
-//	        	nulleffect.release();
-				delay.release();
-				echo.release();}  } 
+		        	audioX.stop();
+		        	audioY.stop();
+		        	audioZ.stop();	
+		        	audioX.release();
+		        	audioY.release();
+		        	audioZ.release();	
+		        	audioX.flush();
+		        	audioY.flush();
+		        	audioZ.flush();
+				}
+				if (audioXe.getState()==AudioTrack.STATE_INITIALIZED &&
+			    	audioYe.getState()==AudioTrack.STATE_INITIALIZED &&
+			    	audioZe.getState()==AudioTrack.STATE_INITIALIZED){
+		        	audioXe.stop();
+		        	audioYe.stop();
+		        	audioZe.stop();
+		        	audioXe.release();
+		        	audioYe.release();
+		        	audioZe.release();	
+		        	audioXe.flush();
+		        	audioYe.flush();
+		        	audioZe.flush();
+	//	        	nulleffect.release();
+					echo.release();
+					}  
+				if (audioXd.getState()==AudioTrack.STATE_INITIALIZED &&
+				    	audioYd.getState()==AudioTrack.STATE_INITIALIZED &&
+				    	audioZd.getState()==AudioTrack.STATE_INITIALIZED){
+		        	audioXd.stop();
+		        	audioYd.stop();
+		        	audioZd.stop();
+		        	audioXd.release();
+		        	audioYd.release();
+		        	audioZd.release();	
+		        	audioXd.flush();
+		        	audioYd.flush();
+		        	audioZd.flush();
+//		        	nulleffect.release();
+					delay.release();
+	
+				} 
+			}//fine try
+			
 	        catch (NullPointerException e){ 
 			    Log.d("AudioTrack", "Audiotrack not initialized");
 			    return;
@@ -393,7 +437,13 @@ public class PlayerService extends Service {
 							audioYe.setAuxEffectSendLevel(1.0f);
 							audioZe.attachAuxEffect(echo.getId());
 							audioZe.setAuxEffectSendLevel(1.0f);
-							
+							audioXe.play();
+			            	audioYe.play();
+			            	audioZe.play();
+			            	audioXe.pause();
+			            	audioYe.pause();
+			            	audioZe.pause();
+			               
 							sleep(500);//tempo in millisecondi
 			            } catch (InterruptedException e) {
 			                // TODO Auto-generated catch block
@@ -418,6 +468,10 @@ public class PlayerService extends Service {
 			                // TODO Auto-generated catch block
 			                e.printStackTrace();
 			            } finally{
+			            	if (audioXe.getState()==AudioTrack.STATE_INITIALIZED &&
+			    			    	audioYe.getState()==AudioTrack.STATE_INITIALIZED &&
+			    			    	audioZe.getState()==AudioTrack.STATE_INITIALIZED){
+			            	
 			            	audioXe.stop();
 				        	audioYe.stop();
 				        	audioZe.stop();
@@ -426,6 +480,7 @@ public class PlayerService extends Service {
 							audioYe.release();
 							audioZe.release();
 							echo.release();
+							}
 			            }
 			            super.run();
 			        }
@@ -538,7 +593,7 @@ public class PlayerService extends Service {
 		}
 		
 		public boolean isDelaying = false;
-		AudioTrack audioXe, audioYe, audioZe;
+		
 synchronized void delay(){
 			
 			if (isPlaying == true){
@@ -546,12 +601,9 @@ synchronized void delay(){
 				
 				
 					if (isDelaying == false){
-				showToast( "Delay on");
+						isDelaying = true;
+						showToast( "Delay on");
 				
-					isDelaying = true;
-					
-					
-		    
 					//correggere i parametri in modo che risulti il delay che vogliamo nelle specifiche
 					delay = new EnvironmentalReverb(1, 0);
 //					 	delay.setDecayHFRatio((short) 1000);
@@ -588,30 +640,31 @@ synchronized void delay(){
 				        @Override
 				        public void run() {
 				        	
-			            	audioXe= playSound(genArrayX);
-			            	audioYe= playSound(genArrayY);
-			            	audioZe= playSound(genArrayZ);
+			            	audioXd= playSound(genArrayX);
+			            	audioYd= playSound(genArrayY);
+			            	audioZd= playSound(genArrayZ);
 
 				            try {
-				            	audioXe.setPlaybackHeadPosition(audioX.getPlaybackHeadPosition());
-				            	audioYe.setPlaybackHeadPosition(audioY.getPlaybackHeadPosition());
-				            	audioZe.setPlaybackHeadPosition(audioZ.getPlaybackHeadPosition());
-				            	audioXe.attachAuxEffect(delay.getId());
-								audioXe.setAuxEffectSendLevel(1.0f);
-								audioYe.attachAuxEffect(delay.getId());
-								audioYe.setAuxEffectSendLevel(1.0f);
-								audioZe.attachAuxEffect(delay.getId());
-								audioZe.setAuxEffectSendLevel(1.0f);
+				            	audioXd.setPlaybackHeadPosition(audioX.getPlaybackHeadPosition());
+				            	audioYd.setPlaybackHeadPosition(audioY.getPlaybackHeadPosition());
+				            	audioZd.setPlaybackHeadPosition(audioZ.getPlaybackHeadPosition());
+				            	audioXd.attachAuxEffect(delay.getId());
+								audioXd.setAuxEffectSendLevel(1.0f);
+								audioYd.attachAuxEffect(delay.getId());
+								audioYd.setAuxEffectSendLevel(1.0f);
+								audioZd.attachAuxEffect(delay.getId());
+								audioZd.setAuxEffectSendLevel(1.0f);
 				                
 				                sleep(1000);//tempo in millisecondi
 				            } catch (InterruptedException e) {
 				                // TODO Auto-generated catch block
 				                e.printStackTrace();
 				            } finally{
-				            	audioXe.play();
-				            	audioYe.play();
-				            	audioZe.play();
-				               
+				            	if(isPlaying)
+				            	{audioXd.play();
+				            	audioYd.play();
+				            	audioZd.play();
+				            	}
 				            }
 				            super.run();
 				        }
@@ -621,21 +674,22 @@ synchronized void delay(){
 					
 					
 				else {
+					isDelaying = false;
 					showToast( "Delay off");
 //					nulleffect= new EnvironmentalReverb(0, 0); //effetto che non contiene nessuna modifica
 //					nulleffect.setEnabled(true);
 //					audioX.attachAuxEffect(nulleffect.getId()); //toglie eventuali effetti aggiunti in precedenza
 //					audioY.attachAuxEffect(nulleffect.getId());	//aggiungendo ad ogni audiotrack un effetto nullo
 //					audioZ.attachAuxEffect(nulleffect.getId());	//come suggerito dalla documentazione
-					audioXe.stop();
-		        	audioYe.stop();
-		        	audioZe.stop();
+					audioXd.stop();
+		        	audioYd.stop();
+		        	audioZd.stop();
 		        	
-					audioXe.release();
-					audioYe.release();
-					audioZe.release();
+					audioXd.release();
+					audioYd.release();
+					audioZd.release();
 					delay.release();
-					isDelaying = false;
+					
 					
 				}//fine else
 					
