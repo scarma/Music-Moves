@@ -443,7 +443,7 @@ public class PlayerService extends Service {
 				sampleRate=(actualrate - quantity);
 			}
 			
-			Toast.makeText(getApplicationContext(), " Nuovo Framerate " + sampleRate, Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "New sample rate: " + sampleRate, Toast.LENGTH_SHORT).show();
 			}
 			//salvo la posizione degli audiotrack
 			posX = audioX.getPlaybackHeadPosition();
@@ -509,8 +509,6 @@ public class PlayerService extends Service {
 					if (audioX.STATE_INITIALIZED==1) {
 						audioX.attachAuxEffect(delayX.getId());
 						audioX.setAuxEffectSendLevel(1.0f);
-						Toast.makeText(getApplicationContext(), "inizializzata " + audioX.setAuxEffectSendLevel(1.0f), Toast.LENGTH_SHORT).show();
-						
 					}
 					if (audioY.STATE_INITIALIZED==1){
 						audioY.attachAuxEffect(delayY.getId());
