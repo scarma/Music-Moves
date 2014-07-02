@@ -320,10 +320,10 @@ public class UI4 extends Activity {
 	        //occhio, si potrebbe usare anche onScroll, far� una prova
 	        @Override
 	        public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
-	        	  x1=event1.getX();
-	        	  x2=event2.getX();
-	        	  y1=event1.getY();
-	        	  y2=event2.getY();
+	        	  x1=event1.getRawX();
+	        	  x2=event2.getRawX();
+	        	  y1=event1.getRawY();
+	        	  y2=event2.getRawY();
 	        	  int quantity = (int)Math.abs(x2-x1)+1000;
 	        	  if (quantity > 2000) quantity =2000;
 	        	  
@@ -377,12 +377,12 @@ public class UI4 extends Activity {
 		
 	}
 	
-	public void volume(boolean up, double intensity){
+	public void volume(boolean up, double volume){
 		
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
 		i.putExtra(PlayerService.VOLUME, true); 
 		i.putExtra("up", up);
-		i.putExtra("intensity", intensity);
+		i.putExtra("volume", volume);
 		startService(i); 
 	}
 

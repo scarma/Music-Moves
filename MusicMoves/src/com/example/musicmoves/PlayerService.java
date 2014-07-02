@@ -65,8 +65,8 @@ public class PlayerService extends Service {
 	 if(intent.getBooleanExtra(ECHO, false)){ echo();}
 	 if(intent.getBooleanExtra(VOLUME, false)) {
 		 boolean up = intent.getBooleanExtra("up", false);
-		 int intensity = intent.getIntExtra("intensity", 0);
-		 volume(up, intensity);
+		 double volume = intent.getDoubleExtra("volume", 0.0);
+		 volume(up, volume);
 	 }
 	 if(intent.getBooleanExtra(SPEED, false)){
 		 boolean up = intent.getBooleanExtra("up", false);
