@@ -73,7 +73,7 @@ public class UI1 extends ListActivity {
 		setContentView(R.layout.activity_ui1);
 		
 		//Visualizzo spazio rimanente
-		StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+		StatFs statFs = new StatFs(getFilesDir().getAbsolutePath());
 		@SuppressWarnings("deprecation")
 		int   Free   = (int)(statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
 		Toast.makeText(getApplicationContext(), "Space free to disk: "+ Free + " MB", Toast.LENGTH_LONG).show();

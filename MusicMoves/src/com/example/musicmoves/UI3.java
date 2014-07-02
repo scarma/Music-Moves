@@ -44,7 +44,8 @@ import database.DBAdapter;
 
 public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private String filename;
-	String filepath= Environment.getExternalStorageDirectory().getPath()+"/MusicMoves";
+	String filepath;
+	//per memoria esterna: String filepath= Environment.getExternalStorageDirectory().getPath()+"/MusicMoves";
 	private SensorManager mSensorManager;
 	private Sensor mAccelerometer;
 	private FileWriter writer;
@@ -67,16 +68,19 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
     public EditText input;
 //    Bundle savedState;
 	private AlertDialog dialog;
+	private boolean recordingStarted = false;
 	
 	@Override
 	protected void onCreate(Bundle savedInstancestate) {
 		super.onCreate(savedInstancestate);
+		filepath= getFilesDir().getAbsolutePath();
 		//Crea cartella in cui salvare i file
 		File folder = new File(filepath);
 	    if (!folder.exists()) {
 	        Toast.makeText(UI3.this, "Directory Does Not Exist, I Create It", Toast.LENGTH_SHORT).show();
 	        folder.mkdir();
 	    }
+	    this.setTitle("Create A New Recording Session");
 	    setContentView(R.layout.activity_ui3);
 	    
 	  //Pop up dialog
@@ -185,39 +189,12 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	}
 	
 	@Override
-	protected void onPause() {
-		
-//		
-	//TODO: Salvare lo stato
-		super.onPause();
-		if (dialog!=null && dialog.isShowing())
-			dialog.dismiss();
-//		String textfield=input.getText().toString();
-//		Log.d("textpau", ""+input.getText());
-//		bundle=new Bundle();
-//		bundle.putString("alert", textfield);
-	}
-
-	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		String textfield=input.getText().toString();
 		outState.putString("alert", textfield);
 		super.onSaveInstanceState(outState);
 	}
 	
-	@Override
-	protected void onResume() {
-	//TODO: Ripristinare lo stato
-		super.onResume();
-//		if(savedState!=null) {
-//			String textfield = savedState.getString("alert");
-//			Log.d("textres", textfield);
-//			if(textfield!=null)
-//				input.append(textfield);
-//			Log.d("input", input.toString());
-//		}
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
