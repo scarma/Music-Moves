@@ -362,7 +362,8 @@ public class PlayerService extends Service {
 				
 			}
 	}
-	
+		
+		int maxintensity = 600;
 		int posX, posY, posZ;
 		synchronized void volume(boolean up, double intensity){
 
@@ -377,16 +378,18 @@ public class PlayerService extends Service {
 			
 //			amplitude modificata da int 1 a double 0.5
 			
-			
-			Toast.makeText(getApplicationContext(), (up) +" "+ (intensity), Toast.LENGTH_SHORT).show();
+			String vol;
+			if(up) vol = "Up touch strenght: ";
+			else vol = "Down touch strenght: ";
+			Toast.makeText(getApplicationContext(), vol + (int)(100*intensity)/maxintensity+"%", Toast.LENGTH_SHORT).show();
 			//variamo amplitude di un valore 
 			
 			if (up==true){
-				amplitude = amplitude + intensity;
+				amplitude = amplitude + intensity/maxintensity;
 				if(amplitude >1)amplitude=1; //valore max 1
 			}
 			else {
-				amplitude = amplitude - intensity;
+				amplitude = amplitude - intensity/maxintensity;
 				if(amplitude<0) amplitude=0; //valore min 0
 			}
 
