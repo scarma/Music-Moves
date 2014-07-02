@@ -68,7 +68,12 @@ public class PlayerService extends Service {
 		 int intensity=intent.getIntExtra(VOLUME_UP, 1);
 		 volume(true, intensity);
 	 }
-	 if(intent.getBooleanExtra(SPEED, false)){ speed();}
+	 if(intent.getBooleanExtra(SPEED, false)){
+		 boolean up = intent.getBooleanExtra("up", false);
+		 int intensity = intent.getIntExtra("intensity", -1);
+		 speed(up, 3000);
+		 }
+	 
 	 if(intent.getBooleanExtra(DELAY, false)){ delay();}
 	 
 	 return Service.START_STICKY;
@@ -383,11 +388,25 @@ public class PlayerService extends Service {
 		
 		
 		
-		synchronized void speed(){
+		synchronized void speed(boolean direction, int quantity){
 //			Stessa cosa che per il metodo volume. Solo che al posto di amplitude modificare sampleRate
 //			Oppure provate a usare setPlaybackRate(int sampleRateInHz) di AudioTrack
-//			
-			 
+			int maxrate, minrate, actualrate, newrate;
+			maxrate=12000;
+			minrate=4000;
+			actualrate = audioX.getPlaybackRate();
+			
+			if (actualrate != maxrate && direction == true){
+				audioX.setPlaybackRate(actualrate + quantity);
+				audioY.setPlaybackRate(actualrate + quantity);
+				audioZ.setPlaybackRate(actualrate + quantity);
+			}
+			if (actualrate!=minrate && direction == false){
+				audioX.setPlaybackRate(actualrate - quantity);
+				audioY.setPlaybackRate(actualrate - quantity);
+				audioZ.setPlaybackRate(actualrate - quantity);
+			}
+			
 		}
 		
 		public boolean isDelaying = false;
@@ -471,6 +490,7 @@ public class PlayerService extends Service {
 					nulleffect= new EnvironmentalReverb(1, audioZ.getAudioSessionId());
 					nulleffect.setEnabled(true);
 					audioZ.attachAuxEffect(nulleffect.getId());	//come suggerito dalla documentazione
+					
 					isDelaying = false;
 					
 				}//fine else
