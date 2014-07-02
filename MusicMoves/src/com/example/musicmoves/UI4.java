@@ -333,24 +333,26 @@ public class UI4 extends Activity {
 	        	  
 	        	        // right to left
 	        	        if(x1 - x2 > 20 && Math.abs(y1-y2) < 100 ) {
+	        	        	Toast.makeText(getApplicationContext(), "SX " + (velocityX), Toast.LENGTH_SHORT).show();
 	        	        	speed(false, quantity);
 	        	            return true;
 	        	        }
 	        	        // left to right
 	        	        else if (x2-x1 > 20 && Math.abs(y1-y2) < 100) {
+	        	        	Toast.makeText(getApplicationContext(), "DX " + (velocityX), Toast.LENGTH_SHORT).show();
 	        	        	speed(true, quantity);
 	        	            return true; 
 	        	        }
 	        	        
 	        	        
 	        	        else if (y1-y2 > 20 && Math.abs(x1-x2) < 100){
-	        	        	//Toast.makeText(getApplicationContext(), "drag su " + (velocityY), Toast.LENGTH_SHORT).show();
+	        	        	Toast.makeText(getApplicationContext(), "drag su " + (velocityY), Toast.LENGTH_SHORT).show();
 	        	        	volume(true, volume);
 	        	        	return true;
 	        	        }
 	        	        
 	        	        else if (y2-y1 > 20 && Math.abs(x1-x2) < 100){
-	        	        	//Toast.makeText(getApplicationContext(), "drag giu " + (velocityY), Toast.LENGTH_SHORT).show();
+	        	        	Toast.makeText(getApplicationContext(), "drag giu " + (velocityY), Toast.LENGTH_SHORT).show();
 	        	        	volume(false, volume);
 	        	        	return true;
 	        	        }

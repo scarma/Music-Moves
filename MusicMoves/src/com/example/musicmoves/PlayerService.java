@@ -430,25 +430,38 @@ public class PlayerService extends Service {
 			if (actualrate <= maxrate && direction == true){
 				if(actualrate + quantity > maxrate){ //se andiamo oltre i 12000, ci fremiamo a 12000
 					actualrate=0;
-					quantity=12000;
+					quantity=maxrate;
 				}
-				audioX.setPlaybackRate(actualrate + quantity);
-				audioY.setPlaybackRate(actualrate + quantity);
-				audioZ.setPlaybackRate(actualrate + quantity);
+				sampleRate=(actualrate + quantity);
 			}
 			
 			if (actualrate >=minrate && direction == false){ // se andiamo sotto i 2000, ci fermiamo a 2000
 				if(actualrate-quantity < minrate){
-					actualrate=2000;
+					actualrate=minrate;
 					quantity=0;
 				}
-				audioX.setPlaybackRate(actualrate - quantity);
-				audioY.setPlaybackRate(actualrate - quantity);
-				audioZ.setPlaybackRate(actualrate - quantity);
+				sampleRate=(actualrate - quantity);
 			}
 			
-			Toast.makeText(getApplicationContext(), " Nuovo Framerate " + audioX.getPlaybackRate(), Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), " Nuovo Framerate " + sampleRate, Toast.LENGTH_SHORT).show();
 			}
+			//salvo la posizione degli audiotrack
+			posX = audioX.getPlaybackHeadPosition();
+			posY = audioY.getPlaybackHeadPosition();
+			posZ = audioZ.getPlaybackHeadPosition();
+			//rilascio le audiotrack per farne di nuove
+			audioX.flush();
+			audioY.flush();
+			audioZ.flush();
+			
+			proSoundGenerator(Environment.getExternalStorageDirectory().getPath()+"/MusicMoves", sessionName);
+			//ripartiamio da dove li abbiamo lasciati
+			audioX.setPlaybackHeadPosition(posX);
+			audioY.setPlaybackHeadPosition(posY);
+			audioZ.setPlaybackHeadPosition(posZ);
+			 audioX.play();
+			 audioY.play();
+			 audioZ.play();
 		}
 		
 		public boolean isDelaying = false;
