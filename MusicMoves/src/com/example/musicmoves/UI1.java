@@ -298,9 +298,14 @@ public class UI1 extends ListActivity {
 				String value="";
 				value = input.getText().toString().toLowerCase(Locale.getDefault());
 				
-				try { value = value.substring(0,1).toUpperCase(Locale.getDefault()) + value.substring(1).toLowerCase(Locale.getDefault());}
-				catch(java.lang.StringIndexOutOfBoundsException e)
-					{ value = "Rec";}
+				try {
+					value = value.substring(0, 1).toUpperCase(
+							Locale.getDefault())
+							+ value.substring(1).toLowerCase(
+									Locale.getDefault());
+				} catch (java.lang.StringIndexOutOfBoundsException e) {
+					value = "Rec";
+				}
 				
 				new_filename = value;
 				
@@ -382,9 +387,9 @@ public class UI1 extends ListActivity {
             	writer.write(line+"\n");
             in.close();
         } catch (FileNotFoundException e) {
-           
+           Log.d("cloneFileToFile", "File Not Found!");
         } catch (IOException e) {
-            
+            Log.d("cloneFileToFile", "Clone failed!");
         } 
     }
 
@@ -447,10 +452,15 @@ public class UI1 extends ListActivity {
 				String value="";
 				value = input.getText().toString().toLowerCase(Locale.getDefault());
 				
-				try { value = value.substring(0,1).toUpperCase(Locale.getDefault()) + value.substring(1).toLowerCase(Locale.getDefault());}
-				catch(java.lang.StringIndexOutOfBoundsException e)//caso stringa vuota
-					{ value = "Rec";	}
-				
+				try {
+					value = value.substring(0, 1).toUpperCase(
+							Locale.getDefault())
+							+ value.substring(1).toLowerCase(
+									Locale.getDefault());
+				} catch (java.lang.StringIndexOutOfBoundsException e)// caso stringa vuota
+				{
+					value = "Rec";
+				}
 				new_filename = value;
 				
 				cursor.moveToFirst();
@@ -621,13 +631,13 @@ public class UI1 extends ListActivity {
 		    File pictureFile = new File(filepath, filename + ".png");
 			
 			try {
-			FileOutputStream fos = new FileOutputStream(pictureFile);
-			if (!temp1.compress(Bitmap.CompressFormat.PNG, 100, fos))
-				Log.d("storeImage", "Error compressing file");
-			fos.close();
-			}
-			catch (IOException ex) {
-			}//fine Try Catch
+				FileOutputStream fos = new FileOutputStream(pictureFile);
+				if (!temp1.compress(Bitmap.CompressFormat.PNG, 100, fos))
+					Log.d("storeImage", "Error compressing file!");
+				fos.close();
+			} catch (IOException ex) {
+				Log.d("storeImage", "Bitmap compress error!");
+			}// fine Try Catch
 		}
 		
 }
