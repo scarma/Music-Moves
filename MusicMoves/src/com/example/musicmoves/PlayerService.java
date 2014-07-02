@@ -162,7 +162,7 @@ public class PlayerService extends Service {
 	        	audioYe.flush();
 	        	audioZe.flush();
 	        	
-	        	nulleffect.release();
+//	        	nulleffect.release();
 				delay.release();
 				echo.release();}  } 
 	        catch (NullPointerException e){ 
@@ -325,12 +325,12 @@ public class PlayerService extends Service {
 			if (isPlaying == true){
 				
 				showToast("Echo on single click");
-				nulleffect= new EnvironmentalReverb(0, 0); //effetto che non contiene nessuna modifica
-				nulleffect.setEnabled(true);
-				audioX.attachAuxEffect(nulleffect.getId()); //toglie eventuali effetti aggiunti in precedenza
-				audioY.attachAuxEffect(nulleffect.getId());	//aggiungendo ad ogni audiotrack un effetto nullo
-				audioZ.attachAuxEffect(nulleffect.getId());	//come suggerito dalla documentazione
-				
+//				nulleffect= new EnvironmentalReverb(0, 0); //effetto che non contiene nessuna modifica
+//				nulleffect.setEnabled(true);
+//				audioX.attachAuxEffect(nulleffect.getId()); //toglie eventuali effetti aggiunti in precedenza
+//				audioY.attachAuxEffect(nulleffect.getId());	//aggiungendo ad ogni audiotrack un effetto nullo
+//				audioZ.attachAuxEffect(nulleffect.getId());	//come suggerito dalla documentazione
+//				
 //				PresetReverb mReverb = new PresetReverb(1,audioX.getAudioSessionId());//<<<<<<<<<<<<<
 //			    mReverb.setPreset(PresetReverb.PRESET_LARGEROOM);
 //			    mReverb.setEnabled(true);
