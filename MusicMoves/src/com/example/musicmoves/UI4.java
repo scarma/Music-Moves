@@ -293,6 +293,9 @@ public class UI4 extends Activity {
 		 return true;
 	    }
 	   */ 
+	
+	
+	//int dimensioni = background
 	    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
 	      
 	    	
@@ -324,7 +327,7 @@ public class UI4 extends Activity {
 	        	  int quantity = (int)Math.abs(x2-x1)+1000;
 	        	  if (quantity > 2000) quantity =2000;
 	        	  
-	        	  int volume = (int)Math.abs(y2-y1);
+	        	  double volume = Math.abs(y2-y1);
 	
 	        	  //fixati i parametri perch� faceva un pelino fatica a riconoscere i movimenti giusti
 	        	  
@@ -374,7 +377,7 @@ public class UI4 extends Activity {
 		
 	}
 	
-	public void volume(boolean up, int intensity){
+	public void volume(boolean up, double intensity){
 		
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
 		i.putExtra(PlayerService.VOLUME, true); 

@@ -65,7 +65,7 @@ public class PlayerService extends Service {
 	 if(intent.getBooleanExtra(ECHO, false)){ echo();}
 	 if(intent.getBooleanExtra(VOLUME, false)) {
 		 boolean up = intent.getBooleanExtra("up", false);
-		 int intensity = intent.getIntExtra("intensity", -1);
+		 int intensity = intent.getIntExtra("intensity", 0);
 		 volume(up, intensity);
 	 }
 	 if(intent.getBooleanExtra(SPEED, false)){
@@ -240,8 +240,8 @@ public class PlayerService extends Service {
 	    private byte[] generatedArray;
 	    private static int time;
 	    static int numSamples;
-	    private int amplitude=1; //ampiezza del file audio. Se >1 distorge (clipping). Dev'essere compreso tra 0 e 1
-	    
+	   // private int amplitude=1; //ampiezza del file audio. Se >1 distorge (clipping). Dev'essere compreso tra 0 e 1
+	    private double amplitude=0.5;
 	    public byte[] genTone(double[] x, int cnt){
 	        // fill out the array
 	    	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -364,25 +364,49 @@ public class PlayerService extends Service {
 	}
 	
 		int posX, posY, posZ;
-		synchronized void volume(boolean up, int intensity){
+		synchronized void volume(boolean up, double intensity){
 
+
+			if(isPlaying == true){
+				
 //			Bisogna: modificare la variabile amplitude, 
 //			ottenere posizione riproduzione, stoppare audiotrack
 //			ricreare le audiotrack(basta chiamare proSoundGenerator) 
 //			e impostare la riproduzione a dov'era arrivato(probabilmente sar� necessario modificare
 //			leggermente proSoundGenerator per far questo),
 			
-			
-			if(isPlaying == true){
-			posX = audioX.getPlaybackHeadPosition();
-			posY = audioY.getPlaybackHeadPosition();
-			posZ = audioZ.getPlaybackHeadPosition();
+//			amplitude modificata da int 1 a double 0.5
 			
 			
 			Toast.makeText(getApplicationContext(), (up) +" "+ (intensity), Toast.LENGTH_SHORT).show();
+			//variamo amplitude di un valore 
 			
+			if (up==true){
+				amplitude = amplitude + intensity;
+				if(amplitude >1)amplitude=1; //valore max 1
+			}
+			else {
+				amplitude = amplitude - intensity;
+				if(amplitude<0) amplitude=0; //valore min 0
+			}
+
+			//salvo la posizione degli audiotrack
+			posX = audioX.getPlaybackHeadPosition();
+			posY = audioY.getPlaybackHeadPosition();
+			posZ = audioZ.getPlaybackHeadPosition();
+			//rilascio le audiotrack per farne di nuove
+			audioX.flush();
+			audioY.flush();
+			audioZ.flush();
 			
-			
+			proSoundGenerator(Environment.getExternalStorageDirectory().getPath()+"/MusicMoves", sessionName);
+			//ripartiamio da dove li abbiamo lasciati
+			audioX.setPlaybackHeadPosition(posX);
+			audioY.setPlaybackHeadPosition(posY);
+			audioZ.setPlaybackHeadPosition(posZ);
+			 audioX.play();
+			 audioY.play();
+			 audioZ.play();
 			
 			}//fine isplaying==true
 		}//fine volume
@@ -390,6 +414,9 @@ public class PlayerService extends Service {
 		
 		
 		synchronized void speed(boolean direction, int quantity){
+			
+
+			if(isPlaying == true){
 //			Stessa cosa che per il metodo volume. Solo che al posto di amplitude modificare sampleRate
 //			Oppure provate a usare setPlaybackRate(int sampleRateInHz) di AudioTrack
 			int maxrate, minrate, actualrate;
@@ -418,7 +445,7 @@ public class PlayerService extends Service {
 			}
 			
 			Toast.makeText(getApplicationContext(), " Nuovo Framerate " + audioX.getPlaybackRate(), Toast.LENGTH_SHORT).show();
-			
+			}
 		}
 		
 		public boolean isDelaying = false;
