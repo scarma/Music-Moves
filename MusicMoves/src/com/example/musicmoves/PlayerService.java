@@ -363,7 +363,7 @@ public class PlayerService extends Service {
 //			Bisogna: modificare la variabile amplitude, 
 //			ottenere posizione riproduzione, stoppare audiotrack
 //			ricreare le audiotrack(basta chiamare proSoundGenerator) 
-//			e impostare la riproduzione a dov'era arrivato(probabilmente sarà necessario modificare
+//			e impostare la riproduzione a dov'era arrivato(probabilmente sarï¿½ necessario modificare
 //			leggermente proSoundGenerator per far questo),
 			
 			
@@ -371,6 +371,13 @@ public class PlayerService extends Service {
 			posX = audioX.getPlaybackHeadPosition();
 			posY = audioY.getPlaybackHeadPosition();
 			posZ = audioZ.getPlaybackHeadPosition();
+			
+			
+			//audioX.
+			
+			
+			
+			
 			}//fine isplaying==true
 		}//fine volume
 		
@@ -475,3 +482,14 @@ public class PlayerService extends Service {
 		
 		
 }//fine class
+
+
+
+
+/*
+ * gestire l'esaurimento dello spazio di memoria
+ * bisogna catturare l'eccezione lanciata da file stream
+ * l'idea e':catturare, salvare tutto, lanciare un messaggio all'utente e forzare larresto dell'input
+ * 
+ * 
+ */
