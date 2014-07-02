@@ -490,6 +490,4 @@ public class PlayerService extends Service {
  * gestire l'esaurimento dello spazio di memoria
  * bisogna catturare l'eccezione lanciata da file stream
  * l'idea e':catturare, salvare tutto, lanciare un messaggio all'utente e forzare larresto dell'input
- * 
- * 
  */

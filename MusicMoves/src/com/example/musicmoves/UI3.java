@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.security.cert.LDAPCertStoreParameters;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -27,6 +28,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StatFs;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.text.InputFilter;
@@ -292,11 +294,11 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		super.onResume();
 		
 	    try {
-
 			writer = new FileWriter(new File(filepath, filename+".txt"), true);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+			Log.d("Recording", e.getMessage());
 		}
 	    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
 		maxDurationRec = preferences.getInt("maxRecTime", 10);
@@ -404,6 +406,15 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		
+			Log.d("onSensorChanged", e.getMessage());
+			//Visualizzo spazio rimanente
+			StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+			@SuppressWarnings("deprecation")
+			int   Free   = (int)(statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
+			if(Free <= 5)
+				Toast.makeText(getApplicationContext(), "Space free to disk: "+ Free + " MB", Toast.LENGTH_LONG).show();
+			
 		}
 	    sampleCnt++;
 	    TextView sampleCounter = (TextView)findViewById(R.id.textViewSampleCounter); //Contatore Samples
@@ -417,6 +428,15 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    progressBarY.postInvalidate();
 	    progressBarZ.postInvalidate();
 	    
+		//check spazio rimanente
+		StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+		@SuppressWarnings("deprecation")
+		int   Free   = (int)(statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
+		if (Free <= 5)
+			Toast.makeText(getApplicationContext(),
+					"Warning, low disk space: " + Free + " MB", Toast.LENGTH_SHORT)
+					.show();
+
 	    if(sampleCnt>maxDurationRec)
         {Stopped(null);}
 	}
@@ -468,6 +488,13 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		fos.close();
 		}
 		catch (IOException e) {
+			Log.d("storeImage", e.getMessage());
+			//Visualizzo spazio rimanente
+			StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+			@SuppressWarnings("deprecation")
+			int   Free   = (int)(statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
+			if(Free <= 5)
+				Toast.makeText(getApplicationContext(), "Space free to disk: "+ Free + " MB", Toast.LENGTH_LONG).show();
 		}//fine Try Catch
 	}//fine storeImage
 	

@@ -48,6 +48,7 @@ import database.DBAdapter;
 public class UI1 extends ListActivity {
 	
 	public final static String EXTRA_MESSAGE = "com.example.MusicMoves.MESSAGE";
+	private static boolean enoughSpace;
 	private DBAdapter databaseHelper;
 	private Cursor cursor;
 	private String[] list_music;
@@ -76,7 +77,12 @@ public class UI1 extends ListActivity {
 		StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
 		@SuppressWarnings("deprecation")
 		int   Free   = (int)(statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
-		Toast.makeText(getApplicationContext(), "Space free to disk: "+ Free + " MB", Toast.LENGTH_LONG).show();
+		if (Free >= 5)
+			enoughSpace = true;
+		else {
+			Toast.makeText(getApplicationContext(), "Warning, low disk space: "+ Free + " MB", Toast.LENGTH_LONG).show();
+			enoughSpace = false;
+		}
     }
 	
 	@Override
@@ -88,6 +94,17 @@ public class UI1 extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		
+		//Visualizzo spazio rimanente
+		StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+		@SuppressWarnings("deprecation")
+		int   Free   = (int)(statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
+		if (Free >= 5)
+			enoughSpace = true;
+		else {
+			Toast.makeText(getApplicationContext(), "Warning, low disk space: "+ Free + " MB", Toast.LENGTH_LONG).show();
+			enoughSpace = false;
+		}
 		
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
 
@@ -173,9 +190,14 @@ public class UI1 extends ListActivity {
 	}
 	public void toUI3(View view) 
 	{
+		if (enoughSpace) {
 	    Intent intent = new Intent(getApplicationContext(), UI3.class);
 	    startActivity(intent);
 	    finish();
+		}
+		else
+			Toast.makeText(getApplicationContext(), "Warning, not enough disk space! New recordings not allowed. Free some space first!", Toast.LENGTH_LONG).show();
+
 	}
 	
 	
@@ -209,29 +231,34 @@ public class UI1 extends ListActivity {
 	
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
-	    AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
-	    switch (item.getItemId()) {
-	        case R.id.playB:
-	        	playRec(info.position);
-	            return true;
-	        case R.id.delete:
-	            deleteRec(info.position);
-	            return true;
-	        case R.id.clone:
-	            cloneRec(info.position);
-	            return true;
-	        case R.id.rename:
-	            renameRec(info.position);
-	            return true;
-	        case R.id.details:
-	            detailsRec(info.position);
-	            return true;
-	        default:
-	            return super.onContextItemSelected(item);
-	    }
+		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
+				.getMenuInfo();
+		switch (item.getItemId()) {
+		case R.id.playB:
+			playRec(info.position);
+			return true;
+		case R.id.delete:
+			deleteRec(info.position);
+			return true;
+		case R.id.clone:
+			if (enoughSpace) {
+				cloneRec(info.position);
+			} else
+				// TODO da sistemare
+				Toast.makeText(getApplicationContext(), "Warning, not enough disk space! Cloning record not allowed. Free some space first!", Toast.LENGTH_LONG).show();
+			return true;
+		case R.id.rename:
+			renameRec(info.position);
+			return true;
+		case R.id.details:
+			detailsRec(info.position);
+			return true;
+		default:
+			return super.onContextItemSelected(item);
+		}
 	}
 
-	private void cloneRec(int position) {//TODO: Sistemare, non funzionante
+	private void cloneRec(int position) {
 		p = position;
 //		prelevo tutti i dati della sessione da clonare e ne creo una 
 //		nuova chiedendo all'utente di inserire un nuovo nome		
