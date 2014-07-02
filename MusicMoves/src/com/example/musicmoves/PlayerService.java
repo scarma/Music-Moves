@@ -362,6 +362,23 @@ public class PlayerService extends Service {
 				audioY.release();
 				audioZ.release();
 				*/
+				Thread timer = new Thread(){
+			        @Override
+			        public void run() {
+
+			            try {
+			                sleep(5000);//tempo in millisecondi
+			            } catch (InterruptedException e) {
+			                // TODO Auto-generated catch block
+			                e.printStackTrace();
+			            } finally{
+			                echo.release();
+			            }
+			            super.run();
+			        }
+			    };
+			    timer.start();
+			    
 				
 			}
 	}
