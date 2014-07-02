@@ -415,8 +415,7 @@ public class UI4 extends Activity {
 		i.putExtra("intensity", intensity);
 		startService(i); 
 	}
-	
-	
+
 
 	
 }

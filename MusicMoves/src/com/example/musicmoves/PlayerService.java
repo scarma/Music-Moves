@@ -308,10 +308,10 @@ public class PlayerService extends Service {
 		
 		
 		synchronized void echo(){
-			Toast.makeText(getApplicationContext(), "Echo on single click", Toast.LENGTH_SHORT).show();
+			
 			if (isPlaying == true){
 				
-				
+				showToast("Echo on single click");
 				nulleffect= new EnvironmentalReverb(0, 0); //effetto che non contiene nessuna modifica
 				nulleffect.setEnabled(true);
 				audioX.attachAuxEffect(nulleffect.getId()); //toglie eventuali effetti aggiunti in precedenza
@@ -411,7 +411,7 @@ public class PlayerService extends Service {
 				amplitude = amplitude - intensity/maxintensity;
 				if(amplitude<0) amplitude=0; //valore min 0
 			}
-			Toast.makeText(getApplicationContext(), vol + (int)(100*intensity)/maxintensity+"% , Amplitude: "+amplitude, Toast.LENGTH_SHORT).show();
+			showToast( vol + (int)(100*intensity)/maxintensity+"% , Amplitude: "+amplitude);
 			
 			//salvo la posizione degli audiotrack
 			posX = audioX.getPlaybackHeadPosition();
@@ -463,8 +463,8 @@ public class PlayerService extends Service {
 				sampleRate=(actualrate - quantity);
 			}
 			
-			Toast.makeText(getApplicationContext(), "New sample rate: " + sampleRate, Toast.LENGTH_SHORT).show();
-			}
+			showToast( "New sample rate: " + sampleRate);
+			
 			//salvo la posizione degli audiotrack
 			posX = audioX.getPlaybackHeadPosition();
 			posY = audioY.getPlaybackHeadPosition();
@@ -482,6 +482,7 @@ public class PlayerService extends Service {
 			 audioX.play();
 			 audioY.play();
 			 audioZ.play();
+			}
 		}
 		
 		public boolean isDelaying = false;
@@ -493,7 +494,7 @@ synchronized void delay(){
 				
 				
 					if (isDelaying == false){
-				Toast.makeText(getApplicationContext(), "Delay on", Toast.LENGTH_SHORT).show();
+				showToast( "Delay on");
 				
 					isDelaying = true;
 					
@@ -539,7 +540,7 @@ synchronized void delay(){
 					
 					
 				else {
-					Toast.makeText(getApplicationContext(), "Delay off", Toast.LENGTH_SHORT).show();
+					showToast( "Delay off");
 //					nulleffect= new EnvironmentalReverb(0, 0); //effetto che non contiene nessuna modifica
 //					nulleffect.setEnabled(true);
 //					audioX.attachAuxEffect(nulleffect.getId()); //toglie eventuali effetti aggiunti in precedenza
@@ -554,6 +555,16 @@ synchronized void delay(){
 		}//fine delay
 		
 
+
+Toast toast;
+void showToast(String s){
+	if(toast==null) {
+		toast=Toast.makeText(this, s, Toast.LENGTH_SHORT);
+	}
+	toast.setText(s);
+	toast.setDuration(Toast.LENGTH_SHORT);
+	toast.show();
+}
 
 
 		
