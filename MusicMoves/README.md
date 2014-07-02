@@ -25,7 +25,7 @@ Cose ancora da fare DEFAULT
 •	Sistemazioni aggiuntive  
 	o	Service per la registrazione  
 	o	Gestione errori(per esempio, quando non c'è spazio per scrivere o
-		quando non ci sono dispositivi per riprodurre)  
+		quando non ci sono dispositivi per riprodurre)  prima parte fatto  
 •	Revisione  
 	o	Commentare tutto in italiano  
 	o	Cancellare cose inutili  

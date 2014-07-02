@@ -22,6 +22,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.PorterDuff.Mode;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -70,6 +71,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 //    Bundle savedState;
 	private AlertDialog dialog;
 	private boolean recordingStarted = false;
+	private static boolean isStopped;
 	
 	@Override
 	protected void onCreate(Bundle savedInstancestate) {
@@ -192,6 +194,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 //			getSupportFragmentManager().beginTransaction()
 //					.add(R.id.container, new PlaceholderFragment()).commit();
 //		}
+	    
+	    
 	}
 	
 	@Override
@@ -271,8 +275,46 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		pause.setVisibility(View.VISIBLE);
 		stopUns.setVisibility(View.INVISIBLE);
 		stopSel.setVisibility(View.VISIBLE);
-		
 		super.onResume();
+		
+	    
+		isStopped = false;
+
+	    
+		Thread thread = new Thread(new Runnable() {
+			public void run() {
+				while (!isStopped) {
+					runOnUiThread(new Runnable() {
+						public void run() {
+							try {
+								//check spazio rimanente
+								StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+								@SuppressWarnings("deprecation")
+								int   Free   = (int)(statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
+								if (Free <= 5) {
+									Toast.makeText(getApplicationContext(),
+											"Warning, low disk space: " + Free + " MB", Toast.LENGTH_LONG)
+											.show();
+									isStopped = true;
+								}
+							} catch (IllegalStateException e) {
+								isStopped = true;
+							}
+						}
+					});
+					try {
+						Thread.sleep(600000);
+					} catch (InterruptedException e) {
+						isStopped = true;
+					}
+				}
+			}
+		});
+		thread.start();
+	    /*
+	     * Da dire al prof!
+	     * 600000 -> In 5 secondi scrive 0.6 KB non scriverà mai 5 MB in 10 minuti 
+	     * */
 		
 	    try {
 			writer = new FileWriter(new File(filepath, filename+".txt"), true);
@@ -286,10 +328,12 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    int sampleRate = 1000*1000/preferences.getInt("sampleRate", 5);
 	    mSensorManager.registerListener(this, mAccelerometer , sampleRate);//SensorManager.SENSOR_DELAY_NORMAL
 	    isAccelListening = true;
+
 	}
 	//TODO: add sampleRate from preferences
 	
 	public void Paused(View view) { //Cambia pulsanti visibili, chiude il FileWriter se aperto
+		isStopped = true;
 		Toast.makeText(getApplicationContext(), "Recording paused", Toast.LENGTH_SHORT).show();	
 		ImageButton rec = (ImageButton) findViewById(R.id.recButton);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseButton);
@@ -311,7 +355,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	
 	public void Stopped(View view) { //Cambia pulsanti visibili, chiude il FileWriter se aperto,
 									 //mostra dati registrati e cancella il file
-		
+	    isStopped = true;
+
 		ImageButton rec = (ImageButton) findViewById(R.id.recButton);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseButton);
 		ImageButton stopUns = (ImageButton) findViewById(R.id.stop_unselectedButton);
@@ -411,14 +456,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    progressBarY.postInvalidate();
 	    progressBarZ.postInvalidate();
 	    
-		//check spazio rimanente
-		StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
-		@SuppressWarnings("deprecation")
-		int   Free   = (int)(statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
-		if (Free <= 5)
-			Toast.makeText(getApplicationContext(),
-					"Warning, low disk space: " + Free + " MB", Toast.LENGTH_SHORT)
-					.show();
+
 
 	    if(sampleCnt>maxDurationRec)
         {Stopped(null);}

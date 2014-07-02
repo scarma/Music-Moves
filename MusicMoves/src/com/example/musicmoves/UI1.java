@@ -13,6 +13,7 @@ import java.util.Locale;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -20,6 +21,8 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
@@ -65,6 +68,9 @@ public class UI1 extends ListActivity {
 	private int year = 0;
 	private String date = null;
 	private FileWriter writer;
+	private SensorManager mSensorManager;
+	private Sensor mAccelerometer;
+	private boolean hasAccelerometer;
 	
 	
 	@SuppressLint("Recycle")
@@ -84,6 +90,18 @@ public class UI1 extends ListActivity {
 			Toast.makeText(getApplicationContext(), "Warning, low disk space: "+ Free + " MB", Toast.LENGTH_LONG).show();
 			enoughSpace = false;
 		}
+		
+		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+		if (mSensorManager == null)
+			hasAccelerometer = false;
+		else {
+			mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+			if (mAccelerometer == null)
+				hasAccelerometer = false;
+			else
+				hasAccelerometer = true;
+		}
+
     }
 	
 	@Override
@@ -192,14 +210,15 @@ public class UI1 extends ListActivity {
 	}
 	public void toUI3(View view) 
 	{
-		if (enoughSpace) {
+		if (!enoughSpace)
+			Toast.makeText(getApplicationContext(), "Warning, not enough disk space! New recordings not allowed. Free some space first!", Toast.LENGTH_LONG).show();
+		if (!hasAccelerometer)
+			Toast.makeText(getApplicationContext(), "No accelerometer sensor found!", Toast.LENGTH_LONG).show();
+		if (enoughSpace && hasAccelerometer) {
 	    Intent intent = new Intent(getApplicationContext(), UI3.class);
 	    startActivity(intent);
 	    finish();
 		}
-		else
-			Toast.makeText(getApplicationContext(), "Warning, not enough disk space! New recordings not allowed. Free some space first!", Toast.LENGTH_LONG).show();
-
 	}
 	
 	

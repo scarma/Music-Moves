@@ -293,6 +293,9 @@ public class UI4 extends Activity {
 		 return true;
 	    }
 	   */ 
+	
+	
+	//int dimensioni = background
 	    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
 	      
 	    	
@@ -321,35 +324,34 @@ public class UI4 extends Activity {
 	        	  x2=event2.getX();
 	        	  y1=event1.getY();
 	        	  y2=event2.getY();
-	        	  int quantity = (int)Math.abs(x2-x1) + 1000;
+	        	  int quantity = (int)Math.abs(x2-x1)+1000;
 	        	  if (quantity > 2000) quantity =2000;
+	        	  
+	        	  double volume = Math.abs(y2-y1);
+	
 	        	  //fixati i parametri perch� faceva un pelino fatica a riconoscere i movimenti giusti
 	        	  
 	        	        // right to left
 	        	        if(x1 - x2 > 20 && Math.abs(y1-y2) < 100 ) {
-	        	           Toast.makeText(getApplicationContext(), "drag a sinistra " + (quantity), Toast.LENGTH_SHORT).show();
 	        	        	speed(false, quantity);
-	        	           
 	        	            return true;
 	        	        }
 	        	        // left to right
 	        	        else if (x2-x1 > 20 && Math.abs(y1-y2) < 100) {
-	        	        	Toast.makeText(getApplicationContext(), "drag a destra " + (quantity), Toast.LENGTH_SHORT).show();
 	        	        	speed(true, quantity);
-	        	        	
 	        	            return true; 
 	        	        }
 	        	        
 	        	        
 	        	        else if (y1-y2 > 20 && Math.abs(x1-x2) < 100){
-	        	        	Toast.makeText(getApplicationContext(), "drag su " + (velocityY), Toast.LENGTH_SHORT).show();
-	        	//        	volume(true, Math.abs(velocityY));
+	        	        	//Toast.makeText(getApplicationContext(), "drag su " + (velocityY), Toast.LENGTH_SHORT).show();
+	        	        	volume(true, volume);
 	        	        	return true;
 	        	        }
 	        	        
 	        	        else if (y2-y1 > 20 && Math.abs(x1-x2) < 100){
-	        	        	Toast.makeText(getApplicationContext(), "drag giu " + (velocityY), Toast.LENGTH_SHORT).show();
-	        	//        	volume(false, Math.abs(velocityY));
+	        	        	//Toast.makeText(getApplicationContext(), "drag giu " + (velocityY), Toast.LENGTH_SHORT).show();
+	        	        	volume(false, volume);
 	        	        	return true;
 	        	        }
 	        	       return true;
@@ -378,25 +380,17 @@ public class UI4 extends Activity {
 	public void volume(boolean up, double intensity){
 		
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
-		i.putExtra(PlayerService.VOLUME, true); //al posto di passare true meglio passare il valore intero direttamente! :)
-		i.putExtra(EXTRA_MESSAGE, sessionName);
-		i.putExtra(PlayerService.VOLUME_UP, 10); //cosi ad esempio
+		i.putExtra(PlayerService.VOLUME, true); 
+		i.putExtra("up", up);
+		i.putExtra("intensity", intensity);
 		startService(i); 
 	}
-//	
-//	public void speed(boolean up, int intensity){
-//		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
-//		i.putExtra("up", up); 
-//		i.putExtra("intensity", intensity);
-//		i.putExtra(EXTRA_MESSAGE, sessionName);
-//		startService(i); 
-//	}
-	
+
 	public void speed(boolean up, int intensity){
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
+		i.putExtra(PlayerService.SPEED, true);
 		i.putExtra("up", up); 
 		i.putExtra("intensity", intensity);
-		i.putExtra(PlayerService.SPEED, true);
 		startService(i); 
 	}
 	
