@@ -43,7 +43,7 @@ public class PlayerService extends Service {
 	 private boolean isPlaying = false; 
 	 private DBAdapter databaseHelper;
 	 private Cursor cursor;
-	
+	 EnvironmentalReverb nulleffect, delay, echo;
 	 @Override 
 	 public IBinder onBind(Intent intent) 
 	 { 
@@ -150,7 +150,10 @@ public class PlayerService extends Service {
 	        	audioZ.release();	
 	        	audioX.flush();
 	        	audioY.flush();
-	        	audioZ.flush();	}  } 
+	        	audioZ.flush();
+	        	nulleffect.release();
+				delay.release();
+				echo.release();}  } 
 	        catch (NullPointerException e){ 
 			    Log.d("AudioTrack", "Audiotrack not initialized");
 			    return;
@@ -308,11 +311,9 @@ public class PlayerService extends Service {
 			Toast.makeText(getApplicationContext(), "Echo on single click", Toast.LENGTH_SHORT).show();
 			if (isPlaying == true){
 				
-				EnvironmentalReverb nulleffect, echo;
+				
 				nulleffect= new EnvironmentalReverb(0, 0); //effetto che non contiene nessuna modifica
 				nulleffect.setEnabled(true);
-				
-				
 				audioX.attachAuxEffect(nulleffect.getId()); //toglie eventuali effetti aggiunti in precedenza
 				audioY.attachAuxEffect(nulleffect.getId());	//aggiungendo ad ogni audiotrack un effetto nullo
 				audioZ.attachAuxEffect(nulleffect.getId());	//come suggerito dalla documentazione
@@ -325,14 +326,16 @@ public class PlayerService extends Service {
 			    
 				echo = new EnvironmentalReverb(1, audioX.getAudioSessionId());
 				
-				
 				  	echo.setDecayHFRatio((short) 1000);
-		            echo.setDecayTime(15000);
+		            echo.setDecayTime(2000);
 		            echo.setDensity((short) 500);
 		            echo.setDiffusion((short) 700);
-		            echo.setReverbLevel((short) 1000);
+		            echo.setReflectionsLevel((short) 1000);
+		            echo.setReverbLevel((short) 2000);
+		            echo.setReflectionsDelay(100);
+		            echo.setRoomHFLevel((short) -10);
+		            echo.setRoomLevel((short) -10);
 		            echo.setEnabled(true);
-		           
 		            
 		           // Toast.makeText(getApplicationContext(), ""+echo.setEnabled(true), Toast.LENGTH_SHORT).show();
 		            //in realta' il toast restituisce 0 a dimostrazione che lo attacca effettivamente. pero non sisentono differenze 
@@ -343,16 +346,16 @@ public class PlayerService extends Service {
 					Toast.makeText(getApplicationContext(), "inizializzata " + audioX.setAuxEffectSendLevel(1.0f), Toast.LENGTH_SHORT).show();
 					
 				}
-				if (audioY.STATE_INITIALIZED==1){
-					audioY.attachAuxEffect(echo.getId());
-					audioY.setAuxEffectSendLevel(1.0f);
-					
-				}
-				if (audioZ.STATE_INITIALIZED==1){
-					audioZ.attachAuxEffect(echo.getId());
-					audioZ.setAuxEffectSendLevel(1.0f);
-					
-				}
+//				if (audioY.STATE_INITIALIZED==1){
+//					audioY.attachAuxEffect(echo.getId());
+//					audioY.setAuxEffectSendLevel(1.0f);
+//					
+//				}
+//				if (audioZ.STATE_INITIALIZED==1){
+//					audioZ.attachAuxEffect(echo.getId());
+//					audioZ.setAuxEffectSendLevel(1.0f);
+//					
+//				}
 				/* questi metodi fermano la riproduzione, quello che io definisco drop dell'audiotrack
 				echo.release();
 				audioX.release();
@@ -466,11 +469,11 @@ public class PlayerService extends Service {
 		
 		public boolean isDelaying = false;
 		
-		synchronized void delay(){
+synchronized void delay(){
 			
 			if (isPlaying == true){
 					
-				EnvironmentalReverb nulleffect, delayX, delayY, delayZ;
+				
 				
 					if (isDelaying == false){
 				Toast.makeText(getApplicationContext(), "Delay on", Toast.LENGTH_SHORT).show();
@@ -480,46 +483,34 @@ public class PlayerService extends Service {
 					
 		    
 					//correggere i parametri in modo che risulti il delay che vogliamo nelle specifiche
-					delayX = new EnvironmentalReverb(1, audioX.getAudioSessionId());
-					delayY = new EnvironmentalReverb(1, audioY.getAudioSessionId());
-					delayZ = new EnvironmentalReverb(1, audioZ.getAudioSessionId());
-					
-					  	delayX.setDecayHFRatio((short) 1000);
-					  	delayX.setDensity((short) 500);
-					  	delayX.setDiffusion((short) 700);
-					  	delayX.setReverbLevel((short) 1000);
-					  	delayX.setEnabled(true);
-					  	
-					  	delayY.setDecayHFRatio((short) 1000);
-					  	delayY.setDensity((short) 500);
-					  	delayY.setDiffusion((short) 700);
-					  	delayY.setReverbLevel((short) 1000);
-					  	delayY.setEnabled(true);
-					  	
-					  	delayZ.setDecayHFRatio((short) 1000);
-					  	delayZ.setDensity((short) 500);
-					  	delayZ.setDiffusion((short) 700);
-					  	delayZ.setReverbLevel((short) 1000);
-					  	delayZ.setEnabled(true);
-			           
-			            
-			           // Toast.makeText(getApplicationContext(), ""+echo.setEnabled(true), Toast.LENGTH_SHORT).show();
+					delay = new EnvironmentalReverb(1, audioX.getAudioSessionId());
+//					 	delay.setDecayHFRatio((short) 1000);
+//					  	delay.setDensity((short) 500);
+//					  	delay.setDiffusion((short) 700);
+					  	delay.setReverbLevel((short) 1000);
+					  	delay.setRoomLevel ((short)-10);
+					  	delay.setReflectionsDelay(300);
+					  	delay.setReverbDelay (100);
+					  	delay.setEnabled(true);
+					 // Toast.makeText(getApplicationContext(), ""+echo.setEnabled(true), Toast.LENGTH_SHORT).show();
 			            //in realta' il toast restituisce 0 a dimostrazione che lo attacca effettivamente. pero non sisentono differenze 
 			            
 					if (audioX.STATE_INITIALIZED==1) {
-						audioX.attachAuxEffect(delayX.getId());
+						audioX.attachAuxEffect(delay.getId());
 						audioX.setAuxEffectSendLevel(1.0f);
-					}
-					if (audioY.STATE_INITIALIZED==1){
-						audioY.attachAuxEffect(delayY.getId());
-						audioY.setAuxEffectSendLevel(1.0f);
+						Toast.makeText(getApplicationContext(), "inizializzata " + audioX.setAuxEffectSendLevel(1.0f), Toast.LENGTH_SHORT).show();
 						
 					}
-					if (audioZ.STATE_INITIALIZED==1){
-						audioZ.attachAuxEffect(delayZ.getId());
-						audioZ.setAuxEffectSendLevel(1.0f);
-						
-					}
+//					if (audioY.STATE_INITIALIZED==1){
+//						audioY.attachAuxEffect(delay.getId());
+//						audioY.setAuxEffectSendLevel(1.0f);
+//						
+//					}
+//					if (audioZ.STATE_INITIALIZED==1){
+//						audioZ.attachAuxEffect(delay.getId());
+//						audioZ.setAuxEffectSendLevel(1.0f);
+//						
+//					}
 					/* questi metodi fermano la riproduzione, quello che io definisco drop dell'audiotrack
 					echo.release();
 					audioX.release();
@@ -532,18 +523,12 @@ public class PlayerService extends Service {
 					
 				else {
 					Toast.makeText(getApplicationContext(), "Delay off", Toast.LENGTH_SHORT).show();
-					nulleffect= new EnvironmentalReverb(1, audioX.getAudioSessionId()); //effetto che non contiene nessuna modifica
-					nulleffect.setEnabled(true);
-					audioX.attachAuxEffect(nulleffect.getId()); //toglie eventuali effetti aggiunti in precedenza
-					
-					nulleffect= new EnvironmentalReverb(1, audioY.getAudioSessionId());
-					nulleffect.setEnabled(true);
-					audioY.attachAuxEffect(nulleffect.getId());	//aggiungendo ad ogni audiotrack un effetto nullo
-					
-					nulleffect= new EnvironmentalReverb(1, audioZ.getAudioSessionId());
-					nulleffect.setEnabled(true);
-					audioZ.attachAuxEffect(nulleffect.getId());	//come suggerito dalla documentazione
-					
+//					nulleffect= new EnvironmentalReverb(0, 0); //effetto che non contiene nessuna modifica
+//					nulleffect.setEnabled(true);
+//					audioX.attachAuxEffect(nulleffect.getId()); //toglie eventuali effetti aggiunti in precedenza
+//					audioY.attachAuxEffect(nulleffect.getId());	//aggiungendo ad ogni audiotrack un effetto nullo
+//					audioZ.attachAuxEffect(nulleffect.getId());	//come suggerito dalla documentazione
+					delay.release();
 					isDelaying = false;
 					
 				}//fine else
@@ -551,7 +536,9 @@ public class PlayerService extends Service {
 			}//fine isplaying
 		}//fine delay
 		
-		
+
+
+
 		
 		
 }//fine class

@@ -51,23 +51,6 @@ public class UI4 extends Activity {
 	    textView.setTextColor(Color.rgb(255, 153, 0));
 	    textView.setText(sessionName);
 	    PlayMusic(null);
-	  
-   }
-	
-	
-	
-	@Override
-	protected void onPause() {
-	//TODO: Salvare lo stato
-		super.onPause();
-	}
-
-	@Override
-	protected void onResume() {
-	//TODO: Ripristinare lo stato
-		
-		  
-	    //plus 
 	    mDetector = new GestureDetector(this, new MyGestureListener());
 	    ImageView background = (ImageView)findViewById(R.id.imageView1);
 	   // trova un modo perch� funga background.setOnTouchListener(this);
@@ -87,7 +70,24 @@ public class UI4 extends Activity {
 	     });*/
 	    background.setOnTouchListener(gestureListener);
 
+	  
+   }
+	
+	
+	
+	@Override
+	protected void onPause() {
+	//TODO: Salvare lo stato
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+	//TODO: Ripristinare lo stato
 		
+		  
+	    //plus 
+	    
 		
 		super.onResume();
 //		Intent intent = getIntent();
@@ -271,6 +271,26 @@ public class UI4 extends Activity {
 		TextView textView = (TextView) findViewById(R.id.textViewSessionName);
 	    textView.setTextColor(Color.rgb(255, 153, 0));
 	    textView.setText(sessionName);
+	    mDetector = new GestureDetector(this, new MyGestureListener());
+	    ImageView background = (ImageView)findViewById(R.id.imageView1);
+	   // trova un modo perch� funga background.setOnTouchListener(this);
+	    gestureListener = new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                mDetector.onTouchEvent(event);
+                return true;
+            }
+        };
+	    
+	    
+/*	    background.setOnTouchListener(new OnTouchListener() {
+	        @Override
+	        public boolean onTouch(final View view, final MotionEvent event) {
+	           return mDetector.onTouchEvent(event);
+	        }
+	     });*/
+	    background.setOnTouchListener(gestureListener);
+
+		
 	  
 	}
 	
