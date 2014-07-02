@@ -71,7 +71,7 @@ public class PlayerService extends Service {
 	 if(intent.getBooleanExtra(SPEED, false)){
 		 boolean up = intent.getBooleanExtra("up", false);
 		 int intensity = intent.getIntExtra("intensity", -1);
-		 speed(up, 3000);
+		 speed(up, intensity);
 		 }
 	 
 	 if(intent.getBooleanExtra(DELAY, false)){ delay();}
@@ -216,7 +216,7 @@ public class PlayerService extends Service {
 	        } catch (FileNotFoundException e) {
 	        	Log.d("FileNotFoundException", "File:"+filepath+"/"+textFile);
 	        } catch (IOException e) {
-	        
+	        	Log.d("IOException", e.getMessage());
 	        } catch (NullPointerException e) {
 	        	Log.d("NullPointerException", "File empty");
 	        } catch (NumberFormatException e) {
@@ -392,21 +392,32 @@ public class PlayerService extends Service {
 		synchronized void speed(boolean direction, int quantity){
 //			Stessa cosa che per il metodo volume. Solo che al posto di amplitude modificare sampleRate
 //			Oppure provate a usare setPlaybackRate(int sampleRateInHz) di AudioTrack
-			int maxrate, minrate, actualrate, newrate;
+			int maxrate, minrate, actualrate;
 			maxrate=12000;
 			minrate=4000;
 			actualrate = audioX.getPlaybackRate();
 			
-			if (actualrate != maxrate && direction == true){
+			if (actualrate <= maxrate && direction == true){
+				if(actualrate + quantity > maxrate){ //se andiamo oltre i 12000, ci fremiamo a 12000
+					actualrate=0;
+					quantity=12000;
+				}
 				audioX.setPlaybackRate(actualrate + quantity);
 				audioY.setPlaybackRate(actualrate + quantity);
 				audioZ.setPlaybackRate(actualrate + quantity);
 			}
-			if (actualrate!=minrate && direction == false){
+			
+			if (actualrate >=minrate && direction == false){ // se andiamo sotto i 2000, ci fermiamo a 2000
+				if(actualrate-quantity < minrate){
+					actualrate=2000;
+					quantity=0;
+				}
 				audioX.setPlaybackRate(actualrate - quantity);
 				audioY.setPlaybackRate(actualrate - quantity);
 				audioZ.setPlaybackRate(actualrate - quantity);
 			}
+			
+			Toast.makeText(getApplicationContext(), " Nuovo Framerate " + audioX.getPlaybackRate(), Toast.LENGTH_SHORT).show();
 			
 		}
 		
