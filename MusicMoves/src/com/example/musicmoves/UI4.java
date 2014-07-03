@@ -3,23 +3,24 @@ package com.example.musicmoves;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.PorterDuff.Mode;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class UI4 extends Activity {
 	
@@ -415,7 +416,29 @@ public class UI4 extends Activity {
 		i.putExtra("intensity", intensity);
 		startService(i); 
 	}
+	
+	public class call_reciver extends BroadcastReceiver{
 
+		@Override
+	    public void onReceive(Context context, Intent intent) {
+	        // TODO Auto-generated method stub
 
+	        String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
+//	        String number = "";
+//	        Bundle bundle = intent.getExtras();
+
+	        if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+	            // Phone is ringing
+//	            number = bundle.getString("incoming_number");
+	        	PauseMusic(null);
+	        } else if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
+	            // Call received
+	        	PlayMusic(null);
+	        } else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
+	            // Call Dropped or rejected
+	        	PlayMusic(null);
+	        }
+		}
+	}//fine classe interna
 	
 }

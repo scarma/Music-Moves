@@ -16,7 +16,6 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.media.audiofx.EnvironmentalReverb;
-import android.media.audiofx.PresetReverb;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
@@ -116,6 +115,7 @@ public class PlayerService extends Service {
 		}
 		catch(NullPointerException e){
 			//Gli effetti non sono attivi, non serve metterli in pausa
+			Log.d("pause", e.getMessage());
 		}
 	   
 	}
@@ -698,18 +698,15 @@ synchronized void delay(){
 		
 
 
-Toast toast;
-void showToast(String s){
-	if(toast==null) {
-		toast=Toast.makeText(this, s, Toast.LENGTH_SHORT);
-	}
-	toast.setText(s);
-	toast.setDuration(Toast.LENGTH_SHORT);
-	toast.show();
-}
-
-
-		
+	Toast toast;
+	void showToast(String s){
+		if(toast==null) {
+			toast=Toast.makeText(this, s, Toast.LENGTH_SHORT);
+		}
+		toast.setText(s);
+		toast.setDuration(Toast.LENGTH_SHORT);
+		toast.show();
+	}	
 		
 }//fine class
 
