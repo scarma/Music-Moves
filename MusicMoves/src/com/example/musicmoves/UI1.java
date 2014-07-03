@@ -189,6 +189,10 @@ public class UI1 extends ListActivity {
 			startActivity(settings_intent);
 			return true;
 		}
+		if (id == R.id.action_info) {
+			Toast.makeText(getApplicationContext(), "App developed by The Ehi Team: Scarmagnan Andrea, Fabian Emanuele, Zampieri Giovanni", Toast.LENGTH_LONG).show();
+			return true;
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
