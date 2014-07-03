@@ -72,6 +72,54 @@
           musicmoves:unitsLeft=""
           musicmoves:unitsRight=" sample/second"
           />
+     
+     <com.example.musicmoves.SeekBarPreference
+          android:key="rdelay" 
+          android:title="Delay" 
+          android:summary="Ritardo del Delay" 
+          android:defaultValue="1" 
+          android:max="10"
+          android:progress="0" 
+          musicmoves:min="1"
+          musicmoves:unitsLeft=""
+          musicmoves:unitsRight=" sample/second"
+          />
+     
+     <com.example.musicmoves.SeekBarPreference
+          android:key="idelay" 
+          android:title="Delay" 
+          android:summary="Intensita' del Delay" 
+          android:defaultValue="1" 
+          android:max="10"
+          android:progress="0" 
+          musicmoves:min="1"
+          musicmoves:unitsLeft=""
+          musicmoves:unitsRight=" sample/second"
+          />
+     
+     <com.example.musicmoves.SeekBarPreference
+          android:key="recho" 
+          android:title="Echo" 
+          android:summary="Ritardo Echo" 
+          android:defaultValue="1" 
+          android:max="10"
+          android:progress="0" 
+          musicmoves:min="1"
+          musicmoves:unitsLeft=""
+          musicmoves:unitsRight=" sample/second"
+          />
+     
+     <com.example.musicmoves.SeekBarPreference
+          android:key="iecho" 
+          android:title="Echo" 
+          android:summary="Intensita' Echo" 
+          android:defaultValue="1" 
+          android:max="10"
+          android:progress="0" 
+          musicmoves:min="1"
+          musicmoves:unitsLeft=""
+          musicmoves:unitsRight=" sample/second"
+          />
     
     </PreferenceCategory>   
 </PreferenceScreen>
