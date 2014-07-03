@@ -140,8 +140,8 @@ public class PlayerService extends Service {
 		isPlaying = true; 
 		
 		if(!initialized)	 {
-			proSoundGenerator(Environment.getExternalStorageDirectory().getPath()+"/MusicMoves", sessionName);
-//			proSoundGenerator(getFilesDir().getAbsolutePath(), sessionName);
+//			proSoundGenerator(Environment.getExternalStorageDirectory().getPath()+"/MusicMoves", sessionName);
+			proSoundGenerator(getFilesDir().getAbsolutePath(), sessionName);
 		}				     
 	     if(audioX.getState()==AudioTrack.STATE_INITIALIZED &&
 	    	audioY.getState()==AudioTrack.STATE_INITIALIZED &&
@@ -466,8 +466,8 @@ public class PlayerService extends Service {
 		audioZ.release();
 		
 		//Ricreo le audiotrack
-		proSoundGenerator(Environment.getExternalStorageDirectory().getPath()+"/MusicMoves", sessionName);
-		
+//		proSoundGenerator(Environment.getExternalStorageDirectory().getPath()+"/MusicMoves", sessionName);
+		proSoundGenerator(getFilesDir().getAbsolutePath(), sessionName);
 		//Facciamo ripartire le audiotrack da dove le abbiamo lasciate
 		audioX.setPlaybackHeadPosition(posX);
 		audioY.setPlaybackHeadPosition(posY);
@@ -517,8 +517,8 @@ public class PlayerService extends Service {
 		audioZ.release();
 		
 		//Ricreo le audiotrack
-		proSoundGenerator(Environment.getExternalStorageDirectory().getPath()+"/MusicMoves", sessionName);
-		
+//		proSoundGenerator(Environment.getExternalStorageDirectory().getPath()+"/MusicMoves", sessionName);
+		proSoundGenerator(getFilesDir().getAbsolutePath(), sessionName);
 		//Facciamo ripartire le audiotrack da dove le abbiamo lasciate
 		audioX.setPlaybackHeadPosition(posX);
 		audioY.setPlaybackHeadPosition(posY);

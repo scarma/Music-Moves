@@ -76,8 +76,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	@Override
 	protected void onCreate(Bundle savedInstancestate) {
 		super.onCreate(savedInstancestate);
-		filepath= Environment.getExternalStorageDirectory().getPath()+"/MusicMoves";
-//		filepath= getFilesDir().getAbsolutePath();
+//		filepath= Environment.getExternalStorageDirectory().getPath()+"/MusicMoves";
+		filepath= getFilesDir().getAbsolutePath();
 		//Crea cartella in cui salvare i file
 		File folder = new File(filepath);
 	    if (!folder.exists()) {
@@ -288,7 +288,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 						public void run() {
 							try {
 								//check spazio rimanente
-								StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+								StatFs statFs = new StatFs(getFilesDir().getAbsolutePath());
+//								StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
 								@SuppressWarnings("deprecation")
 								int   Free   = (int)(statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
 								if (Free <= 5) {
@@ -437,7 +438,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		
 			Log.d("onSensorChanged", e.getMessage());
 			//Visualizzo spazio rimanente
-			StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+//			StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
+			StatFs statFs = new StatFs(getFilesDir().getAbsolutePath());
 			@SuppressWarnings("deprecation")
 			int   Free   = (int)(statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
 			if(Free <= 5)

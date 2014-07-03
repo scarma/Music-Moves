@@ -14,16 +14,16 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 public class SeekBarPreference extends Preference implements OnSeekBarChangeListener {
-	
+	//Preference per le Seekbar, utilizzata nella UI5
 	private final String TAG = getClass().getName();
 	
 	private static final String ANDROID="http://schemas.android.com/apk/res/android";
 	private static final String APPLICATIONS="musicmoves";
 	private static final int DEFAULT_VALUE = 50;
 	
-	private int mMaxValue      = 100;
-	private int mMinValue      = 0;
-	private int mInterval      = 1;
+	private int mMaxValue = 100;
+	private int mMinValue = 0;
+	private int mInterval = 1;
 	private int mCurrentValue;
 	private String mUnitsLeft  = "";
 	private String mUnitsRight = "";
@@ -47,7 +47,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 		mSeekBar.setMax(mMaxValue - mMinValue);
 		mSeekBar.setOnSeekBarChangeListener(this);
 		
-		setWidgetLayoutResource(R.layout.seek_bar_preference);
+		setWidgetLayoutResource(R.layout.seek_bar_preference); //Imposta layout come da file xml
 	}
 	
 	private void setValuesFromXml(AttributeSet attrs) {
