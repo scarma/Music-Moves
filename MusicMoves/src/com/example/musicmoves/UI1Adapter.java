@@ -15,28 +15,29 @@ import android.widget.TextView;
 import database.DBAdapter;
  
 public class UI1Adapter extends ArrayAdapter<String> {
+	//Adapter per la riga con immagine, titolo e date nella UI1
 	public final static String EXTRA_MESSAGE = "com.example.MusicMoves.MESSAGE";
     private LayoutInflater mInflater;
  
     private String[] list_music;
     
-    private int mIdRisorsaVista;
+    private int mIdLayout;
 
     private Context ctx;
 	
 	private DBAdapter databaseHelper;
 	private Cursor cursor;
  
-    public UI1Adapter(Context ctx, int IdRisorsaVista, String[] strings) {
-        super(ctx, IdRisorsaVista, strings);
-        //per instanziare un file xml layout nel suo oggetto vista corrispondente
+    public UI1Adapter(Context ctx, int IdLayout, String[] strings) {
+        super(ctx, IdLayout, strings);
+        //Istanzia il layout definito dall'xml nella sua View corrispondente
         mInflater = (LayoutInflater)ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
  
         this.ctx=ctx;
         
         list_music = strings;
         
-        mIdRisorsaVista = IdRisorsaVista;
+        mIdLayout = IdLayout;
     }
  
     @Override
@@ -56,7 +57,7 @@ public class UI1Adapter extends ArrayAdapter<String> {
  
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        convertView = mInflater.inflate(mIdRisorsaVista, null);
+        convertView = mInflater.inflate(mIdLayout, null);
  
         databaseHelper = new DBAdapter(ctx);
 		databaseHelper.open();
@@ -64,6 +65,7 @@ public class UI1Adapter extends ArrayAdapter<String> {
 		cursor.moveToFirst();
         
         ImageView iv = (ImageView)convertView.findViewById(R.id.immagine_vista);
+        
         //Scala dimensioni Bitmap e la mostra
         int w = parent.getWidth();
         Bitmap bitmapScaled = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(cursor.getString(5)+list_music[position]+".png"), w/5, w/5, false);
@@ -80,14 +82,6 @@ public class UI1Adapter extends ArrayAdapter<String> {
         
         databaseHelper.close();
 		cursor.close();
-        
-//        tv.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				Toast.makeText(ctx, "asasd" + position, Toast.LENGTH_SHORT).show();
-//			}
-//		});
  
         iv.setOnClickListener(new OnClickListener() {
 			
