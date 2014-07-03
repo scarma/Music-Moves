@@ -45,6 +45,9 @@ public class PlayerService extends Service {
 	 EnvironmentalReverb nulleffect, delay, echo;
 	 private byte[] genArrayX,genArrayY, genArrayZ; 
 	 AudioTrack audioXe, audioYe, audioZe, audioXd, audioYd, audioZd;
+	 Thread timer, timer1, timer2;
+	 
+	
 	 @Override 
 	 public IBinder onBind(Intent intent) 
 	 { 
@@ -102,20 +105,30 @@ public class PlayerService extends Service {
 			audioXe.pause();
 			audioYe.pause();
 			audioZe.pause();
+//			timer1.interrupt();
 			
 		}
 		if (audioXd.getState()==AudioTrack.STATE_INITIALIZED &&
 			   	audioYd.getState()==AudioTrack.STATE_INITIALIZED &&
 			   	audioZd.getState()==AudioTrack.STATE_INITIALIZED){
-				        	audioXd.pause();
-				        	audioYd.pause();
-				        	audioZd.pause();	
+				audioXd.stop();
+	        	audioYd.stop();
+	        	audioZd.stop();
+	        	audioXd.release();
+	        	audioYd.release();
+	        	audioZd.release();	
+	        	audioXd.flush();
+	        	audioYd.flush();
+	        	audioZd.flush();
+	//        	nulleffect.release();
+				delay.release();
+//				timer.interrupt();
 			
 		    } 
 		}
 		catch(NullPointerException e){
 			//Gli effetti non sono attivi, non serve metterli in pausa
-			Log.d("pause", e.getMessage());
+
 		}
 	   
 	}
@@ -190,6 +203,7 @@ public class PlayerService extends Service {
 		        	audioZe.flush();
 	//	        	nulleffect.release();
 					echo.release();
+//					timer1.interrupt();
 					}  
 				if (audioXd.getState()==AudioTrack.STATE_INITIALIZED &&
 				    	audioYd.getState()==AudioTrack.STATE_INITIALIZED &&
@@ -205,6 +219,7 @@ public class PlayerService extends Service {
 		        	audioZd.flush();
 //		        	nulleffect.release();
 					delay.release();
+//					timer.interrupt();
 	
 				} 
 			}//fine try
@@ -362,7 +377,7 @@ public class PlayerService extends Service {
 		public void setTime(int time) {
 			PlayerService.time = time;
 		}
-		
+//		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		
 		synchronized void echo(){
 			
@@ -413,30 +428,28 @@ public class PlayerService extends Service {
 //					audioZ.setAuxEffectSendLevel(1.0f);
 //					
 //				}
-				/* questi metodi fermano la riproduzione, quello che io definisco drop dell'audiotrack
-				echo.release();
-				audioX.release();
-				audioY.release();
-				audioZ.release();
-				*/
-				Thread timer = new Thread(){
+		            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+	            	final int echotime = 1000+preferences.getInt("recho", 10);
+	            	
+	            	final float iecho  = preferences.getInt("iecho", 10)/10;
+				timer1 = new Thread(){
 			        @Override
 			        public void run() {
-			        	
-		            	audioXe= playSound(genArrayX);
+			        	audioXe= playSound(genArrayX);
 		            	audioYe= playSound(genArrayY);
 		            	audioZe= playSound(genArrayZ);
-
+		            	
+			        	
 			            try {
 			            	audioXe.setPlaybackHeadPosition(audioX.getPlaybackHeadPosition());
 			            	audioYe.setPlaybackHeadPosition(audioY.getPlaybackHeadPosition());
 			            	audioZe.setPlaybackHeadPosition(audioZ.getPlaybackHeadPosition());
 			            	audioXe.attachAuxEffect(echo.getId());
-							audioXe.setAuxEffectSendLevel(1.0f);
+							audioXe.setAuxEffectSendLevel(iecho);
 							audioYe.attachAuxEffect(echo.getId());
-							audioYe.setAuxEffectSendLevel(1.0f);
+							audioYe.setAuxEffectSendLevel(iecho);
 							audioZe.attachAuxEffect(echo.getId());
-							audioZe.setAuxEffectSendLevel(1.0f);
+							audioZe.setAuxEffectSendLevel(iecho);
 							audioXe.play();
 			            	audioYe.play();
 			            	audioZe.play();
@@ -446,7 +459,7 @@ public class PlayerService extends Service {
 			               
 							sleep(500);//tempo in millisecondi
 			            } catch (InterruptedException e) {
-			                // TODO Auto-generated catch block
+			                // atop
 			                e.printStackTrace();
 			            } finally{
 			            	audioXe.play();
@@ -457,13 +470,13 @@ public class PlayerService extends Service {
 			            super.run();
 			        }
 			    };
-			    timer.start();
-			    Thread timer2 = new Thread(){
+			    timer1.start();
+			    timer2 = new Thread(){
 			        @Override
 			        public void run() {
 
 			            try {
-			                sleep(3000);//tempo in millisecondi
+			                sleep(echotime);//tempo in millisecondi
 			            } catch (InterruptedException e) {
 			                // TODO Auto-generated catch block
 			                e.printStackTrace();
@@ -480,6 +493,7 @@ public class PlayerService extends Service {
 							audioYe.release();
 							audioZe.release();
 							echo.release();
+//							interrupt();
 							}
 			            }
 			            super.run();
@@ -631,16 +645,17 @@ synchronized void delay(){
 //					if (audioZ.STATE_INITIALIZED==1){
 //						audioZ.attachAuxEffect(delay.getId());
 //						audioZ.setAuxEffectSendLevel(1.0f);
-////						
+						
+		            	
 //					}
-					/* questi metodi fermano la riproduzione, quello che io definisco drop dell'audiotrack
-					echo.release();
-										*/
-					Thread timer = new Thread(){
+		            	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		            	final int delaytime = preferences.getInt("rdelay", 10);
+		            	final float idelay  = preferences.getInt("idelay", 10)/10;
+		            	
+					timer = new Thread(){
 				        @Override
 				        public void run() {
-				        	
-			            	audioXd= playSound(genArrayX);
+				        	audioXd= playSound(genArrayX);
 			            	audioYd= playSound(genArrayY);
 			            	audioZd= playSound(genArrayZ);
 
@@ -649,13 +664,18 @@ synchronized void delay(){
 				            	audioYd.setPlaybackHeadPosition(audioY.getPlaybackHeadPosition());
 				            	audioZd.setPlaybackHeadPosition(audioZ.getPlaybackHeadPosition());
 				            	audioXd.attachAuxEffect(delay.getId());
-								audioXd.setAuxEffectSendLevel(1.0f);
+								audioXd.setAuxEffectSendLevel(idelay);
 								audioYd.attachAuxEffect(delay.getId());
-								audioYd.setAuxEffectSendLevel(1.0f);
+								audioYd.setAuxEffectSendLevel(idelay);
 								audioZd.attachAuxEffect(delay.getId());
-								audioZd.setAuxEffectSendLevel(1.0f);
-				                
-				                sleep(1000);//tempo in millisecondi
+								audioZd.setAuxEffectSendLevel(idelay);
+								audioXd.play();
+				            	audioYd.play();
+				            	audioZd.play();
+				            	audioXd.pause();
+				            	audioYd.pause();
+				            	audioZd.pause();
+				                sleep(delaytime);//tempo in millisecondi
 				            } catch (InterruptedException e) {
 				                // TODO Auto-generated catch block
 				                e.printStackTrace();
@@ -666,6 +686,7 @@ synchronized void delay(){
 				            	audioZd.play();
 				            	}
 				            }
+				            
 				            super.run();
 				        }
 				    };
@@ -681,10 +702,10 @@ synchronized void delay(){
 //					audioX.attachAuxEffect(nulleffect.getId()); //toglie eventuali effetti aggiunti in precedenza
 //					audioY.attachAuxEffect(nulleffect.getId());	//aggiungendo ad ogni audiotrack un effetto nullo
 //					audioZ.attachAuxEffect(nulleffect.getId());	//come suggerito dalla documentazione
-					audioXd.stop();
-		        	audioYd.stop();
-		        	audioZd.stop();
-		        	
+//					audioXd.stop();
+//		        	audioYd.stop();
+//		        	audioZd.stop();
+//		        	
 					audioXd.release();
 					audioYd.release();
 					audioZd.release();

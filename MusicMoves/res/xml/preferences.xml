@@ -53,7 +53,7 @@
          android:title="Maximum playback duration" 
          android:summary="Maximum duration of a music track" 
          android:defaultValue="1000" 
-         android:max="1000"
+         android:max="300"
          android:progress="0"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"
@@ -76,49 +76,49 @@
      <com.example.musicmoves.SeekBarPreference
           android:key="rdelay" 
           android:title="Delay" 
-          android:summary="Ritardo del Delay" 
-          android:defaultValue="1" 
-          android:max="10"
+          android:summary="Amount of Delay" 
+          android:defaultValue="1000" 
+          android:max="3000"
           android:progress="0" 
-          musicmoves:min="1"
+          musicmoves:min="500"
           musicmoves:unitsLeft=""
-          musicmoves:unitsRight=" sample/second"
+          musicmoves:unitsRight=" millisecond"
           />
      
      <com.example.musicmoves.SeekBarPreference
           android:key="idelay" 
           android:title="Delay" 
-          android:summary="Intensita' del Delay" 
-          android:defaultValue="1" 
+          android:summary="Delay's intensity" 
+          android:defaultValue="7" 
           android:max="10"
           android:progress="0" 
-          musicmoves:min="1"
+          musicmoves:min="0"
           musicmoves:unitsLeft=""
-          musicmoves:unitsRight=" sample/second"
+          musicmoves:unitsRight=" effect volume"
           />
      
      <com.example.musicmoves.SeekBarPreference
           android:key="recho" 
           android:title="Echo" 
-          android:summary="Ritardo Echo" 
-          android:defaultValue="1" 
-          android:max="10"
+          android:summary="Echo duration" 
+          android:defaultValue="1000" 
+          android:max="3000"
           android:progress="0" 
-          musicmoves:min="1"
+          musicmoves:min="0"
           musicmoves:unitsLeft=""
-          musicmoves:unitsRight=" sample/second"
+          musicmoves:unitsRight=" millisecond"
           />
      
      <com.example.musicmoves.SeekBarPreference
           android:key="iecho" 
           android:title="Echo" 
-          android:summary="Intensita' Echo" 
-          android:defaultValue="1" 
+          android:summary="Echo" 
+          android:defaultValue="7" 
           android:max="10"
           android:progress="0" 
-          musicmoves:min="1"
+          musicmoves:min="0"
           musicmoves:unitsLeft=""
-          musicmoves:unitsRight=" sample/second"
+          musicmoves:unitsRight=" effect volume"
           />
     
     </PreferenceCategory>   
