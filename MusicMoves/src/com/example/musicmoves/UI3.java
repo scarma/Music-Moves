@@ -293,7 +293,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 						/*
 					     * 600000
 					     * Abbiamo messo uno sleep di 10 minuti perche' abbiamo stimato che 
-					     * in 5 secondi scrive 0.6 KB quindi non scriverà mai 5 MB in 10 minuti. 
+					     * in 5 secondi scrive 0.6 KB piu' la dimensione dell'immagine che si aggira sui 3.8 KB 
+					     * quindi non riempira' 5 MB in 10 minuti. 
 					     * */
 						Thread.sleep(600000);
 					} catch (InterruptedException e) {
