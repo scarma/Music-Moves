@@ -410,6 +410,10 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		
 			Log.d("onSensorChanged", e.getMessage());
 			//Visualizzo spazio rimanente
+			/*
+			 * Verifico che lo spazio sufficiente nel device.
+			 * Imposto lo spazio minimo richiesto maggiore uguale a 5MB
+			 */
 //			StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
 			StatFs statFs = new StatFs(getFilesDir().getAbsolutePath());
 			@SuppressWarnings("deprecation")
@@ -452,7 +456,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
         return stringBuilder.toString();
     }
 	
-	
 	private void LockScreenRotation() { 
 		// Sets screen rotation as fixed to current rotation setting
 		switch (this.getResources().getConfiguration().orientation)
@@ -468,13 +471,11 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private void UnlockScreenRotation(){ // allow screen rotations
 		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 	}
-	
 
     //crea la thumbnail
 	//metodo che salva un'immagine nella cartella MusicMoves
 	private void storeImage(Bitmap image) {
 		File pictureFile = new File(filepath, filename + ".png");
-		
 		try {
 		FileOutputStream fos = new FileOutputStream(pictureFile);
 		if (!image.compress(Bitmap.CompressFormat.PNG, 100, fos))
@@ -492,9 +493,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		}//fine Try Catch
 	}//fine storeImage
 	
-	
 	public void creaThumbNail(int da, int m, int y, int h, int mi, int s) {
-		
 		 Bitmap bitmap = null;
 		 Bitmap temp1;
 		// Variabili che variano da 0 a 255

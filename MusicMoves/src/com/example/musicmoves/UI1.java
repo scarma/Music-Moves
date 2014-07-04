@@ -78,6 +78,12 @@ public class UI1 extends ListActivity {
 		setContentView(R.layout.activity_ui1);
 		
 		//Visualizzo spazio rimanente
+		/*
+		 * Verifico che lo spazio sufficiente nel device.
+		 * Imposto lo spazio minimo richiesto maggiore uguale a 5MB
+		 * Nel caso in cui non ci fosse abbastanza spazio non e' permesso all'utente di effettuare nuove
+		 * registrazioni.
+		 */
 //		StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
 		StatFs statFs = new StatFs(getFilesDir().getAbsolutePath());
 		@SuppressWarnings("deprecation")
@@ -89,6 +95,10 @@ public class UI1 extends ListActivity {
 			enoughSpace = false;
 		}
 		
+		/*
+		 * Verifico l'effettiva presenza dell'accelerometro nel device e se non e'
+		 * presente non e' permesso all'utente effettuare nuove registrazioni.
+		 */
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		if (mSensorManager == null)
 			hasAccelerometer = false;
@@ -107,6 +117,10 @@ public class UI1 extends ListActivity {
 		super.onResume();
 		
 		//Visualizzo spazio rimanente
+		/*
+		 * Verifico che lo spazio sufficiente nel device.
+		 * Imposto lo spazio minimo richiesto maggiore uguale a 5MB
+		 */
 		StatFs statFs = new StatFs(getFilesDir().getAbsolutePath());
 //		StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
 		@SuppressWarnings("deprecation")
@@ -143,7 +157,6 @@ public class UI1 extends ListActivity {
 		registerForContextMenu(listaV);
 		
 		listaV.setOnItemClickListener(new OnItemClickListener() {
-			
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				// Vado a UI2 toccando elemento della lista
@@ -161,9 +174,11 @@ public class UI1 extends ListActivity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
+		/*
+		 * L'evento click nell'action bar e' gestito qui. La Action Bar 
+		 * gestira' automaticamente i clic sul pulsante Home/Up, cosi' 
+		 * come si specifica un'attività padre in AndroidManifest.xml.
+		 */
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			Intent settings_intent = new Intent(getApplicationContext(), UI5.class);
@@ -195,6 +210,9 @@ public class UI1 extends ListActivity {
 		}
 	}
 	
+	/*
+	 * 
+	 */
 	public void toUI3(View view) 
 	{
 		if (!enoughSpace)
@@ -235,6 +253,12 @@ public class UI1 extends ListActivity {
       menu.setHeaderTitle("Recording " + position);
     }
 	
+	/*
+	 * Gestisco piu' eventi quando l'utente effettua un long-pressed:
+	 * mostro un menu' a tendina con vari pulsanti per
+	 * il play, la cancellazione, la clonazione, la rinomina e i dettagli di
+	 * una registrazione.
+	 */
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item
@@ -264,6 +288,10 @@ public class UI1 extends ListActivity {
 		}
 	}
 
+	/*
+	 * Il metondo cloneRec() mi permette di clonare una registrazione esistente
+	 * e ne creo una nuova con un nome differente che chiedo all'utente.
+	 */
 	private void cloneRec(int position) {
 		p = position;
 //		prelevo tutti i dati della sessione da clonare e ne creo una 
@@ -272,16 +300,16 @@ public class UI1 extends ListActivity {
 		databaseHelper.open();
 		cursor = databaseHelper.fetchASession(list_music[position]);
 		
-		// 1. Instantiate an AlertDialog.Builder with its constructor
+		// 1. Instanzio un AlertDialog.Builder con il suo costruttore
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-		// 2. Chain together various setter methods to set the dialog characteristics
+		// 2. Metodi diversi per impostare le caratteristiche di dialogo
 		builder.setMessage("Insert New Session Name")
 		       .setTitle("Rename Cloned Session");
 		
-		// Set an EditText view to get user input 
+		// Imposto EditText per avere un input dall'utente 
 		final EditText input = new EditText(this);
-		//Input filter to accept only letter or digit
+		//Input filter accetta solo lettere o cifre
 		InputFilter filter = new InputFilter() { 
 			public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) { 
 				for (int i = start; i < end; i++) { 
@@ -317,11 +345,8 @@ public class UI1 extends ListActivity {
 				
 				cursor.moveToFirst();
 				
-//				int id_o = cursor.getInt(0);
 				String name_o = cursor.getString(1);
 				String loc_o = cursor.getString(2);
-//				String date_co = cursor.getString(3);
-//				String date_lmo = cursor.getString(4);
 				String image_o = cursor.getString(5);
 				int sample_o = cursor.getInt(6);
 				int x_o = cursor.getInt(7);
@@ -333,7 +358,7 @@ public class UI1 extends ListActivity {
 				int count = cursor.getInt(0);
 				
 				if(count != 0){
-					//avviso l'utente che ï¿½ giï¿½ esistente una sessione con il nome che vuole inserire
+					//avviso l'utente che e' gia' esistente una sessione con il nome che vuole inserire
 					Toast.makeText(getApplicationContext(), "Name not avaiable, please choose a different name", Toast.LENGTH_LONG).show();
 					cloneRec(p);
 					return;
@@ -374,17 +399,20 @@ public class UI1 extends ListActivity {
 		builder.setNegativeButton(android.R.string.no,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
-//						onBackPressed();
 					}
 				});
 		
-		// 3. Get the AlertDialog from create()
+		// 3. Ottengo un AlertDialog dal create()
 		AlertDialog dialog = builder.create();
 	
 		dialog.show();
 	}
 	
-	public void cloneFileToFile(String filepath, String fileName) {//Legge file come stringa
+	/*
+	 * Il metodo cloneFileToFile() legge i file come stringa
+	 * e mi permette di clonare un file gia' esistente.
+	 */
+	public void cloneFileToFile(String filepath, String fileName) {
         String line = "";
         BufferedReader in = null;
         try {
@@ -399,6 +427,9 @@ public class UI1 extends ListActivity {
         } 
     }
 
+	/*
+	 * Il deleteRec() mi permette di eliminare una registrazione. 
+	 */
 	private void deleteRec(int position) {
 		databaseHelper.open();
 		cursor = databaseHelper.fetchIdSession(list_music[position]);
@@ -418,22 +449,27 @@ public class UI1 extends ListActivity {
 		startActivity(getIntent());
 	}
 	
+	/*
+	 * Il metodo renameRec() mi permette di rinominare una registrazione
+	 * e chiedo all'utente di inserire un nuovo nome e controllo che il nuovo
+	 * nome non sia gia' utilizzato! In quel caso chiedo all'utente di inserire
+	 * un nuovo nome valido per l'inserimento.
+	 */
 	private void renameRec(int position) {
 		p = position;
-//		faccio un semplice update
 		databaseHelper.open();
 		cursor = databaseHelper.fetchASession(list_music[position]);
 		
-		// 1. Instantiate an AlertDialog.Builder with its constructor
+		// 1. Instanzio un AlertDialog.Builder con il suo costruttore
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-		// 2. Chain together various setter methods to set the dialog characteristics
+		// 2. Metodi diversi per impostare le caratteristiche di dialogo
 		builder.setMessage("Insert Session Name")
 		       .setTitle("Rename Session");
 		
-		// Set an EditText view to get user input 
+		//Imposto EditText per avere un input dall'utente
 		final EditText input = new EditText(this);
-		//Input filter to accept only letter or digit
+		//Input filter accetta solo lettere o cifre
 		input.setFilters(getFilter());
 		builder.setView(input);
 		
@@ -441,8 +477,7 @@ public class UI1 extends ListActivity {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-		        // Do something with value!   
-				String value="";
+		        String value="";
 				value = input.getText().toString().toLowerCase(Locale.getDefault());
 				
 				try {
@@ -475,7 +510,7 @@ public class UI1 extends ListActivity {
 				int count = cursor.getInt(0);
 				
 				if(count != 0){
-					//avviso l'utente che ï¿½ giï¿½ esistente una sessione con il nome che vuole inserire
+					//avviso l'utente che e' gia' esistente una sessione con il nome che vuole inserire
 					Toast.makeText(getApplicationContext(), "Name not avaiable, please choose a different name", Toast.LENGTH_LONG).show();
 					renameRec(p);
 					return;
@@ -501,11 +536,10 @@ public class UI1 extends ListActivity {
 		builder.setNegativeButton(android.R.string.no,
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
-//						onBackPressed();
 					}
 				});
 		
-		// 3. Get the AlertDialog from create()
+		// 3. Ottengo AlertDialog dal create()
 		AlertDialog dialog = builder.create();
 		
 		dialog.show();
@@ -527,10 +561,18 @@ public class UI1 extends ListActivity {
 		return new InputFilter[]{filter,lenghtfilter};
 	}
 	
+	/*
+	 * Con il metodo playRec() vado alla UI4 che mi permette di
+	 * ascoltare la registrazione effettuata.
+	 */
 	private void playRec(int position) {
 		runUI4(position);
 	}
 	
+	/*
+	 * Con il metodo detailsRec() vado alla UI2 che mi permette di
+	 * vedere le informazioni sulla registrazione selezionata.
+	 */
 	private void detailsRec(int position) {
 		runUI2(position);
 	}
@@ -548,7 +590,9 @@ public class UI1 extends ListActivity {
 	    startActivity(intent);
 	}
 
-	//crea la thumbnail
+	/*
+	 * crea la thumbnail
+	 */
 	public void creaThumbNail(int da, int m, int y, int h, int mi, int s, String filepath, String filename) {
 			
 		 Bitmap bitmap = null;
@@ -623,5 +667,4 @@ public class UI1 extends ListActivity {
 			Log.d("storeImage", ex.getMessage());
 		}// fine Try Catch
 	}
-		
 }
