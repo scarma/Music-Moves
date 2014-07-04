@@ -233,6 +233,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	/*
 	 * Il metodo Recording permette la registrazione dei dati forniti dall'accelerometro,
 	 * cambia i pulsanti visibili, crea il FileWriter.
+	 * Tenendo conto del numero massimo di sample impostato dall'utente:
+	 * raggiunto il quale la registrazione si blocca.
 	 */
 	public void Recording(View view) { 
 		Toast.makeText(getApplicationContext(), "Recording", Toast.LENGTH_SHORT).show();

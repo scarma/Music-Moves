@@ -105,8 +105,13 @@ public class UI4 extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
+	/*
+	 * Il metodo PlayMusic() permette di ascoltare i dati raccolti dall'accelerometro.
+	 * Opportunamente utilizzati e tenendo conto di tutte le impostazioni che l'utente
+	 * puo' mettere (upsampling, assi, massima durata in playback, sample rate)
+	 * Gestisce i bottoni presenti nell'UI e fa partire il playback music service.
+	 */
 	public void PlayMusic(View view) { 
-		// Play button: starts the playback music service 
 		ImageButton play = (ImageButton) findViewById(R.id.playB);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseB);
 		ImageButton stopUns = (ImageButton) findViewById(R.id.stop_unselectedB);
@@ -170,6 +175,10 @@ public class UI4 extends Activity {
         isPlaying=true;
 	}
 	
+	/*
+	 * PauseMusic() gestisce i bottoni quando metto in pausa la riproduzione
+	 * e mette in pausa anche il service. 
+	 */
 	public void PauseMusic(View view) { 
 		//Pause button
 		ImageButton play = (ImageButton) findViewById(R.id.playB);
@@ -183,6 +192,10 @@ public class UI4 extends Activity {
 		isPlaying=false;
 	}
 	
+	/*
+	 * StopMusic() blocca la riproduzione e il service e rimanda 
+	 * l'utente alla UI di partenza (UI1 o UI2).
+	 */
 	public void StopMusic(View view) { 
 		// Stop button: stops the music by stopping the service 
 		ImageButton play = (ImageButton) findViewById(R.id.playB);
@@ -202,7 +215,11 @@ public class UI4 extends Activity {
 		onBackPressed();
 	}
 	
-	public String intToTime (int time){ 	
+	/*
+	 * intToTime() e' un metodo che mi serve soltanto per trasformare il tempo
+	 * in formato stringa in modo da poterlo visualizare all'utente.
+	 */
+	public String intToTime(int time){ 	
 	    int seconds = time%60;
 	    int minutes = ((time-seconds)/60)%60;
 	    String t = String.format(Locale.getDefault(),"%02d%s%02d", minutes,":",seconds);
@@ -223,13 +240,12 @@ public class UI4 extends Activity {
 		  play.setVisibility(View.VISIBLE);
 		  pause.setVisibility(View.INVISIBLE);
 	  }
-	//Modifica campo textView
+	    //Modifica campo textView
 		TextView textView = (TextView) findViewById(R.id.textViewSessionName);
 	    textView.setTextColor(Color.rgb(255, 153, 0));
 	    textView.setText(sessionName);
 	    mDetector = new GestureDetector(this, new MyGestureListener());
 	    ImageView background = (ImageView)findViewById(R.id.imageView1);
-	   // trova un modo perch� funga background.setOnTouchListener(this);
 	    gestureListener = new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 mDetector.onTouchEvent(event);
@@ -239,27 +255,40 @@ public class UI4 extends Activity {
 	    background.setOnTouchListener(gestureListener);
 	}
 
+	//plus
+	/*
+	 * La classe MyGestureListener serve per riconoscere i gesti dell'utente
+	 * sull'immagine nell'UI4 e applicare al gesto l'effetto corrispondente.
+	 */
 	class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
 	        
 		public boolean onDoubleTap(MotionEvent event){
         	delay();
         	return true;
         }
-	        
+	    
+		/*
+		 * Fa qualcosa MENTRE il dito e' premuto sullo schermo 
+		 * e non rilevo un longpress. 
+		 */
         @Override
         public boolean onDown(MotionEvent event) { 
-        	//fa qualcosa MENTRE il dito e' premuto sullo schermo
-        	//diverso da longpress
-            return true;
+        	return true;
         }
 	        
+        /*
+         * onSingleTapConfirmed() con questo metodo riconosco il singolo tocco
+         * e faccio partire l'effetto echo.
+         */
         public boolean onSingleTapConfirmed(MotionEvent event){
-        	
         	echo();
         	return true;
         }
 	        
-        //occhio, si potrebbe usare anche onScroll, far� una prova
+        /*
+         * onFling() mi permette di riconoscere i movimenti che corrispondono agli
+         * altri effetti e li fa partire quando rileva il gesto corrispondente.
+         */
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
         	  x1=event1.getRawX();
@@ -271,7 +300,7 @@ public class UI4 extends Activity {
         	  
         	  double volume = Math.abs(y2-y1);
 	
-        	  //fixati i parametri perch� faceva un pelino fatica a riconoscere i movimenti giusti
+        	  //fixati i parametri perche' faceva un pelino fatica a riconoscere i movimenti giusti
 	        	  
     	      // right to left
 	          if(x1 - x2 > 20 && Math.abs(y1-y2) < 100 ) {
@@ -295,6 +324,10 @@ public class UI4 extends Activity {
 	     }  	
 	}//fine classe
 
+	/*
+	 * Con il metodo echo() faccio partire l'effetto attraverso il service
+	 * che viene oppurtunamente chiamato.
+	 */
 	public void echo(){
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
 		i.putExtra(PlayerService.ECHO, true);
@@ -302,6 +335,10 @@ public class UI4 extends Activity {
 		startService(i);		
 	}
 	
+	/*
+	 * Con il metodo delay() faccio partire l'effetto attraverso il service
+	 * che viene oppurtunamente chiamato.
+	 */
 	public void delay(){
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
 		i.putExtra(PlayerService.DELAY, true); 
@@ -309,6 +346,10 @@ public class UI4 extends Activity {
 		startService(i);
 	}
 	
+	/*
+	 * Con il metodo volume() faccio partire l'effetto attraverso il service
+	 * che viene oppurtunamente chiamato.
+	 */
 	public void volume(boolean up, double volume){
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
 		i.putExtra(PlayerService.VOLUME, true); 
@@ -317,6 +358,10 @@ public class UI4 extends Activity {
 		startService(i); 
 	}
 
+	/*
+	 * Con il metodo spped() faccio partire l'effetto attraverso il service
+	 * che viene oppurtunamente chiamato.
+	 */
 	public void speed(boolean up, int intensity){
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
 		i.putExtra(PlayerService.SPEED, true);
