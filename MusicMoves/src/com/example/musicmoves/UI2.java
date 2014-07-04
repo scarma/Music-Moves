@@ -126,16 +126,18 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
+		// Inflate the menu; questo aggiunge elementi alla barra delle azioni, se è presente.
 		getMenuInflater().inflate(R.menu.ui2, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
+		/*
+		 * L'evento click nell'action bar e' gestito qui. La Action Bar 
+		 * gestira' automaticamente i clic sul pulsante Home/Up, cosi' 
+		 * come si specifica un'attività padre in AndroidManifest.xml.
+		 */
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			Intent settings_intent = new Intent(getApplicationContext(), UI5.class);
@@ -145,7 +147,10 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 		return super.onOptionsItemSelected(item);
 	}
 	
-	//Metodo unico per i checkbox, per il momento li riconosce e se li clicchiamo manda un toast
+	/*
+	 * Il metodo aggiorna() aggiorna direttamente su db quali assi
+	 * l'utente ha selezionato o deselezionato.
+	 */
 	public void aggiorna (View view){
 		databaseHelper = new DBAdapter(getApplicationContext());
 		databaseHelper.open();
@@ -188,7 +193,10 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 		databaseHelper.close();
 	}//fine aggiona
 	
-	
+	/*
+	 * Con il metodo rinomina() permetto all'utente di rinominare la
+	 * registrazione
+	 */
 	public void rinomina (View view){
 		
 		EditText editText = (EditText) findViewById(R.id.editTextRename);
@@ -258,6 +266,10 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 	}
 	
 	//metodi che devono essere implementati
+	/*
+	 *Con questo metodo rilevo la modifica dell'upsampling attraverso la seekbar
+	 *e aggiorno direttamente su db.  
+	 */
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 		progress+=100;
 		TextView text = (TextView)findViewById(R.id.textViewUpsampling);
@@ -277,6 +289,11 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 	public void onStopTrackingTouch(SeekBar seekBar) {
 	}
 	
+	/*
+	 * toUI4() mi permette di andare alla UI4 dove posso
+	 * ascoltare la registrazione con le eventuali modifiche
+	 * alle sue impostazioni fatte.
+	 */
 	public void toUI4(View view) 
 	{
 		Intent intent = new Intent(getApplicationContext(), UI4.class);
