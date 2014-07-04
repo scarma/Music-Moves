@@ -54,7 +54,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	private int year;
 	private String date = null;
 	private DBAdapter databaseHelper;
-	private Cursor cursor; //salvare stato
+	private Cursor cursor;
 	private int sampleCnt = 0;
 	private VerticalProgressBar progressBarX;
     private VerticalProgressBar progressBarY;
@@ -63,7 +63,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
     Calendar c;
     private int maxDurationRec;
     public EditText input;
-//    Bundle savedState;
 	private static boolean isStopped;
 	@Override
 	protected void onCreate(Bundle savedInstancestate) {
@@ -154,7 +153,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 
 		alert.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 			  public void onClick(DialogInterface dialog, int whichButton) {
-			    // Canceled.
+			    // Annullato l'inserimento, torno all'UI precedente.
 				 onBackPressed();
 				    
 			  }
@@ -170,15 +169,14 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	        
 	    
 	    if (savedInstancestate != null) {
-	        //Restore value of members from saved state
-	    	//Ripristina i valori dello stato precendente dell'istanza.
+	    	//Ripristina i valori dello stato precendente dell'istanza del dialog.
 	    	String value=savedInstancestate.getString("alert");
 	    	if (value!=null){
 	    		input.setText(value);
 	    		input.setSelection(value.length());
 	    	}
 	    } else {
-	        //Probabilmente inizializza i membri con i valori predefiniti per una nuova istanza.
+	    	//Niente salvato, non serve ripristinare.
 	    }	    
 	}
 	
@@ -189,10 +187,11 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		super.onSaveInstanceState(outState);
 	}
 	
+	/*
+	 * Il metodo onCreateOptionsMenu() aggiunge il menù.
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
-		// Inflate the menu; questo aggiunge elementi alla barra delle azioni, se è presente.
 		getMenuInflater().inflate(R.menu.ui3, menu);
 		return true;
 	}
@@ -225,8 +224,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	/*
 	 * Il metodo Recording permette la registrazione dei dati forniti dall'accelerometro,
 	 * cambia i pulsanti visibili, crea il FileWriter.
-	 * Tenendo conto del numero massimo di sample impostato dall'utente:
-	 * raggiunto il quale la registrazione si blocca.
+	 * Tiene conto del numero massimo di sample impostato dall'utente,
+	 * Raggiunto il limite, la registrazione viene conclusa.
 	 * Inoltre mostro 3 progressBar che indicano i valori letti dai 3 assi x, y e z
 	 * dell'accelerometro e mostro il numero di sample registrati.
 	 * I valori delle progressBar vengono settati nel metodo onSensorChanged().
@@ -283,7 +282,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 					});
 					try {
 						/*
-					     * 600000
 					     * Abbiamo messo uno sleep di 10 minuti perche' abbiamo stimato che 
 					     * in 5 secondi scrive 0.6 KB piu' la dimensione dell'immagine che si aggira sui 3.8 KB 
 					     * quindi non riempira' 5 MB in 10 minuti. 
@@ -312,7 +310,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	
 	/*
 	 * Il metodo Paused() manda in pausa la registrazione,
-	 * cambia pulsanti visibili e chiude il FileWriter se aperto.
+	 * cambia pulsanti visibili e chiude il FileWriter aperto.
 	 */
 	public void Paused(View view) { 
 		isStopped = true;
@@ -338,7 +336,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	 * Il metodo Stopped() blocca e quindi fa terminare la registrazione
 	 * reindirizzando l'utente sulla UI1 che contiene tutte le registrazioni
 	 * fatte finora dall'utente stesso.
-	 * Inoltre cambia pulsanti visibili, chiude il FileWriter,
+	 * Inoltre cambia pulsanti visibili e chiude il FileWriter.
 	 */
 	public void Stopped(View view) { 
 	    isStopped = true;
@@ -409,7 +407,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		//Quando l'accelerometro ascolta scrive su file
+		//Ogni nuovo dato dell'accelerometro prendo i valori e li scrivo su file di testo
 		
 	    final float x = event.values[0];
 	    final float y = event.values[1];
@@ -453,7 +451,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	/*
 	 * Con il metodo LockScreenRotation() blocco la rotazione dello schermo
 	 * in fase di registrazione.
-	 * Lo schermo e' bloccato nella modalita' con cui l'utente e' entrato nella UI3.
+	 * Lo schermo e' bloccato dopo che l'utente ha inserito il nome per la registrazione
 	 */
 	private void LockScreenRotation() { 
 		switch (this.getResources().getConfiguration().orientation)
