@@ -93,9 +93,9 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		alert.setTitle("New Recording Session");
 		alert.setMessage("Insert Session Name");
 
-		// Set an EditText view to get user input 
+		//Imposto EditText per avere un input dall'utente
 		input = new EditText(this);
-		//Input filter to accept only letter or digit
+		//Input filter accetta solo lettere o cifre
 		InputFilter filter = new InputFilter() { 
 	        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) { 
 	        		
@@ -113,7 +113,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				LockScreenRotation(); 
 				String value="";
-				
 				value = input.getText().toString().toLowerCase(Locale.getDefault());
 				try {
 					value = value.substring(0, 1).toUpperCase(
@@ -124,7 +123,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 					value = "Rec";
 				}
 				
-				//controllo che il nuovo nome non sia giï¿½ presente nel db
+				//controllo che il nuovo nome non sia gia' presente nel db
 				databaseHelper = new DBAdapter(getApplicationContext());
 				databaseHelper.open();
 				cursor = databaseHelper.NameSessionAsExist(value);
@@ -134,7 +133,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 				cursor.close();
 				
 				if(count != 0){
-					//avviso l'utente che ï¿½ giï¿½ esistente una sessione con il nome che vuole inserire
+					//avviso l'utente che e' gia' esistente una sessione con il nome che vuole inserire
 					Toast.makeText(getApplicationContext(), "Name not avaiable, please choose a different name", Toast.LENGTH_LONG).show();
 					finish();
 					startActivity(getIntent());
@@ -174,20 +173,20 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		
 		dialog=alert.show();
 		
-		
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 	    mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 	        
 	    
 	    if (savedInstancestate != null) {
-	        // Restore value of members from saved state
+	        //Restore value of members from saved state
+	    	//Ripristina i valori dello stato precendente dell'istanza.
 	    	String value=savedInstancestate.getString("alert");
 	    	if (value!=null){
 	    		input.setText(value);
 	    		input.setSelection(value.length());
 	    	}
 	    } else {
-	        // Probably initialize members with default values for a new instance
+	        //Probabilmente inizializza i membri con i valori predefiniti per una nuova istanza.
 	    }	    
 	}
 	
@@ -201,16 +200,18 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
-		// Inflate the menu; this adds items to the action bar if it is present.
+		// Inflate the menu; questo aggiunge elementi alla barra delle azioni, se è presente.
 		getMenuInflater().inflate(R.menu.ui3, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
+		/*
+		 * L'evento click nell'action bar e' gestito qui. La Action Bar 
+		 * gestira' automaticamente i clic sul pulsante Home/Up, cosi' 
+		 * come si specifica un'attività padre in AndroidManifest.xml.
+		 */
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			Intent settings_intent = new Intent(getApplicationContext(), UI5.class);
@@ -229,8 +230,11 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		finish();
 	}
 
+	/*
+	 * Il metodo Recording permette la registrazione dei dati forniti dall'accelerometro,
+	 * cambia i pulsanti visibili, crea il FileWriter.
+	 */
 	public void Recording(View view) { 
-		//Cambia pulsanti visibili, crea il FileWriter, ascolta i dati accelerometro
 		Toast.makeText(getApplicationContext(), "Recording", Toast.LENGTH_SHORT).show();
 	    progressBarX = (VerticalProgressBar) findViewById(R.id.progressX);
 		progressBarY = (VerticalProgressBar) findViewById(R.id.progressY);
@@ -259,7 +263,12 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 					runOnUiThread(new Runnable() {
 						public void run() {
 							try {
-								//check spazio rimanente
+								//Visualizzo spazio rimanente
+								/*
+								 * Verifico che lo spazio sufficiente nel device.
+								 * Imposto lo spazio minimo richiesto maggiore uguale a 5MB
+								 * Nel caso in cui non ci fosse abbastanza spazio blocco la registrazione.
+								 */
 								StatFs statFs = new StatFs(getFilesDir().getAbsolutePath());
 //								StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getAbsolutePath());
 								@SuppressWarnings("deprecation")
@@ -276,6 +285,11 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 						}
 					});
 					try {
+						/*
+					     * 600000
+					     * Abbiamo messo uno sleep di 10 minuti perche' abbiamo stimato che 
+					     * in 5 secondi scrive 0.6 KB quindi non scriverà mai 5 MB in 10 minuti. 
+					     * */
 						Thread.sleep(600000);
 					} catch (InterruptedException e) {
 						isStopped = true;
@@ -284,10 +298,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			}
 		});
 		thread.start();
-	    /*
-	     * Da dire al prof!
-	     * 600000 -> In 5 secondi scrive 0.6 KB non scriverà mai 5 MB in 10 minuti 
-	     * */
+	    
 	    try {
 			writer = new FileWriter(new File(filepath, filename+".txt"), true);
 		} catch (IOException e) {
@@ -297,13 +308,16 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
 		maxDurationRec = preferences.getInt("maxRecTime", 10);
 	    int sampleRate = 1000*1000/preferences.getInt("sampleRate", 5);
-	    mSensorManager.registerListener(this, mAccelerometer , sampleRate);//SensorManager.SENSOR_DELAY_NORMAL
+	    mSensorManager.registerListener(this, mAccelerometer , sampleRate);
 	    isAccelListening = true;
 
 	}
 	
+	/*
+	 * Il metodo Paused() manda in pausa la registrazione,
+	 * cambia pulsanti visibili e chiude il FileWriter se aperto.
+	 */
 	public void Paused(View view) { 
-		//Cambia pulsanti visibili, chiude il FileWriter se aperto
 		isStopped = true;
 		Toast.makeText(getApplicationContext(), "Recording paused", Toast.LENGTH_SHORT).show();	
 		ImageButton rec = (ImageButton) findViewById(R.id.recButton);
@@ -324,9 +338,14 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    mSensorManager.unregisterListener(this, mAccelerometer);
 	}
 	
+	/*
+	 * Il metodo Stopped() blocca e quindi fa terminare la registrazione
+	 * reindirizzando l'utente sulla UI1 che contine tutte le registrazioni
+	 * fatte finora dall'utente stesso.
+	 * Inoltre cambia pulsanti visibili, chiude il FileWriter se aperto,
+	 * mostra dati registrati e cancella il file.
+	 */
 	public void Stopped(View view) { 
-		//Cambia pulsanti visibili, chiude il FileWriter se aperto,
-		//mostra dati registrati e cancella il file
 	    isStopped = true;
 
 		ImageButton rec = (ImageButton) findViewById(R.id.recButton);
@@ -420,7 +439,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			int   Free   = (int)(statFs.getAvailableBlocks() * statFs.getBlockSize()) / 1048576;
 			if(Free <= 5)
 				Toast.makeText(getApplicationContext(), "Space free to disk: "+ Free + " MB", Toast.LENGTH_LONG).show();
-			
 		}
 	    sampleCnt++;
 	    TextView sampleCounter = (TextView)findViewById(R.id.textViewSampleCounter); //Contatore Samples
@@ -438,7 +456,9 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    	Stopped(null);
         }
 	}
-
+	/*
+	 * Scarma lo lascio a te!
+	 */
 	public String readFileAsString(String fileName) {
 		//Legge file come stringa
         StringBuilder stringBuilder = new StringBuilder();
@@ -456,6 +476,11 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
         return stringBuilder.toString();
     }
 	
+	/*
+	 * Con il metodo LockScreenRotation() blocco la rotazione dello schermo
+	 * in fase di registrazione.
+	 * Lo schermo e' bloccato nella modalita' con cui l'utente e' entrato nella UI3.
+	 */
 	private void LockScreenRotation() { 
 		// Sets screen rotation as fixed to current rotation setting
 		switch (this.getResources().getConfiguration().orientation)
@@ -468,12 +493,17 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		} 
 	}
 	
-	private void UnlockScreenRotation(){ // allow screen rotations
+	/*
+	 * Con il metodo UnlockScreenRotation() sblocco la rotazione dello schermo.
+	 */
+	private void UnlockScreenRotation(){
 		this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 	}
 
-    //crea la thumbnail
-	//metodo che salva un'immagine nella cartella MusicMoves
+    /*
+     * storeImage() crea la thumbnail
+     * ed e' il metodo che salva un'immagine nella cartella MusicMoves
+     */
 	private void storeImage(Bitmap image) {
 		File pictureFile = new File(filepath, filename + ".png");
 		try {
