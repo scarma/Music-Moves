@@ -31,17 +31,16 @@ public class UI4 extends Activity {
     public static boolean isStopped;
 	private boolean isPlaying;
 	
-	//parte del progetto plus
+	//Parte del progetto plus
 	public float x1, x2 , y1 , y2;
 	private GestureDetector mDetector;
 	private View.OnTouchListener gestureListener;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		setVolumeControlStream(AudioManager.STREAM_MUSIC); //aumenta volume musica anche se in pausa
+		setVolumeControlStream(AudioManager.STREAM_MUSIC); //Aumenta volume musica anche se in pausa
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ui4);	
-		// Get the message from the intent
 		Intent intent = getIntent();
 	    sessionName = intent.getStringExtra(UI1.EXTRA_MESSAGE);
 		//Modifica campo textView
@@ -51,7 +50,6 @@ public class UI4 extends Activity {
 	    PlayMusic(null);
 	    mDetector = new GestureDetector(this, new MyGestureListener());
 	    ImageView background = (ImageView)findViewById(R.id.imageView1);
-	   // trova un modo perche' funzioni background.setOnTouchListener(this);
 	    gestureListener = new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 mDetector.onTouchEvent(event);
@@ -61,16 +59,10 @@ public class UI4 extends Activity {
 	    background.setOnTouchListener(gestureListener);
    }
 	
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();	
-	}
-	
+	/*
+	 * Il metodo onCreateOptionsMenu() aggiunge il menù 
+	 * che consente di tornare a UI1, UI2 o UI5.
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -80,9 +72,6 @@ public class UI4 extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_details) {
 			Intent intent = new Intent(getApplicationContext(), UI2.class);
@@ -106,10 +95,11 @@ public class UI4 extends Activity {
 	}
 	
 	/*
-	 * Il metodo PlayMusic() permette di ascoltare i dati raccolti dall'accelerometro.
-	 * Opportunamente utilizzati e tenendo conto di tutte le impostazioni che l'utente
-	 * puo' mettere (upsampling, assi, massima durata in playback, sample rate)
-	 * Gestisce i bottoni presenti nell'UI e fa partire il playback music service.
+	 * Il metodo PlayMusic() permette di far partire il PlayerService
+	 * e gestisce i bottoni presenti nell'UI.
+	 * Inoltre fa partire il thread che gestisce l'aggiornamento della
+	 * ProgressBar e delle TextView a seconda del tempo di riproduzione
+	 * e della durata delle tracce audio
 	 */
 	public void PlayMusic(View view) { 
 		ImageButton play = (ImageButton) findViewById(R.id.playB);
@@ -177,7 +167,7 @@ public class UI4 extends Activity {
 	
 	/*
 	 * PauseMusic() gestisce i bottoni quando metto in pausa la riproduzione
-	 * e mette in pausa anche il service. 
+	 * e manda l'intent al service che mette in pausa le AudioTrack. 
 	 */
 	public void PauseMusic(View view) { 
 		//Pause button
@@ -216,8 +206,8 @@ public class UI4 extends Activity {
 	}
 	
 	/*
-	 * intToTime() e' un metodo che mi serve soltanto per trasformare il tempo
-	 * in formato stringa in modo da poterlo visualizare all'utente.
+	 * intToTime() e' un metodo per trasformare i tempi
+	 * in formato stringa in modo da poterli mostrare correttamente all'utente.
 	 */
 	public String intToTime(int time){ 	
 	    int seconds = time%60;
@@ -226,10 +216,6 @@ public class UI4 extends Activity {
 	    return t;
 	}
 
-	public void onBackPressed() {
-		super.onBackPressed();
-	}
-	
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 	  super.onConfigurationChanged(newConfig);
@@ -359,7 +345,7 @@ public class UI4 extends Activity {
 	}
 
 	/*
-	 * Con il metodo spped() faccio partire l'effetto attraverso il service
+	 * Con il metodo speed() faccio partire l'effetto attraverso il service
 	 * che viene oppurtunamente chiamato.
 	 */
 	public void speed(boolean up, int intensity){

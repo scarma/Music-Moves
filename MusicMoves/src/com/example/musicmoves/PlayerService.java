@@ -25,7 +25,16 @@ import android.widget.Toast;
 import database.DBAdapter;
 
 public class PlayerService extends Service {
-	
+	/*
+	 * Qui viene fatta l'intera elaborazione del file di testo
+	 * contenente i dati dell'accelerometro, suddividendoli in 3 array,
+	 * trasformando i 3 array in altri 3 array "sonori",
+	 * fino ad ottenere le 3 tracce audio (audioX, audioY, audioZ)
+	 * che vengono poi mandate in riproduzione simultaneamente.
+	 * Inoltre vengono creati gli effetti echo, delay
+	 * e viene gestito il cambiamento di volume(amplitude)
+	 * e di velocità(sampleRate) delle tracce.
+	 */
 	 private String message;
 	 public static String PLAY = "BGPlay";
 	 public static String PAUSE = "BGPause";
