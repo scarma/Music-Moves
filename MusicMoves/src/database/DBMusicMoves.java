@@ -25,8 +25,7 @@ public class DBMusicMoves extends SQLiteOpenHelper {
 	    FeedEntry.COLUMN_NAME_X + " INTEGER" + COMMA_SEP +
 	    FeedEntry.COLUMN_NAME_Y + " INTEGER" + COMMA_SEP +
 	    FeedEntry.COLUMN_NAME_Z + " INTEGER" + COMMA_SEP +
-	    "UNIQUE (" + FeedEntry.COLUMN_NAME_TITLE + /*COMMA_SEP + 
-	    FeedEntry.COLUMN_NAME_IMAGE +*/ ")" +
+	    "UNIQUE (" + FeedEntry.COLUMN_NAME_TITLE + ")" +
 	    " )";
 	
 	private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + FeedEntry.TABLE_NAME;
