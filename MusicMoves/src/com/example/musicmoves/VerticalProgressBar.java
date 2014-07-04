@@ -22,8 +22,7 @@ public class VerticalProgressBar extends ProgressBar{
     }
 
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(h, w, oldh, oldw);
-        
+        super.onSizeChanged(h, w, oldh, oldw);        
         this.x = w;
         this.y = h;
         this.z = oldw;
@@ -44,13 +43,10 @@ public class VerticalProgressBar extends ProgressBar{
         super.onDraw(c);
     }
 
-
     @Override
     public synchronized void setProgress(int progress) {
-    	
         if (progress >= 0)
             super.setProgress(progress);
-
         else
             super.setProgress(0);
         onSizeChanged(x, y, z, w);

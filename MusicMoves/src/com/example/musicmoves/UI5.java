@@ -11,29 +11,27 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
-
-
 public class UI5 extends PreferenceActivity {
 	
 	@SuppressWarnings("deprecation")
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        Carica le preferences dal file preferences.xml
+//      Carica le preferences dal file preferences.xml
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);       
         addPreferencesFromResource(R.xml.preferences);
     } 
       
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
-//		 Aggiunge menù
+//		Aggiunge menù
 		getMenuInflater().inflate(R.menu.ui5, menu);
 		return true;
 	}
+	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-//		 Permette di riportare le impostazioni ai parametri di default
+//		Permette di riportare le impostazioni ai parametri di default
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			SharedPreferences mPreferences= PreferenceManager.getDefaultSharedPreferences (this);
@@ -47,7 +45,4 @@ public class UI5 extends PreferenceActivity {
 			}
 		return true;
 	}
-	
-		
-	
 }

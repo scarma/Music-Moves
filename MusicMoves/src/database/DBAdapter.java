@@ -11,7 +11,7 @@ import database.FeedReaderContract.FeedEntry;
 
 public class DBAdapter {
 
-	//@SuppressWarnings("unused")
+   	  //@SuppressWarnings("unused")
 	  //private static final String LOG_TAG = DBAdapter.class.getSimpleName();
 	        
 	  private Context context;

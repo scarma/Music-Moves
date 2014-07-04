@@ -89,8 +89,7 @@ public class PlayerService extends Service {
 		 
 		 return Service.START_STICKY;
 	 } 
-	 
-	
+	 	
 	 private synchronized void pause() {
 		if (!isPlaying) return;
 		isPlaying = false;
@@ -121,15 +120,10 @@ public class PlayerService extends Service {
 			audioXd.pause();
 			audioYd.pause();
 			audioZd.pause();
-	//        	nulleffect.release();
-				
-//				timer.interrupt();
-			
 		    } 
 		}
 		catch(NullPointerException e){
 			//Gli effetti non sono attivi, non serve metterli in pausa
-
 		}
 	   
 	}
@@ -150,7 +144,6 @@ public class PlayerService extends Service {
 	        audioY.play();
 	        audioZ.play();	
 	        initialized = true;
-	        
 	     }
 	     else {
 			    Log.d("AudioTrack", "Audiotrack not initialized");
@@ -159,7 +152,6 @@ public class PlayerService extends Service {
 		 // supplying the ongoing notification to be shown to the user 
 		 Intent intent = new Intent(this, UI4.class);
 		 intent.putExtra(UI1.EXTRA_MESSAGE, message);
-//		 intent.putExtra("my", "false");//
 		 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP); 
 		 PendingIntent pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT); 
 		 Notification notification = new NotificationCompat.Builder(getApplicationContext()) 
@@ -169,8 +161,7 @@ public class PlayerService extends Service {
 		 .setContentIntent(pi) // Required on Gingerbread and below 
 		 .build(); 
 		 final int notificationID = 7071727; //An ID for this notification unique within the app 
-		 startForeground(notificationID, notification); 
-		 
+		 startForeground(notificationID, notification);		 
 	}
 	
 	 private void stop() { 
@@ -218,7 +209,6 @@ public class PlayerService extends Service {
 					delay.release();
 				} 
 			}//Fine try
-			
 	        catch (NullPointerException e){ 
 			    Log.d("AudioTrack", "Audiotrack not initialized");
 			    return;
@@ -227,7 +217,9 @@ public class PlayerService extends Service {
 	 } 
 	
 	 @Override 
-	 public void onDestroy() { stop(); } 
+	 public void onDestroy() { 
+		 stop(); 
+     } 
 	 
 	 static AudioTrack audioX;
 	 static AudioTrack audioY;
@@ -293,8 +285,6 @@ public class PlayerService extends Service {
         } 
     }
 	
-	
-	 
      public byte[] genTone(double[] x, int cnt){
         // fill out the array
     	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
@@ -431,10 +421,7 @@ public class PlayerService extends Service {
 	 }
 	 
 	 synchronized void volume(boolean up, double intensity){
-
-
-		if(isPlaying == true){
-			
+		if(isPlaying == true){			
 //			Modifichiamo l'ampezza delle tracce audio(amplitude), 
 //			otteniamo la posizione di riproduzione, rilasciamo le audiotrack
 //			e le ricreiamo con l'ampiezza aggiornata (proSoundGenerator)
@@ -475,12 +462,11 @@ public class PlayerService extends Service {
 		audioX.play();
 		audioY.play();
 		audioZ.play();
-		
 		}//fine isplaying==true
 	 }//fine volume
 	
 	 synchronized void speed(boolean direction, int quantity){
-//			Stessa cosa che per il metodo volume. Solo che al posto di amplitude modifico il sampleRate
+//		Stessa cosa che per il metodo volume. Solo che al posto di amplitude modifico il sampleRate
 		if(isPlaying == true){
 
 		int maxrate, minrate, actualrate;
@@ -530,9 +516,7 @@ public class PlayerService extends Service {
 	 }
 	
 	 synchronized void delay(){
-
 		if (isPlaying == true){
-			
 				if (isDelaying == false){
 					isDelaying = true;
 					showToast( "Delay on");

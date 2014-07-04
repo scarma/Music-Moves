@@ -47,7 +47,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 import database.DBAdapter;
 
-
 public class UI1 extends ListActivity {
 	
 	public final static String EXTRA_MESSAGE = "com.example.MusicMoves.MESSAGE";
@@ -71,7 +70,6 @@ public class UI1 extends ListActivity {
 	private SensorManager mSensorManager;
 	private Sensor mAccelerometer;
 	private boolean hasAccelerometer;
-	
 	
 	@SuppressLint("Recycle")
 	@Override
@@ -132,8 +130,7 @@ public class UI1 extends ListActivity {
 			if (cursor.isAfterLast())
 				break;
 			list_music[i] = cursor.getString(1);
-			cursor.moveToNext();
-			
+			cursor.moveToNext();		
 		}
 		databaseHelper.close();
 		cursor.close();
@@ -153,9 +150,6 @@ public class UI1 extends ListActivity {
 				runUI2(position);
 			}
 		});  
-		
-		
-		
 	}
 	
 	@Override
@@ -200,6 +194,7 @@ public class UI1 extends ListActivity {
 			return rootView;
 		}
 	}
+	
 	public void toUI3(View view) 
 	{
 		if (!enoughSpace)
@@ -212,7 +207,6 @@ public class UI1 extends ListActivity {
 	    finish();
 		}
 	}
-	
 	
 	@Override
 	public void onBackPressed() {
@@ -230,7 +224,6 @@ public class UI1 extends ListActivity {
 	            }
 	        }).create().show();
 	}
-	
 	
 	@Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
@@ -387,7 +380,7 @@ public class UI1 extends ListActivity {
 		
 		// 3. Get the AlertDialog from create()
 		AlertDialog dialog = builder.create();
-		
+	
 		dialog.show();
 	}
 	
@@ -441,19 +434,6 @@ public class UI1 extends ListActivity {
 		// Set an EditText view to get user input 
 		final EditText input = new EditText(this);
 		//Input filter to accept only letter or digit
-//		InputFilter filter = new InputFilter() { 
-//			public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) { 
-//				for (int i = start; i < end; i++) { 
-//					if (!Character.isLetterOrDigit(source.charAt(i))) { 
-//						return ""; 
-//					} 
-//				} 
-//				return null; 
-//			} 
-//		};
-//		//Input filter per accettare file al massimo di 10 caratteri
-//		InputFilter lenghtfilter = new InputFilter.LengthFilter(10);
-//		input.setFilters(new InputFilter[]{filter,lenghtfilter});
 		input.setFilters(getFilter());
 		builder.setView(input);
 		
@@ -530,7 +510,6 @@ public class UI1 extends ListActivity {
 		
 		dialog.show();
 	}
-	//pisello
 	
 	public static InputFilter[] getFilter(){
 		InputFilter filter = new InputFilter() { 
@@ -569,88 +548,80 @@ public class UI1 extends ListActivity {
 	    startActivity(intent);
 	}
 
-	 //crea la thumbnail
-		public void creaThumbNail(int da, int m, int y, int h, int mi, int s, String filepath, String filename) {
+	//crea la thumbnail
+	public void creaThumbNail(int da, int m, int y, int h, int mi, int s, String filepath, String filename) {
 			
-			 Bitmap bitmap = null;
-			 Bitmap temp1;
-			// Variabili che variano da 0 a 255
-			int a, b, c, d, e, f;
-			
-			e= da*255/31;
-			d= m*255/12;
-			a= y%255;
-			c= h*255/60;
-			b= mi*255/60;
-			f= s*255/60;
+		 Bitmap bitmap = null;
+		 Bitmap temp1;
+		// Variabili che variano da 0 a 255
+		int a, b, c, d, e, f;
 		
-			//	Log.d("Valori:",a+" "+b+" "+c+" "+d+" "+e+" "+f);
+		e= da*255/31;
+		d= m*255/12;
+		a= y%255;
+		c= h*255/60;
+		b= mi*255/60;
+		f= s*255/60;
 			
-			// Inizializza colori
-			int primo, secondo, terzo, quarto, quinto, sesto;
-//			primo =   Color.rgb(a, b, c); //sfondo
-//			secondo = Color.rgb(d, e, f); //2
-//			terzo =   Color.rgb(a, c, e); //3
-//			quarto =  Color.rgb(b, d, f); //1
-//			quinto =  Color.rgb(f, e, c); //altoparlante interno
-//			sesto =   Color.rgb(a, d, b); //altoparlante
-			primo =   Color.rgb(a, b, f); //sfondo
-			secondo = Color.rgb(d, e, f); //2
-			terzo =   Color.rgb(c, f, e); //3
-			quarto =  Color.rgb(f, d, b); //1
-			quinto =  Color.rgb(f, e, c); //altoparlante interno
-			sesto =   Color.rgb(a, d, b); //altoparlante
+		// Inizializza colori
+		int primo, secondo, terzo, quarto, quinto, sesto;
+		primo =   Color.rgb(a, b, f); //sfondo
+		secondo = Color.rgb(d, e, f); //2
+		terzo =   Color.rgb(c, f, e); //3
+		quarto =  Color.rgb(f, d, b); //1
+		quinto =  Color.rgb(f, e, c); //altoparlante interno
+		sesto =   Color.rgb(a, d, b); //altoparlante
+	
+		//Prende la bitmap dalla cartella res/raw/
+	    try {
+	      bitmap = BitmapFactory.decodeResource(getResources(),R.raw.icon_trasp_play);
+	    	} 
+	    catch (Exception ex) {
+	      ex.printStackTrace();
+	    }	
+	    
+	   temp1 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
+	   
+	   //Scrive nuova bitmap in base ai colori
+	   int pixels[]= new int[bitmap.getWidth()*bitmap.getHeight()];
+	   bitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+	    for (int i=0; i<pixels.length; i++){
+	    	if (pixels[i]==Color.WHITE){
+	    		pixels[i]=primo;
+	    	}
+	    	else if (pixels[i]==Color.BLUE){
+	    		pixels[i]=secondo;
+	    	}
+	    	else if (pixels[i]==Color.GREEN){
+	    		pixels[i]=terzo;
+	    	}
+	    	else if (pixels[i]==Color.YELLOW){
+	    		pixels[i]=quarto;
+	    	}
+	    	else if (pixels[i]==Color.BLACK){
+	    		pixels[i]=quinto;
+	    	}
+	    	else if (pixels[i]==Color.RED){
+	    		pixels[i]=sesto;
+	    	}
+	    	else if (pixels[i]==Color.TRANSPARENT){
+	    		pixels[i]=Color.TRANSPARENT;
+	    	}
+	    	else pixels[i]=primo;
+	    	
+	    }
+	    temp1.setPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+	    
+	    File pictureFile = new File(filepath, filename + ".png");
 		
-			//Prende la bitmap dalla cartella res/raw/
-		    try {
-		      bitmap = BitmapFactory.decodeResource(getResources(),R.raw.icon_trasp_play);
-		    	} 
-		    catch (Exception ex) {
-		      ex.printStackTrace();
-		    }	
-		    
-		   temp1 = bitmap.copy(Bitmap.Config.ARGB_8888, true);
-		   
-		   //Scrive nuova bitmap in base ai colori
-		   int pixels[]= new int[bitmap.getWidth()*bitmap.getHeight()];
-		   bitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
-		    for (int i=0; i<pixels.length; i++){
-		    	if (pixels[i]==Color.WHITE){
-		    		pixels[i]=primo;
-		    	}
-		    	else if (pixels[i]==Color.BLUE){
-		    		pixels[i]=secondo;
-		    	}
-		    	else if (pixels[i]==Color.GREEN){
-		    		pixels[i]=terzo;
-		    	}
-		    	else if (pixels[i]==Color.YELLOW){
-		    		pixels[i]=quarto;
-		    	}
-		    	else if (pixels[i]==Color.BLACK){
-		    		pixels[i]=quinto;
-		    	}
-		    	else if (pixels[i]==Color.RED){
-		    		pixels[i]=sesto;
-		    	}
-		    	else if (pixels[i]==Color.TRANSPARENT){
-		    		pixels[i]=Color.TRANSPARENT;
-		    	}
-		    	else pixels[i]=primo;
-		    	
-		    }
-		    temp1.setPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
-		    
-		    File pictureFile = new File(filepath, filename + ".png");
-			
-			try {
-				FileOutputStream fos = new FileOutputStream(pictureFile);
-				if (!temp1.compress(Bitmap.CompressFormat.PNG, 100, fos))
-					Log.d("storeImage", "Error compressing file!");
-				fos.close();
-			} catch (IOException ex) {
-				Log.d("storeImage", ex.getMessage());
-			}// fine Try Catch
-		}
+		try {
+			FileOutputStream fos = new FileOutputStream(pictureFile);
+			if (!temp1.compress(Bitmap.CompressFormat.PNG, 100, fos))
+				Log.d("storeImage", "Error compressing file!");
+			fos.close();
+		} catch (IOException ex) {
+			Log.d("storeImage", ex.getMessage());
+		}// fine Try Catch
+	}
 		
 }

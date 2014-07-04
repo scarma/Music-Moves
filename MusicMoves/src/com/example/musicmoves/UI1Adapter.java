@@ -17,14 +17,10 @@ import database.DBAdapter;
 public class UI1Adapter extends ArrayAdapter<String> {
 	//Adapter per la riga con immagine, titolo e date nella UI1
 	public final static String EXTRA_MESSAGE = "com.example.MusicMoves.MESSAGE";
-    private LayoutInflater mInflater;
- 
+    private LayoutInflater mInflater; 
     private String[] list_music;
-    
     private int mIdLayout;
-
     private Context ctx;
-	
 	private DBAdapter databaseHelper;
 	private Cursor cursor;
  
@@ -32,11 +28,8 @@ public class UI1Adapter extends ArrayAdapter<String> {
         super(ctx, IdLayout, strings);
         //Istanzia il layout definito dall'xml nella sua View corrispondente
         mInflater = (LayoutInflater)ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
- 
         this.ctx=ctx;
-        
         list_music = strings;
-        
         mIdLayout = IdLayout;
     }
  

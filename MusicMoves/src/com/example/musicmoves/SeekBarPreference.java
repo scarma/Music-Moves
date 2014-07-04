@@ -80,7 +80,6 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 	@Override
 	protected View onCreateView(ViewGroup parent) {
 		View view = super.onCreateView(parent);
-		
 		// The basic preference layout puts the widget frame to the right of the title and summary,
 		// so we need to change it a bit - the seekbar should be under them.
 		LinearLayout layout = (LinearLayout) view;
@@ -93,7 +92,6 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 	@Override
 	public void onBindView(View view) {
 		super.onBindView(view);
-
 		try {
 			// move our seekbar to the new view we've been given
 			ViewParent oldContainer = mSeekBar.getParent();
@@ -113,22 +111,19 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 		catch(Exception ex) {
 			Log.e(TAG, "Error binding view: " + ex.toString());
 		}
-		
 		//if dependency is false from the beginning, disable the seek bar
 		if (view != null && !view.isEnabled())
 		{
 			mSeekBar.setEnabled(false);
 		}
-		
 		updateView(view);
 	}
     
-    	/**
+     /**
 	 * Update a SeekBarPreference view with our current state
 	 * @param view
 	 */
 	protected void updateView(View view) {
-
 		try {
 			mStatusText = (TextView) view.findViewById(R.id.seekBarPrefValue);
 
@@ -142,18 +137,15 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 			
 			TextView unitsLeft = (TextView)view.findViewById(R.id.seekBarPrefUnitsLeft);
 			unitsLeft.setText(mUnitsLeft);
-			
 		}
 		catch(Exception e) {
 			Log.e(TAG, "Error updating seek bar preference", e);
 		}
-		
 	}
 	
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 		int newValue = progress + mMinValue;
-		
 		if(newValue > mMaxValue)
 			newValue = mMaxValue;
 		else if(newValue < mMinValue)
@@ -171,29 +163,25 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 		mCurrentValue = newValue;
 		mStatusText.setText(String.valueOf(newValue));
 		persistInt(newValue);
-
 	}
 
 	@Override
-	public void onStartTrackingTouch(SeekBar seekBar) {}
+	public void onStartTrackingTouch(SeekBar seekBar) {
+	}
 
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) {
 		notifyChanged();
 	}
 
-
 	@Override 
 	protected Object onGetDefaultValue(TypedArray ta, int index){
-		
 		int defaultValue = ta.getInt(index, DEFAULT_VALUE);
-		return defaultValue;
-		
+		return defaultValue;		
 	}
 
 	@Override
 	protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-
 		if(restoreValue) {
 			mCurrentValue = getPersistedInt(mCurrentValue);
 		}
@@ -205,11 +193,9 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 			catch(Exception ex) {
 				Log.e(TAG, "Invalid default value: " + defaultValue.toString());
 			}
-			
 			persistInt(temp);
 			mCurrentValue = temp;
 		}
-		
 	}
 	
 	/**
@@ -224,7 +210,6 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 	@Override
 	public void onDependencyChanged(Preference dependency, boolean disableDependent) {
 		super.onDependencyChanged(dependency, disableDependent);
-		
 		//Disable movement of seek bar when dependency is false
 		if (mSeekBar != null)
 		{
@@ -232,5 +217,3 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 		}
 	}
 }
-
-

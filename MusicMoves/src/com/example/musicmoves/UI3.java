@@ -87,7 +87,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    this.setTitle("Create A New Recording Session");
 	    setContentView(R.layout.activity_ui3);
 	    
-	  //Pop up dialog
+        //Pop up dialog
 		AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		
 		alert.setTitle("New Recording Session");
@@ -188,14 +188,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    	}
 	    } else {
 	        // Probably initialize members with default values for a new instance
-	    }
-	    
-//		if (savedInstanceState == null) {	//duplicava il layout con questo
-//			getSupportFragmentManager().beginTransaction()
-//					.add(R.id.container, new PlaceholderFragment()).commit();
-//		}
-	    
-	    
+	    }	    
 	}
 	
 	@Override
@@ -236,27 +229,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		finish();
 	}
 
-//	/**
-//	 * A placeholder fragment containing a simple view.
-//	 */
-//	public static class PlaceholderFragment extends Fragment {
-//
-//		public PlaceholderFragment() {
-//		}
-//
-//		@Override
-//		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//				Bundle savedInstanceState) {
-//			View rootView = inflater.inflate(R.layout.fragment_ui3, container,
-//					false);
-//			return rootView;
-//		}
-//	}
-	
-
-
-
-	public void Recording(View view) { //Cambia pulsanti visibili, crea il FileWriter, ascolta i dati accelerometro
+	public void Recording(View view) { 
+		//Cambia pulsanti visibili, crea il FileWriter, ascolta i dati accelerometro
 		Toast.makeText(getApplicationContext(), "Recording", Toast.LENGTH_SHORT).show();
 	    progressBarX = (VerticalProgressBar) findViewById(R.id.progressX);
 		progressBarY = (VerticalProgressBar) findViewById(R.id.progressY);
@@ -277,9 +251,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		stopSel.setVisibility(View.VISIBLE);
 		super.onResume();
 		
-	    
 		isStopped = false;
-
 	    
 		Thread thread = new Thread(new Runnable() {
 			public void run() {
@@ -316,12 +288,10 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	     * Da dire al prof!
 	     * 600000 -> In 5 secondi scrive 0.6 KB non scriverà mai 5 MB in 10 minuti 
 	     * */
-		
 	    try {
 			writer = new FileWriter(new File(filepath, filename+".txt"), true);
 		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
+			// TODO Auto-generated catch block
 			Log.d("Recording", e.getMessage());
 		}
 	    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
@@ -331,9 +301,9 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    isAccelListening = true;
 
 	}
-	//TODO: add sampleRate from preferences
 	
-	public void Paused(View view) { //Cambia pulsanti visibili, chiude il FileWriter se aperto
+	public void Paused(View view) { 
+		//Cambia pulsanti visibili, chiude il FileWriter se aperto
 		isStopped = true;
 		Toast.makeText(getApplicationContext(), "Recording paused", Toast.LENGTH_SHORT).show();	
 		ImageButton rec = (ImageButton) findViewById(R.id.recButton);
@@ -354,8 +324,9 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    mSensorManager.unregisterListener(this, mAccelerometer);
 	}
 	
-	public void Stopped(View view) { //Cambia pulsanti visibili, chiude il FileWriter se aperto,
-									 //mostra dati registrati e cancella il file
+	public void Stopped(View view) { 
+		//Cambia pulsanti visibili, chiude il FileWriter se aperto,
+		//mostra dati registrati e cancella il file
 	    isStopped = true;
 
 		ImageButton rec = (ImageButton) findViewById(R.id.recButton);
@@ -424,7 +395,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	}
 	
 	@Override
-	public void onSensorChanged(SensorEvent event) {//Quando l'accel. ascolta scrive su file
+	public void onSensorChanged(SensorEvent event) {
+		//Quando l'accelerometro ascolta scrive su file
 		
 	    final float x = event.values[0];
 	    final float y = event.values[1];
@@ -457,14 +429,14 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    progressBarX.postInvalidate();
 	    progressBarY.postInvalidate();
 	    progressBarZ.postInvalidate();
-	    
 
-
-	    if(sampleCnt>maxDurationRec)
-        {Stopped(null);}
+	    if(sampleCnt>maxDurationRec){
+	    	Stopped(null);
+        }
 	}
 
-	public String readFileAsString(String fileName) {//Legge file come stringa
+	public String readFileAsString(String fileName) {
+		//Legge file come stringa
         StringBuilder stringBuilder = new StringBuilder();
         String line="";
         BufferedReader in = null;
@@ -476,14 +448,13 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
            Log.d("readFileAsString", e.getMessage());
         } catch (IOException e) {
         	Log.d("readFileAsString", e.getMessage()); 
-        } 
-        
+        }
         return stringBuilder.toString();
-        
     }
 	
 	
-	private void LockScreenRotation() { // Sets screen rotation as fixed to current rotation setting
+	private void LockScreenRotation() { 
+		// Sets screen rotation as fixed to current rotation setting
 		switch (this.getResources().getConfiguration().orientation)
 		{   case Configuration.ORIENTATION_PORTRAIT:     
 				this.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -536,16 +507,8 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		b= mi*255/60;
 		f= s*255/60;
 	
-		//	Log.d("Valori:",a+" "+b+" "+c+" "+d+" "+e+" "+f);
-		
 		// Inizializza colori
 		int primo, secondo, terzo, quarto, quinto, sesto;
-//		primo =   Color.rgb(a, b, c); //sfondo
-//		secondo = Color.rgb(d, e, f); //2
-//		terzo =   Color.rgb(a, c, e); //3
-//		quarto =  Color.rgb(b, d, f); //1
-//		quinto =  Color.rgb(f, e, c); //altoparlante interno
-//		sesto =   Color.rgb(a, d, b); //altoparlante
 		primo =   Color.rgb(a, b, f); //sfondo
 		secondo = Color.rgb(d, e, f); //2
 		terzo =   Color.rgb(c, f, e); //3
@@ -593,33 +556,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    }
 	    temp1.setPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
 	    
-	storeImage(temp1);
+	    storeImage(temp1);
 	}
-	
-	
-  
-	
-	
-    
-	
-//	private void ThumbnailFromDateCreator(int date, int month, int year, int hour, int minute, int second){
-//		Bitmap _buffer;
-//        ArrayList<GraphicObject> _graphics = new ArrayList<GraphicObject>();
-//        int width = 40;
-//        int height = 40; 
-//		int colors[] = new int[width*height];
-//         for (int x = 0; x<width ; x++) {
-//             for (int y = 0; y<height ; y++){
-//                 int r = ((date/31)-(hour/24))*255;
-//                 int b = ((month/12-(minute/60))*255;
-//                 int g = ((year/1900-(second/60))*255;
-//                 int a = 255;
-//                 colors[x + y * width] = (a << 24) | (r << 16) | (g << 8) | b;
-//             }
-//         }
-//         Canvas canvas=_surfaceHolder.lockCanvas(null);
-//         _buffer = Bitmap.createBitmap(colors, width, height, Bitmap.Config.RGB_565);
-//         canvas.drawBitmap(_buffer, 0, 0, null);
-//	}
-	
 }

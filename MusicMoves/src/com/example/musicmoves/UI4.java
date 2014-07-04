@@ -31,7 +31,7 @@ public class UI4 extends Activity {
     public static boolean isStopped;
 	private boolean isPlaying;
 	
-	//plus
+	//parte del progetto plus
 	public float x1, x2 , y1 , y2;
 	private GestureDetector mDetector;
 	private View.OnTouchListener gestureListener;
@@ -51,56 +51,28 @@ public class UI4 extends Activity {
 	    PlayMusic(null);
 	    mDetector = new GestureDetector(this, new MyGestureListener());
 	    ImageView background = (ImageView)findViewById(R.id.imageView1);
-	   // trova un modo perch� funga background.setOnTouchListener(this);
+	   // trova un modo perche' funzioni background.setOnTouchListener(this);
 	    gestureListener = new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent event) {
                 mDetector.onTouchEvent(event);
                 return true;
             }
         };
-	    
-	    
-/*	    background.setOnTouchListener(new OnTouchListener() {
-	        @Override
-	        public boolean onTouch(final View view, final MotionEvent event) {
-	           return mDetector.onTouchEvent(event);
-	        }
-	     });*/
 	    background.setOnTouchListener(gestureListener);
-
-	  
    }
-	
-	
 	
 	@Override
 	protected void onPause() {
-	//TODO: Salvare lo stato
 		super.onPause();
 	}
 
 	@Override
 	protected void onResume() {
-	//TODO: Ripristinare lo stato
-		
-		  
-	    //plus 
-	    
-		
-		super.onResume();
-//		Intent intent = getIntent();
-//		boolean startedbyme=intent.getBooleanExtra("my", false);
-//		if (startedbyme)
-//			Toast.makeText(this, "Lanciato da me", Toast.LENGTH_SHORT).show();
-		
-		
-		
-		
+		super.onResume();	
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.ui4, menu);
 		return true;
@@ -130,11 +102,11 @@ public class UI4 extends Activity {
 			startActivity(intent);
 			return true;
 		}
-		
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public void PlayMusic(View view) { //// Play button: starts the playback music service 
+	public void PlayMusic(View view) { 
+		// Play button: starts the playback music service 
 		ImageButton play = (ImageButton) findViewById(R.id.playB);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseB);
 		ImageButton stopUns = (ImageButton) findViewById(R.id.stop_unselectedB);
@@ -196,13 +168,10 @@ public class UI4 extends Activity {
 		});
 		thread.start();
         isPlaying=true;
-//		Context context = getApplicationContext();
-//		super.onResume();   
-		
 	}
 	
-	
-	public void PauseMusic(View view) { //Pause button
+	public void PauseMusic(View view) { 
+		//Pause button
 		ImageButton play = (ImageButton) findViewById(R.id.playB);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseB);
 		pause.setVisibility(View.INVISIBLE);
@@ -212,10 +181,10 @@ public class UI4 extends Activity {
 		i.putExtra(PlayerService.PAUSE, true); 
 		startService(i); 
 		isPlaying=false;
-		
 	}
 	
-	public void StopMusic(View view) { // Stop button: stops the music by stopping the service 
+	public void StopMusic(View view) { 
+		// Stop button: stops the music by stopping the service 
 		ImageButton play = (ImageButton) findViewById(R.id.playB);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseB);
 		ImageButton stopUns = (ImageButton) findViewById(R.id.stop_unselectedB);
@@ -234,27 +203,16 @@ public class UI4 extends Activity {
 	}
 	
 	public String intToTime (int time){ 	
-		 int seconds = time%60;
-		 int minutes = ((time-seconds)/60)%60;
-		 String t = String.format(Locale.getDefault(),"%02d%s%02d", minutes,":",seconds);
-		 return t;
-	   }
+	    int seconds = time%60;
+	    int minutes = ((time-seconds)/60)%60;
+	    String t = String.format(Locale.getDefault(),"%02d%s%02d", minutes,":",seconds);
+	    return t;
+	}
 
 	public void onBackPressed() {
-		//TODO: CHE ROBA �! SISTEMARE ON BACK PRESSED Grazie
-//		String s = "my";
-//		Intent intent = getIntent();
-//		boolean back = intent.getBooleanExtra(s, false);
-//		String back = getIntent().getExtras().getString("my");
-		
-//		Bundle extras=getIntent().getExtras();
-//		boolean back = extras.getBoolean("my",false);
-//		
-//		if(back)
-			super.onBackPressed();
-//		else
-//			startActivity(new Intent(UI4.this, UI1.class));
+		super.onBackPressed();
 	}
+	
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 	  super.onConfigurationChanged(newConfig);
@@ -278,127 +236,80 @@ public class UI4 extends Activity {
                 return true;
             }
         };
-	    
-	    
-/*	    background.setOnTouchListener(new OnTouchListener() {
-	        @Override
-	        public boolean onTouch(final View view, final MotionEvent event) {
-	           return mDetector.onTouchEvent(event);
-	        }
-	     });*/
 	    background.setOnTouchListener(gestureListener);
-
-		
-	  
 	}
-	
-	
-	
-	
-	//parte per il plus
-	
-	
-	/*
-	 * 
-	 * questo metodo gestirebbe tutti gli eventi possibili che non sono gia' gestiti da altri metodi
-	 * percio' restituisce tantissimi toast quando clicckiamo fuori dall'imageview
-	 @Override 
-	    public boolean onTouchEvent(MotionEvent event){ 
-//	        this.mDetector.onTouchEvent(event);
-//	        return super.onTouchEvent(event);
-     	Toast.makeText(getApplicationContext(), "Evento non gestito ", Toast.LENGTH_SHORT).show();
 
-		 return true;
-	    }
-	   */ 
+	class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+	        
+		public boolean onDoubleTap(MotionEvent event){
+        	delay();
+        	return true;
+        }
+	        
+        @Override
+        public boolean onDown(MotionEvent event) { 
+        	//fa qualcosa MENTRE il dito e' premuto sullo schermo
+        	//diverso da longpress
+            return true;
+        }
+	        
+        public boolean onSingleTapConfirmed(MotionEvent event){
+        	
+        	echo();
+        	return true;
+        }
+	        
+        //occhio, si potrebbe usare anche onScroll, far� una prova
+        @Override
+        public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
+        	  x1=event1.getRawX();
+        	  x2=event2.getRawX();
+        	  y1=event1.getRawY();
+        	  y2=event2.getRawY();
+        	  int quantity = (int)Math.abs(x2-x1)+1000;
+        	  if (quantity > 2000) quantity =2000;
+        	  
+        	  double volume = Math.abs(y2-y1);
 	
-	
-	//int dimensioni = background
-	    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
-	      
-	    	
-	        
-	        public boolean onDoubleTap(MotionEvent event){
-	        	delay();
-	        	return true;
-	        }
-	        
-	        @Override
-	        public boolean onDown(MotionEvent event) { 
-	        	//fa qualcosa MENTRE il dito � premuto sullo schermo
-	        	//diverso da longpress
-	            return true;
-	        }
-	        
-	        public boolean onSingleTapConfirmed(MotionEvent event){
-	        	
-	        	echo();
-	        	return true;
-	        }
-	        //occhio, si potrebbe usare anche onScroll, far� una prova
-	        @Override
-	        public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
-	        	  x1=event1.getRawX();
-	        	  x2=event2.getRawX();
-	        	  y1=event1.getRawY();
-	        	  y2=event2.getRawY();
-	        	  int quantity = (int)Math.abs(x2-x1)+1000;
-	        	  if (quantity > 2000) quantity =2000;
+        	  //fixati i parametri perch� faceva un pelino fatica a riconoscere i movimenti giusti
 	        	  
-	        	  double volume = Math.abs(y2-y1);
-	
-	        	  //fixati i parametri perch� faceva un pelino fatica a riconoscere i movimenti giusti
-	        	  
-	        	        // right to left
-	        	        if(x1 - x2 > 20 && Math.abs(y1-y2) < 100 ) {
-//	        	        	Toast.makeText(getApplicationContext(), "SX " + (velocityX), Toast.LENGTH_SHORT).show();
-	        	        	speed(false, quantity);
-	        	            return true;
-	        	        }
-	        	        // left to right
-	        	        else if (x2-x1 > 20 && Math.abs(y1-y2) < 100) {
-//	        	        	Toast.makeText(getApplicationContext(), "DX " + (velocityX), Toast.LENGTH_SHORT).show();
-	        	        	speed(true, quantity);
-	        	            return true; 
-	        	        }
-	        	        
-	        	        
-	        	        else if (y1-y2 > 20 && Math.abs(x1-x2) < 100){
-//	        	        	Toast.makeText(getApplicationContext(), "drag su " + (velocityY), Toast.LENGTH_SHORT).show();
-	        	        	volume(true, volume);
-	        	        	return true;
-	        	        }
-	        	        
-	        	        else if (y2-y1 > 20 && Math.abs(x1-x2) < 100){
-//	        	        	Toast.makeText(getApplicationContext(), "drag giu " + (velocityY), Toast.LENGTH_SHORT).show();
-	        	        	volume(false, volume);
-	        	        	return true;
-	        	        }
-	        	       return true;
-	        }
-	        	
-	    }//fine classe
-	    
-
+    	      // right to left
+	          if(x1 - x2 > 20 && Math.abs(y1-y2) < 100 ) {
+	          	  speed(false, quantity);
+    	          return true;
+    	      }
+    	      // left to right
+	          else if (x2-x1 > 20 && Math.abs(y1-y2) < 100) {
+    	          speed(true, quantity);
+    	          return true; 
+	          }
+	          else if (y1-y2 > 20 && Math.abs(x1-x2) < 100){
+	        	  volume(true, volume);
+	        	  return true;
+	          }
+	          else if (y2-y1 > 20 && Math.abs(x1-x2) < 100){
+	        	   volume(false, volume);
+	        	   return true;
+	          }
+	          return true;
+	     }  	
+	}//fine classe
 
 	public void echo(){
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
 		i.putExtra(PlayerService.ECHO, true);
 		i.putExtra(EXTRA_MESSAGE, sessionName);
-		startService(i); 
-		
+		startService(i);		
 	}
 	
 	public void delay(){
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
 		i.putExtra(PlayerService.DELAY, true); 
 		i.putExtra(EXTRA_MESSAGE, sessionName);
-		startService(i); 
-		
+		startService(i);
 	}
 	
 	public void volume(boolean up, double volume){
-		
 		Intent i = new Intent(getApplicationContext(),PlayerService.class); 
 		i.putExtra(PlayerService.VOLUME, true); 
 		i.putExtra("up", up);
@@ -412,30 +323,5 @@ public class UI4 extends Activity {
 		i.putExtra("up", up); 
 		i.putExtra("intensity", intensity);
 		startService(i); 
-	}
-	
-//	public class call_reciver extends BroadcastReceiver{
-//
-//		@Override
-//	    public void onReceive(Context context, Intent intent) {
-//	        // TODO Auto-generated method stub
-//
-//	        String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
-////	        String number = "";
-////	        Bundle bundle = intent.getExtras();
-//
-//	        if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
-//	            // Phone is ringing
-////	            number = bundle.getString("incoming_number");
-//	        	PauseMusic(null);
-//	        } else if (state.equals(TelephonyManager.EXTRA_STATE_OFFHOOK)) {
-//	            // Call received
-//	        	PlayMusic(null);
-//	        } else if (state.equals(TelephonyManager.EXTRA_STATE_IDLE)) {
-//	            // Call Dropped or rejected
-//	        	PlayMusic(null);
-//	        }
-//		}
-//	}//fine classe interna
-	
+	}	
 }

@@ -54,8 +54,7 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 	protected void onStart() {
 		super.onStart();
 	}
-	
-	
+		
 	@Override
 	protected void onPause() {
 		if(modify){
@@ -94,6 +93,7 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 			cursor.moveToFirst();
 			ImageView iv = (ImageView) findViewById(R.id.imageThumb);
 			Display display = getWindowManager().getDefaultDisplay();
+			@SuppressWarnings("deprecation")
 			int w = display.getWidth();
 		    Bitmap bitmapScaled = Bitmap.createScaledBitmap(BitmapFactory.decodeFile(cursor.getString(5)+message+".png"), 2*w/5, 2*w/5, false);
 	        iv.setImageBitmap(bitmapScaled);
@@ -186,7 +186,7 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 		}//fine asse z
 		
 		databaseHelper.close();
-}//fine aggiona
+	}//fine aggiona
 	
 	
 	public void rinomina (View view){
@@ -257,7 +257,6 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 	    startActivity(intent);
 	}
 	
-	
 	//metodi che devono essere implementati
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 		progress+=100;
@@ -269,6 +268,7 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 		databaseHelper.close();
 		modify=true;
 	}
+	
 	@Override
 	public void onStartTrackingTouch(SeekBar seekBar) {
 	}
@@ -290,4 +290,5 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 		// TODO Auto-generated method stub
 		super.onBackPressed();
 	}
+	
 }
