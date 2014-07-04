@@ -19,6 +19,7 @@ public class UI5 extends PreferenceActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        Carica le preferences dal file preferences.xml
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);       
         addPreferencesFromResource(R.xml.preferences);
     } 
@@ -26,15 +27,13 @@ public class UI5 extends PreferenceActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
-//		 Inflate the menu; this adds items to the action bar if it is present.
+//		 Aggiunge menù
 		getMenuInflater().inflate(R.menu.ui5, menu);
 		return true;
 	}
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-//		 Handle action bar item clicks here. The action bar will
-//		 automatically handle clicks on the Home/Up button, so long
-//		 as you specify a parent activity in AndroidManifest.xml.
+//		 Permette di riportare le impostazioni ai parametri di default
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			SharedPreferences mPreferences= PreferenceManager.getDefaultSharedPreferences (this);

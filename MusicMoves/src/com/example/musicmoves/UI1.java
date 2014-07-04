@@ -105,12 +105,6 @@ public class UI1 extends ListActivity {
     }
 	
 	@Override
-	protected void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
-	}
-	
-	@Override
 	protected void onResume() {
 		super.onResume();
 		
@@ -128,7 +122,7 @@ public class UI1 extends ListActivity {
 		
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
 
-		//lettura dal database        
+		//Lettura dal database        
 		databaseHelper = new DBAdapter(getApplicationContext());
 		databaseHelper.open();
 		cursor = databaseHelper.fetchAllSession();
@@ -146,7 +140,7 @@ public class UI1 extends ListActivity {
 		
 		adapter = new UI1Adapter(this, R.layout.riga_lista, list_music);
 		setListAdapter(adapter);
-		//da qui inseriamo il codice utile a mostrare un messaggio al click
+		//Da qui inseriamo il codice utile a mostrare un messaggio al click
 		ListView listaV = getListView();
 		listaV.setTextFilterEnabled(true);
 		registerForContextMenu(listaV);
@@ -155,7 +149,7 @@ public class UI1 extends ListActivity {
 			
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				// vado a UI2 toccando elemento della lista
+				// Vado a UI2 toccando elemento della lista
 				runUI2(position);
 			}
 		});  
@@ -164,12 +158,6 @@ public class UI1 extends ListActivity {
 		
 	}
 	
-	@Override
-	protected void onPause() {
-	//TODO: Salvare lo stato
-		super.onPause();
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
@@ -269,7 +257,7 @@ public class UI1 extends ListActivity {
 			if (enoughSpace) {
 				cloneRec(info.position);
 			} else
-				// TODO da sistemare
+				//Avverte l'utente che non c'è abbastanza spazio disponibile in memoria
 				Toast.makeText(getApplicationContext(), "Warning, not enough disk space! Cloning record not allowed. Free some space first!", Toast.LENGTH_LONG).show();
 			return true;
 		case R.id.rename:
@@ -437,7 +425,7 @@ public class UI1 extends ListActivity {
 		startActivity(getIntent());
 	}
 	
-	private void renameRec(int position) {//TODO: Sistemare, non funzionante
+	private void renameRec(int position) {
 		p = position;
 //		faccio un semplice update
 		databaseHelper.open();

@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.widget.ProgressBar;
 
 public class VerticalProgressBar extends ProgressBar{
+//	ProgressBar verticale mostrata nella UI3 in fase di registrazione
     private int x, y, z, w;
 
     public VerticalProgressBar(Context context) {
@@ -37,6 +38,7 @@ public class VerticalProgressBar extends ProgressBar{
     }
 
     protected void onDraw(Canvas c) {
+//    	Ruota la progress bar in modo che sia verticale
         c.rotate(-90);
         c.translate(-getHeight(), 0);
         super.onDraw(c);
