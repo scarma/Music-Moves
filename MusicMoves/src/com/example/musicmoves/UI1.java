@@ -652,7 +652,6 @@ public class UI1 extends ListActivity {
 	    		pixels[i]=Color.TRANSPARENT;
 	    	}
 	    	else pixels[i]=primo;
-	    	
 	    }
 	    temp1.setPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
 	    

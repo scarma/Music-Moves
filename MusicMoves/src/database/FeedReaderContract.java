@@ -2,6 +2,13 @@ package database;
 
 import android.provider.BaseColumns;
 
+/*
+ * La classe FeedReaderContract contiene i nomi delle colonne del database.
+ * Abbiamo fatto questa scelta di progettazione (in una classe separata) in modo
+ * che in futuro se si vuole cambiare nome ad una variabile e/o toglierne
+ * e/o aggiungerne lo si fa in un unico luogo, cioe' in questa classe.
+ * Quindi senza dover modificare altre parti del codice dell'applicazione.
+ */
 public class FeedReaderContract {
 	/* Inner class that defines the table contents */
 	public static abstract class FeedEntry implements BaseColumns {

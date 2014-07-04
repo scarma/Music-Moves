@@ -5,6 +5,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/*
+ * La classe DBMusicMoves mi permette di creare e/o aggiornare
+ * in una versione superiore il database.
+ * Inoltre mi permette di tornare alle versioni precedenti
+ * del database. 
+ */
 public class DBMusicMoves extends SQLiteOpenHelper {
 	
 	public static final String DB_NAME = "DBMusicMoves.db";
@@ -13,6 +19,7 @@ public class DBMusicMoves extends SQLiteOpenHelper {
 	private static final String TEXT_TYPE = " TEXT";
 	private static final String COMMA_SEP = ",";
 
+	//questa stringa contine la create table dell'unica tabella del nostro database.
 	private static final String SQL_CREATE_ENTRIES =
 	    "CREATE TABLE " + FeedEntry.TABLE_NAME + " (" +
 	    FeedEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + COMMA_SEP +

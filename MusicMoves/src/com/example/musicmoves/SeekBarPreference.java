@@ -13,6 +13,11 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
+/*
+ * La classe SeekBarPreference permette di gestire le preferenze utilizzando le SeekBar.
+ * Implementando i vari metodi settiamo i valori di default delle SeekBar, salviamo i valori e
+ * ripristiniamo i valori salvati.  
+ */
 public class SeekBarPreference extends Preference implements OnSeekBarChangeListener {
 	//Preference per le Seekbar, utilizzata nella UI5
 	private final String TAG = getClass().getName();

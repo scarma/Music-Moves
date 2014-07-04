@@ -9,11 +9,11 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import database.FeedReaderContract.FeedEntry;
 
-public class DBAdapter {
-
-   	  //@SuppressWarnings("unused")
-	  //private static final String LOG_TAG = DBAdapter.class.getSimpleName();
-	        
+/*
+ * La classe DBAdapter ci permette di implementare tutte le query
+ * che dobbiamo eseguire per interagire con il nostro database.
+ */
+public class DBAdapter {	        
 	  private Context context;
 	  private SQLiteDatabase database;
 	  private DBMusicMoves dbHelper;
@@ -47,31 +47,31 @@ public class DBAdapter {
 	   return values;
 	  }
 	        
-	  //create a music session
+	  //creo un'istanza nel database: cioe' mi permette di inserire una nuova riga che corrisponde ad una nuova registrazione
 	  public long createSession(String title, String location, String date_c, String date_m, String image, int sample_rate, int x, int y, int z) {
 	    ContentValues initialValues = createContentValues(title, location+"/", date_c, date_m, image, sample_rate, x, y, z);
 	    return database.insertOrThrow(FeedEntry.TABLE_NAME, null, initialValues);
 	  }
 
-	  //update a music session
+	  //mi permette di aggiornare un'istanza all'interno del db.
 	  public boolean updateSession( long id, String title, String location, String date_c, String date_m, String image, int sample_rate, int x, int y, int z){
 	    ContentValues updateValues = createContentValues(title, location, date_c, date_m, image, sample_rate, x, y, z);
 	    return database.update(FeedEntry.TABLE_NAME, updateValues, FeedEntry._ID + "=" + id, null) > 0;
 	  }
 	                
-	  //delete a music session      
+	  //cancello un'istanza dal db     
 	  public boolean deleteSession(long id) {
 	    return database.delete(FeedEntry.TABLE_NAME, FeedEntry._ID + "=" + id, null) > 0;
 	  }
 
-	  //fetch all music sessions order by name
+	  //rilevo tutte le istanze presenti nel db.
 	  public Cursor fetchAllSession() {
 		return database.query(FeedEntry.TABLE_NAME, new String[] {FeedEntry._ID, FeedEntry.COLUMN_NAME_TITLE, FeedEntry.COLUMN_NAME_LOCATION, 
 	    		FeedEntry.COLUMN_NAME_DATE_CREATION, FeedEntry.COLUMN_NAME_LAST_MODIFY, FeedEntry.COLUMN_NAME_IMAGE, FeedEntry.COLUMN_NAME_UPSAMPLING, 
 	    		FeedEntry.COLUMN_NAME_X, FeedEntry.COLUMN_NAME_Y, FeedEntry.COLUMN_NAME_Z}, null, null, null, null, FeedEntry.COLUMN_NAME_TITLE);
 	  }
 	  
-	  //fetch music sessions filter by a string
+	  //rilevo un'istanza in particolare all'interno del db.
 	  public Cursor fetchSessionByFilter(String filter) {
 	    Cursor mCursor = database.query(true, FeedEntry.TABLE_NAME, new String[] {FeedEntry._ID, FeedEntry.COLUMN_NAME_TITLE, FeedEntry.COLUMN_NAME_LOCATION, 
 	    		FeedEntry.COLUMN_NAME_DATE_CREATION, FeedEntry.COLUMN_NAME_LAST_MODIFY, FeedEntry.COLUMN_NAME_IMAGE, FeedEntry.COLUMN_NAME_UPSAMPLING, 
@@ -81,7 +81,7 @@ public class DBAdapter {
 	    return mCursor;
 	  }
 	  
-	  //fetch id and location in a music session filter by a session name
+	  //leggo id e location in un'istanza attraverso il nome del record.
 	  public Cursor fetchIdSession(String name){
 		  Cursor mCursor = database.query(FeedEntry.TABLE_NAME, new String[]{FeedEntry._ID, FeedEntry.COLUMN_NAME_LOCATION}, 
 				  FeedEntry.COLUMN_NAME_TITLE + " like '%"+ name + "%'", null, null, null, null);
@@ -89,19 +89,19 @@ public class DBAdapter {
 		  return mCursor;
 	  }
 	  
-	  //
+	  //leggo tutto di un'istanza attraverso il nome del record.
 	  public Cursor fetchASession(String name) {
 	      return database.query(FeedEntry.TABLE_NAME, new String[] {FeedEntry._ID, FeedEntry.COLUMN_NAME_TITLE, FeedEntry.COLUMN_NAME_LOCATION, 
 		    		FeedEntry.COLUMN_NAME_DATE_CREATION, FeedEntry.COLUMN_NAME_LAST_MODIFY, FeedEntry.COLUMN_NAME_IMAGE, FeedEntry.COLUMN_NAME_UPSAMPLING, 
 		    		FeedEntry.COLUMN_NAME_X, FeedEntry.COLUMN_NAME_Y, FeedEntry.COLUMN_NAME_Z}, FeedEntry.COLUMN_NAME_TITLE + " like '%"+ name + "%'", null, null, null, null);
 	  }
 	  
-	  //
+	  //verifico se il nome di una registrazione e' presente o meno all'interno del db.
 	  public Cursor NameSessionAsExist(String name){
 		  return database.rawQuery("select count(*) from " + FeedEntry.TABLE_NAME + " where " + FeedEntry.COLUMN_NAME_TITLE + "=?", new String[] {name});
 	  }
 	  
-	  //update axe x on checkbox
+	  //aggiorno l'asse x di un'istanza.
 	  public void updateX(String name, int x){
 		  String sql=String.format(Locale.US,"update %s SET %s=%d  WHERE %s='%s'" ,  FeedEntry.TABLE_NAME,
 				  FeedEntry.COLUMN_NAME_X, x, FeedEntry.COLUMN_NAME_TITLE, name
@@ -109,10 +109,9 @@ public class DBAdapter {
 		  System.out.println(sql);
 		  database.execSQL(sql);
 		  return;
-		  //return database.rawQuery("update " + FeedEntry.TABLE_NAME + " SET " + FeedEntry.COLUMN_NAME_X + " = " + x + " where " + FeedEntry.COLUMN_NAME_TITLE + "=?",  new String[] {name});
 	  }
 	  
-	//update axe y on checkbox
+	  //aggiorno l'asse y di un'istanza.
 	  public void updateY(String name, int y){
 		  String sql=String.format(Locale.US,"update %s SET %s=%d WHERE %s='%s'" ,  FeedEntry.TABLE_NAME,
 				  FeedEntry.COLUMN_NAME_Y, y, FeedEntry.COLUMN_NAME_TITLE, name
@@ -122,7 +121,7 @@ public class DBAdapter {
 		  return;
 	  }
 	  
-	//update axe x on checkbox
+	  //aggiorno l'asse z di un'istanza.
 	  public void updateZ(String name, int z){
 		  String sql=String.format(Locale.US,"update %s SET %s=%d WHERE %s='%s'" ,  FeedEntry.TABLE_NAME,
 				  FeedEntry.COLUMN_NAME_Z, z, FeedEntry.COLUMN_NAME_TITLE, name
@@ -132,7 +131,7 @@ public class DBAdapter {
 		  return;
 	  }
 	  
-	//update upsampling on checkbox
+	  //aggiorno l'upsampling di un'istanza.
 	  public void updateUpsampling(String name, int up){
 		  String sql=String.format(Locale.US,"update %s SET %s=%d WHERE %s='%s'" ,  FeedEntry.TABLE_NAME,
 				  FeedEntry.COLUMN_NAME_UPSAMPLING, up, FeedEntry.COLUMN_NAME_TITLE, name
@@ -142,7 +141,7 @@ public class DBAdapter {
 		  return;
 	  }
 	  
-	//update date
+	  //aggiorno la data di ultima modifica di un'istanza.
 	  public void updateDate(String name, String data){
 		  String sql=String.format(Locale.US,"update %s SET %s='%s' WHERE %s='%s'" ,  FeedEntry.TABLE_NAME,
 				  FeedEntry.COLUMN_NAME_LAST_MODIFY, data, FeedEntry.COLUMN_NAME_TITLE, name
