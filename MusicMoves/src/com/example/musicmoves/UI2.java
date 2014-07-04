@@ -49,12 +49,7 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ui2);
 	}
-	
-	@Override
-	protected void onStart() {
-		super.onStart();
-	}
-		
+
 	@Override
 	protected void onPause() {
 		if(modify){
@@ -102,14 +97,14 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 		    textView.setTextColor(Color.rgb(255, 153, 0));
 		    textView.setText(message+ "\nDate Creation: "+cursor.getString(3)+ "\nLast Modified: "+cursor.getString(4));
 		    this.setTitle(message);
-		    //setta checkboxes in base al database
+		    //Setta checkboxes in base al database
 		    CheckBox x = (CheckBox)findViewById(R.id.checkX);
 		    if(cursor.getInt(7)==1)x.setChecked(true);
 		    CheckBox y = (CheckBox)findViewById(R.id.checkY);
 		    if(cursor.getInt(8)==1)y.setChecked(true);
 		    CheckBox z = (CheckBox)findViewById(R.id.checkZ);
 		    if(cursor.getInt(9)==1)z.setChecked(true);
-		    //setta barra upsampling
+		    //Setta barra upsampling
 		    SeekBar bar = (SeekBar)findViewById(R.id.seekBarUpsampling);
 		    bar.setProgress(cursor.getInt(6)-100);
 		    int tempor = cursor.getInt(6);
@@ -124,9 +119,11 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 			editText.setFilters(UI1.getFilter());
 	}
 	
+	/*
+	 * Il metodo onCreateOptionsMenu() aggiunge il menù.
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; questo aggiunge elementi alla barra delle azioni, se è presente.
 		getMenuInflater().inflate(R.menu.ui2, menu);
 		return true;
 	}
@@ -257,15 +254,10 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 		Intent intent = new Intent(getApplicationContext(), UI2.class);
 	    intent.putExtra(UI1.EXTRA_MESSAGE, message);
 	    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-	    //android salva in uno stack le activity nell'ordine in cui le apriamo. quando noi gli diciamo di riavviare l'activity nello stack compare una nuova UI2
-	    //se noi quindi andiamo a premere il tasto back lui tenta di riaprire la precedente ui2 pero' nel frattempo abbiamo rinominato quindi crasha nel caricare la bitmap
-	    //set flag mi assicura che nello stack venga inserita solo una istanza (l'ultima) per ogni activity. insomma cancella dallo stack la vecchia UI2 quindi se premo back
-	    //ritorna correttamente alla UI1
 	    finish();
 	    startActivity(intent);
 	}
 	
-	//metodi che devono essere implementati
 	/*
 	 *Con questo metodo rilevo la modifica dell'upsampling attraverso la seekbar
 	 *e aggiorno direttamente su db.  
@@ -302,10 +294,5 @@ public class UI2 extends ActionBarActivity implements SeekBar.OnSeekBarChangeLis
 	    startActivity(intent);
 	}
 	
-	@Override
-	public void onBackPressed() {
-		// TODO Auto-generated method stub
-		super.onBackPressed();
-	}
 	
 }

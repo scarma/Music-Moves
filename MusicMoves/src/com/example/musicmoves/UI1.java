@@ -55,7 +55,7 @@ public class UI1 extends ListActivity {
 	private String[] list_music;
 	private UI1Adapter adapter;
 	private int pos;
-	private int p; //posizione nella lista
+	private int p;
 	private String loc;
 	private String new_filename;
 	private int hour = 0;
@@ -164,53 +164,41 @@ public class UI1 extends ListActivity {
 		});  
 	}
 	
+	/*
+	 * Il metodo onCreateOptionsMenu() aggiunge il menù specificato da xml.
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
+		
 		getMenuInflater().inflate(R.menu.ui1, menu);
 		return true;
 	}
 
+	/*
+	 * L'evento click nell'action bar e' gestito qui. La Action Bar 
+	 * gestira' automaticamente i clic sul pulsante Home/Up, cosi' 
+	 * come si specifica un'attività padre in AndroidManifest.xml.
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		/*
-		 * L'evento click nell'action bar e' gestito qui. La Action Bar 
-		 * gestira' automaticamente i clic sul pulsante Home/Up, cosi' 
-		 * come si specifica un'attività padre in AndroidManifest.xml.
-		 */
+		
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			Intent settings_intent = new Intent(getApplicationContext(), UI5.class);
-			//settings_intent.putExtras(bundle); //per salvare
 			startActivity(settings_intent);
 			return true;
 		}
-		if (id == R.id.action_info) {
+		if (id == R.id.action_info) { //Abbiamo aggiunto le info su chi ha fatto l'app :)
 			Toast.makeText(getApplicationContext(), "App developed by The Ehi Team: Scarmagnan Andrea, Fabian Emanuele, Zampieri Giovanni", Toast.LENGTH_LONG).show();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_ui1, container,
-					false);
-			return rootView;
-		}
-	}
 	
 	/*
-	 * 
+	 * va alla UI3 (quella per la registrazione) se c'è abbastanza spazio
+	 * e se il dispositivo ha l'accelerometro 
 	 */
 	public void toUI3(View view) 
 	{
@@ -225,6 +213,10 @@ public class UI1 extends ListActivity {
 		}
 	}
 	
+	/*
+	 * onBackPressed() esce dall'app se l'utente conferma di voler uscire
+	 * e ferma il service
+	 */
 	@Override
 	public void onBackPressed() {
 	    new AlertDialog.Builder(this)
@@ -408,8 +400,8 @@ public class UI1 extends ListActivity {
 	}
 	
 	/*
-	 * Il metodo cloneFileToFile() legge i file come stringa
-	 * e mi permette di clonare un file gia' esistente.
+	 * Il metodo cloneFileToFile() legge i file di testo riga per riga
+	 * e mi permette di clonare un file di testo gia' esistente.
 	 */
 	public void cloneFileToFile(String filepath, String fileName) {
         String line = "";
@@ -427,7 +419,9 @@ public class UI1 extends ListActivity {
     }
 
 	/*
-	 * Il deleteRec() mi permette di eliminare una registrazione. 
+	 * Il deleteRec() mi permette di eliminare una registrazione,
+	 * ovvero la sua immagine e il suo file di testo contenente i dati
+	 * dell'accelerometro 
 	 */
 	private void deleteRec(int position) {
 		databaseHelper.open();
@@ -452,7 +446,7 @@ public class UI1 extends ListActivity {
 	 * Il metodo renameRec() mi permette di rinominare una registrazione
 	 * e chiedo all'utente di inserire un nuovo nome e controllo che il nuovo
 	 * nome non sia gia' utilizzato! In quel caso chiedo all'utente di inserire
-	 * un nuovo nome valido per l'inserimento.
+	 * un nuovo nome valido per l'inserimento. 
 	 */
 	private void renameRec(int position) {
 		p = position;
@@ -544,6 +538,11 @@ public class UI1 extends ListActivity {
 		dialog.show();
 	}
 	
+	/*
+	 * Per tutti gli inserimenti di testo
+	 * nell'app sono concessi solo nomi composti da numeri o lettere aventi massimo 
+	 * 10 caratteri
+	 */
 	public static InputFilter[] getFilter(){
 		InputFilter filter = new InputFilter() { 
 			public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) { 
