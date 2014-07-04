@@ -9,18 +9,41 @@
         android:key="x"
         android:title="@string/x"
         android:defaultValue="true" 
-        android:summary="Enable/disable X axes"/>
+        android:summary="Enable/disable X-axis"/>
     <CheckBoxPreference 
         android:key="y"
         android:title="@string/y"
         android:defaultValue="true" 
-        android:summary="Enable/disable Y axes"/>
+        android:summary="Enable/disable Y-axis"/>
     <CheckBoxPreference
 		android:key="z"
 		android:title="@string/z"
 		android:defaultValue="true" 
-		android:summary="Enable/disable Z axes"/>
-    
+		android:summary="Enable/disable Z-axis"/>
+      <com.example.musicmoves.SeekBarPreference
+          android:key="sampleRate" 
+          android:title="Sample rate" 
+          android:summary="Sample rate used to record accelerometer data" 
+          android:defaultValue="5" 
+          android:max="10"
+          android:progress="0" 
+          musicmoves:min="1"
+          musicmoves:unitsLeft=""
+          musicmoves:unitsRight=" sample/second"
+          />
+     <com.example.musicmoves.SeekBarPreference
+         android:key="maxRecTime" 
+         android:title="Maximum recording duration" 
+         android:summary="Maximum duration of a recording session" 
+         android:defaultValue="500" 
+         android:max="1000"
+         android:progress="0"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         musicmoves:min="1"
+         musicmoves:unitsLeft=""
+         musicmoves:unitsRight=" samples"
+         />
     
     <com.example.musicmoves.SeekBarPreference
          android:key="upsampling" 
@@ -36,24 +59,11 @@
          musicmoves:unitsRight="0 samples"
          />
      <com.example.musicmoves.SeekBarPreference
-         android:key="maxRecTime" 
-         android:title="Maximum recording duration" 
-         android:summary="Maximum duration of a recording session" 
-         android:defaultValue="500" 
-         android:max="1000"
-         android:progress="0"
-         android:layout_width="fill_parent"
-         android:layout_height="wrap_content"
-         musicmoves:min="1"
-         musicmoves:unitsLeft=""
-         musicmoves:unitsRight=" samples"
-         />
-     <com.example.musicmoves.SeekBarPreference
          android:key="maxPlayTime" 
          android:title="Maximum playback duration" 
          android:summary="Maximum duration of a music track" 
-         android:defaultValue="1000" 
-         android:max="300"
+         android:defaultValue="100" 
+         android:max="1000"
          android:progress="0"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"
@@ -62,39 +72,26 @@
          musicmoves:unitsRight=" seconds"
          />
      <com.example.musicmoves.SeekBarPreference
-          android:key="sampleRate" 
-          android:title="Sample rate" 
-          android:summary="Sample rate used to record accelerometer data" 
-          android:defaultValue="5" 
-          android:max="10"
-          android:progress="0" 
-          musicmoves:min="1"
-          musicmoves:unitsLeft=""
-          musicmoves:unitsRight=" sample/second"
-          />
-     
-     <com.example.musicmoves.SeekBarPreference
           android:key="rdelay" 
           android:title="Delay" 
           android:summary="Amount of Delay" 
-          android:defaultValue="1000" 
+          android:defaultValue="700" 
           android:max="3000"
           android:progress="0" 
           musicmoves:min="500"
           musicmoves:unitsLeft=""
           musicmoves:unitsRight=" millisecond"
           />
-     
      <com.example.musicmoves.SeekBarPreference
           android:key="idelay" 
           android:title="Delay" 
-          android:summary="Delay's intensity" 
+          android:summary="Delay effect intensity" 
           android:defaultValue="7" 
           android:max="10"
           android:progress="0" 
           musicmoves:min="0"
           musicmoves:unitsLeft=""
-          musicmoves:unitsRight=" effect volume"
+          musicmoves:unitsRight="0% effect volume"
           />
      
      <com.example.musicmoves.SeekBarPreference
@@ -102,7 +99,7 @@
           android:title="Echo" 
           android:summary="Echo duration" 
           android:defaultValue="1000" 
-          android:max="3000"
+          android:max="4000"
           android:progress="0" 
           musicmoves:min="0"
           musicmoves:unitsLeft=""
@@ -112,13 +109,13 @@
      <com.example.musicmoves.SeekBarPreference
           android:key="iecho" 
           android:title="Echo" 
-          android:summary="Echo" 
+          android:summary="Echo effect intensity" 
           android:defaultValue="7" 
           android:max="10"
           android:progress="0" 
           musicmoves:min="0"
           musicmoves:unitsLeft=""
-          musicmoves:unitsRight=" effect volume"
+          musicmoves:unitsRight="0% effect volume"
           />
     
     </PreferenceCategory>   
