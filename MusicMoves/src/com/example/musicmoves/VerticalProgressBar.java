@@ -5,8 +5,13 @@ import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.widget.ProgressBar;
 
+/*
+ * ProgressBar verticale mostrata nella UI3 in fase di registrazione
+ * Nell'UI3 mostro in fase di registrazione 3 progressBar che indicano
+ * i valori dei tre assi x, y e z letti dall'accelerometro: che variano
+ * a seconda della posizione del dispositivo.
+ */
 public class VerticalProgressBar extends ProgressBar{
-//	ProgressBar verticale mostrata nella UI3 in fase di registrazione
     private int x, y, z, w;
 
     public VerticalProgressBar(Context context) {
@@ -37,12 +42,16 @@ public class VerticalProgressBar extends ProgressBar{
     }
 
     protected void onDraw(Canvas c) {
-//    	Ruota la progress bar in modo che sia verticale
+//    	Ruota la progress bar in modo che sia verticale.
+//    	Altrimenti di default sarebbe orizzontale.
         c.rotate(-90);
         c.translate(-getHeight(), 0);
         super.onDraw(c);
     }
 
+    /*
+     * Con setProgress() setto il valore delle progressBar.
+     */
     @Override
     public synchronized void setProgress(int progress) {
         if (progress >= 0)

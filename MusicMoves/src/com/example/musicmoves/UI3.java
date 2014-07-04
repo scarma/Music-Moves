@@ -235,6 +235,9 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	 * cambia i pulsanti visibili, crea il FileWriter.
 	 * Tenendo conto del numero massimo di sample impostato dall'utente:
 	 * raggiunto il quale la registrazione si blocca.
+	 * Inoltre mostro 3 progressBar che indicano i valori letti dai 3 assi x, y e z
+	 * dell'accelerometro e mostro il numero di sample registrati.
+	 * I valori delle progressBar vengono settati nel metodo onSensorChanged().
 	 */
 	public void Recording(View view) { 
 		Toast.makeText(getApplicationContext(), "Recording", Toast.LENGTH_SHORT).show();
