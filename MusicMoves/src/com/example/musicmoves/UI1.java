@@ -24,7 +24,6 @@ import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.StatFs;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -56,7 +55,7 @@ public class UI1 extends ListActivity {
 	private String[] list_music;
 	private UI1Adapter adapter;
 	private int pos;
-	private int p; //posizione nella lista, non sapevo se c'era già una variabile che potevo usare
+	private int p; //posizione nella lista
 	private String loc;
 	private String new_filename;
 	private int hour = 0;

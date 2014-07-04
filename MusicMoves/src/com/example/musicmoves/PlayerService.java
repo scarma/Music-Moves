@@ -93,7 +93,6 @@ public class PlayerService extends Service {
 	 private synchronized void pause() {
 		if (!isPlaying) return;
 		isPlaying = false;
-//		if (myPlayer != null)	
 		if (audioX.getState()==AudioTrack.STATE_INITIALIZED &&
 		   	audioY.getState()==AudioTrack.STATE_INITIALIZED &&
 		   	audioZ.getState()==AudioTrack.STATE_INITIALIZED){

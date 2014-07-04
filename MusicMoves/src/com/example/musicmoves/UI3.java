@@ -1,13 +1,9 @@
 package com.example.musicmoves;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.security.cert.LDAPCertStoreParameters;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -22,7 +18,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.PorterDuff.Mode;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -69,10 +64,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
     private int maxDurationRec;
     public EditText input;
 //    Bundle savedState;
-	private AlertDialog dialog;
-	private boolean recordingStarted = false;
 	private static boolean isStopped;
-	
 	@Override
 	protected void onCreate(Bundle savedInstancestate) {
 		super.onCreate(savedInstancestate);
@@ -171,7 +163,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			public void onCancel(DialogInterface dialog){onBackPressed();}
 		});
 		
-		dialog=alert.show();
+		alert.show();
 		
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 	    mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -308,7 +300,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    try {
 			writer = new FileWriter(new File(filepath, filename+".txt"), true);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			Log.d("Recording", e.getMessage());
 		}
 	    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences (this);
@@ -337,19 +328,17 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	       try {
 			writer.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-			Log.d("wtiter.close", e.getMessage());
+			Log.d("writer.close", e.getMessage());
 		}	}
 	    mSensorManager.unregisterListener(this, mAccelerometer);
 	}
 	
 	/*
 	 * Il metodo Stopped() blocca e quindi fa terminare la registrazione
-	 * reindirizzando l'utente sulla UI1 che contine tutte le registrazioni
+	 * reindirizzando l'utente sulla UI1 che contiene tutte le registrazioni
 	 * fatte finora dall'utente stesso.
-	 * Inoltre cambia pulsanti visibili, chiude il FileWriter se aperto,
-	 * mostra dati registrati e cancella il file.
+	 * Inoltre cambia pulsanti visibili, chiude il FileWriter,
 	 */
 	public void Stopped(View view) { 
 	    isStopped = true;
@@ -368,7 +357,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 		       try {
 				writer.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				Log.d("writer.close", e.getMessage());
 			}	}
@@ -430,7 +418,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 			writer.write(x+", "+y+", "+z+"\n");
 		} 
 	    catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		
 			Log.d("onSensorChanged", e.getMessage());
@@ -462,25 +449,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	    	Stopped(null);
         }
 	}
-	/*
-	 * Scarma lo lascio a te!
-	 */
-	public String readFileAsString(String fileName) {
-		//Legge file come stringa
-        StringBuilder stringBuilder = new StringBuilder();
-        String line="";
-        BufferedReader in = null;
-        try {
-            in = new BufferedReader(new FileReader(new File(filepath, fileName+".txt")));
-            while ((line = in.readLine()) != null) stringBuilder.append(line+"\n");
-            in.close();
-        } catch (FileNotFoundException e) {
-           Log.d("readFileAsString", e.getMessage());
-        } catch (IOException e) {
-        	Log.d("readFileAsString", e.getMessage()); 
-        }
-        return stringBuilder.toString();
-    }
 	
 	/*
 	 * Con il metodo LockScreenRotation() blocco la rotazione dello schermo
@@ -488,7 +456,6 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	 * Lo schermo e' bloccato nella modalita' con cui l'utente e' entrato nella UI3.
 	 */
 	private void LockScreenRotation() { 
-		// Sets screen rotation as fixed to current rotation setting
 		switch (this.getResources().getConfiguration().orientation)
 		{   case Configuration.ORIENTATION_PORTRAIT:     
 				this.setRequestedOrientation( ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -507,8 +474,7 @@ public class UI3 extends ActionBarActivity implements SensorEventListener {
 	}
 
     /*
-     * storeImage() crea la thumbnail
-     * ed e' il metodo che salva un'immagine nella cartella MusicMoves
+     * storeImage() è il metodo che salva la thumnail creata nella cartella dell'app
      */
 	private void storeImage(Bitmap image) {
 		File pictureFile = new File(filepath, filename + ".png");
