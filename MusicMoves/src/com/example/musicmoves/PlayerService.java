@@ -89,7 +89,10 @@ public class PlayerService extends Service {
 		 
 		 return Service.START_STICKY;
 	 } 
-	 	
+	 
+	 /*
+	  * pause() mette in pausa le audiotrack se attive
+	  */
 	 private synchronized void pause() {
 		if (!isPlaying) return;
 		isPlaying = false;
@@ -127,6 +130,10 @@ public class PlayerService extends Service {
 	   
 	}
 
+	 /*
+	  * play() crea le audiotrack "principali" con proSoundgenerator()
+	  * e le fa partire. Inoltre fa partire il service in foreground e crea la notifica
+	  */
 	 private void play() {
 		
 		if(isPlaying) return; 
@@ -147,22 +154,25 @@ public class PlayerService extends Service {
 	     else {
 			    Log.d("AudioTrack", "Audiotrack not initialized");
 		    }
-		 // Runs this service in the foreground, 
-		 // supplying the ongoing notification to be shown to the user 
 		 Intent intent = new Intent(this, UI4.class);
 		 intent.putExtra(UI1.EXTRA_MESSAGE, message);
 		 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP); 
 		 PendingIntent pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT); 
+		 //Crea e mostra la notifica all'utente
 		 Notification notification = new NotificationCompat.Builder(getApplicationContext()) 
 		 .setContentTitle("MusicMoves") 
 		 .setContentText(sessionName) 
 		 .setSmallIcon(R.drawable.ic_launcher) 
-		 .setContentIntent(pi) // Required on Gingerbread and below 
+		 .setContentIntent(pi) // Richiesto su Gingerbread 
 		 .build(); 
-		 final int notificationID = 7071727; //An ID for this notification unique within the app 
+		 final int notificationID = 7071727; //ID unico per la notifica all'interno dell' app 
 		 startForeground(notificationID, notification);		 
 	}
 	
+	 /*
+	  * stop() ferma e rilascia le audiotrack
+	  * Inoltre ferma il service e toglie la notifica
+	  */
 	 private void stop() { 
 		 	isPlaying = false; 
 		 	initialized = false;
@@ -266,9 +276,9 @@ public class PlayerService extends Service {
         			z[i] = (Double.parseDouble(coord[2])*10) + 880.0; //Aggiunge freq La5 ai dati dell'asse z e lo mette nell'array
         		else z[i] =	 0.0;
         	}
-        	genArrayX=genTone(x,cnt);
-        	genArrayY=genTone(y,cnt);
-        	genArrayZ=genTone(z,cnt);
+        	genArrayX=genTone(x,cnt);	 //Genera array "sonoro" per l'asse x
+        	genArrayY=genTone(y,cnt);	 //Genera array "sonoro" per l'asse y
+        	genArrayZ=genTone(z,cnt);	 //Genera array "sonoro" per l'asse z
         	audioX = playSound(genArrayX); //Genera suono per l'asse x
         	audioY = playSound(genArrayY); //Genera suono per l'asse y
         	audioZ = playSound(genArrayZ); //Genera suono per l'asse z
@@ -284,18 +294,22 @@ public class PlayerService extends Service {
         } 
     }
 	
+	 
+	 	/*
+		 * genTone() mi permette di creare un'array "sonoro" a 16 bit adatto per
+		 * creare l'audiotrack da riprodurre
+		 */
      public byte[] genTone(double[] x, int cnt){
-        // fill out the array
-    	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
     	maxduration = preferences.getInt("maxPlayTime", 10);
     	numSamples = 10*cnt*upsampling;
-        if(numSamples > maxduration*sampleRate)
-        	{numSamples = maxduration*sampleRate;}
-    	double sample[] = new double[numSamples];
+        if(numSamples > maxduration*sampleRate) 	//Se la durata supera la durata massima
+        	{numSamples = maxduration*sampleRate;}	//consentita (settabile tramite seekbar)
+    	double sample[] = new double[numSamples];	//creiamo un array più piccolo(non usando tutti i dati)
     	for (int i = 0; i < (numSamples); ++i) { 
-        	if ((i%(10*upsampling))==0) //inserisce dati accelerometro nell'array
-        		{ freqOfTone = x[i/(10*upsampling)];}
-            sample[i] = amplitude*Math.sin(2 * Math.PI * i / (sampleRate/freqOfTone));
+        	if ((i%(10*upsampling))==0) 				//Utilizza ogni dato dell'accellerometro
+        		{ freqOfTone = x[i/(10*upsampling)];}	//per un numero di campioni pari a 10*upsampling
+            sample[i] = amplitude*Math.sin(2 * Math.PI * i / (sampleRate/freqOfTone)); //Creo la sinusoide, campione per campione
         }
     	byte generatedSnd[] = new byte[2 * numSamples];
         // Converto ad un array "sonoro" a 16 bit
@@ -310,6 +324,10 @@ public class PlayerService extends Service {
         return generatedSnd;
      }
     
+     	/*
+		 * playSound() mi permette di creare l' audiotrack 
+		 * e di ricavare la durata totale della traccia
+		 */
 	 synchronized AudioTrack playSound(byte[] generatedSnd){
 		generatedArray = generatedSnd;
 		AudioTrack audioTrack;
@@ -331,6 +349,11 @@ public class PlayerService extends Service {
 		PlayerService.time = time;
 	 }
 	
+	 	/*
+		 * echo() crea 3 audiotrack cloni di quelle "principali"
+		 * e ci applica un effetto creato con la classe EnvironmentalReverb
+		 * Due thread (timer1 e timer2) gestiscono l'avvio posticipato e l'interruzione dell'effetto
+		 */
 	 synchronized void echo(){
 		if (isPlaying == true){
 			showToast("Echo on");
@@ -419,13 +442,13 @@ public class PlayerService extends Service {
 		}
 	 }
 	 
-	 synchronized void volume(boolean up, double intensity){
+   /*		Col metodo volume() modifichiamo l'ampezza delle tracce audio(amplitude), 
+ 	*		otteniamo la posizione di riproduzione, rilasciamo le audiotrack
+	*		e le ricreiamo con l'ampiezza aggiornata (proSoundGenerator),
+	*		poi impostiamo la riproduzione a dov'era arrivato
+	*/ 
+	synchronized void volume(boolean up, double intensity){
 		if(isPlaying == true){			
-//			Modifichiamo l'ampezza delle tracce audio(amplitude), 
-//			otteniamo la posizione di riproduzione, rilasciamo le audiotrack
-//			e le ricreiamo con l'ampiezza aggiornata (proSoundGenerator)
-//			e impostiamo la riproduzione a dov'era arrivato
-		
 		//Variamo amplitude in base all'intensità del gesto e alla direzione 
 		if (up==true){
 			amplitude = amplitude + intensity/maxintensity;
@@ -514,6 +537,13 @@ public class PlayerService extends Service {
 		}
 	 }
 	
+	 	/*
+		 * delay() crea 3 audiotrack cloni di quelle "principali"
+		 * e ci applica un effetto creato con la classe EnvironmentalReverb
+		 * Un thread (timer) gestisce l'avvio posticipato dell'effetto
+		 * Se al double tap è già attivo(isDelaying==true), le audiotrack
+		 * e l'effetto ad esse applicato vengono rilasciati
+		 */
 	 synchronized void delay(){
 		if (isPlaying == true){
 				if (isDelaying == false){
@@ -585,6 +615,10 @@ public class PlayerService extends Service {
 		}//Fine isplaying
 	}//Fine delay
 	
+	 /*
+	  * showToast() serve a far scomparire precedenti Toast ancora presenti
+	  * e a rimpiazzarli col nuovo Toast
+	  */
 	 void showToast(String s){
 		if(toast==null) {
 			toast=Toast.makeText(this, s, Toast.LENGTH_SHORT);
