@@ -122,12 +122,11 @@ public class PlayerService extends Service {
 			audioXe.pause();
 			audioYe.pause();
 			audioZe.pause();
-//			timer1.interrupt();
-			
 		}
 		if (audioXd.getState()==AudioTrack.STATE_INITIALIZED &&
 			   	audioYd.getState()==AudioTrack.STATE_INITIALIZED &&
-			   	audioZd.getState()==AudioTrack.STATE_INITIALIZED){
+			   	audioZd.getState()==AudioTrack.STATE_INITIALIZED)
+		{
 			audioXd.pause();
 			audioYd.pause();
 			audioZd.pause();
@@ -385,13 +384,14 @@ public class PlayerService extends Service {
         	final int echotime = 1000+preferences.getInt("recho", 10);
         	final float iecho  = preferences.getInt("iecho", 10)/10;
         	
+        	
 			timer1 = new Thread(){
 		        @Override
 		        public void run() {
-		        	audioXe= playSound(genArrayX);
-	            	audioYe= playSound(genArrayY);
-	            	audioZe= playSound(genArrayZ);
 		            try {
+			        	audioXe= playSound(genArrayX);
+		            	audioYe= playSound(genArrayY);
+		            	audioZe= playSound(genArrayZ);
 		            	audioXe.setPlaybackHeadPosition(audioX.getPlaybackHeadPosition());
 		            	audioYe.setPlaybackHeadPosition(audioY.getPlaybackHeadPosition());
 		            	audioZe.setPlaybackHeadPosition(audioZ.getPlaybackHeadPosition());
@@ -415,6 +415,7 @@ public class PlayerService extends Service {
 		            	audioXe.play();	//Trascorso il tempo mando le tracce in riproduzi
 		            	audioYe.play(); //(sovrapposte alle tracce audio "principali")
 		            	audioZe.play();
+		            	timer1.interrupt();
 		            }
 		            super.run();
 		        }
@@ -441,6 +442,7 @@ public class PlayerService extends Service {
 						audioYe.release();
 						audioZe.release();
 						echo.release();
+		            	timer2.interrupt();
 						}
 		            }
 		            super.run();
@@ -574,14 +576,13 @@ public class PlayerService extends Service {
 					timer = new Thread(){
 				        @Override
 				        public void run() {
-				        	audioXd= playSound(genArrayX);	//Genero le audiotrack basate sullo stesso
-			            	audioYd= playSound(genArrayY);	//array "sonoro" delle audiotrack "principali"
-			            	audioZd= playSound(genArrayZ);
-
 				            try {
-				            	audioXd.setPlaybackHeadPosition(audioX.getPlaybackHeadPosition());
-				            	audioYd.setPlaybackHeadPosition(audioY.getPlaybackHeadPosition());
-				            	audioZd.setPlaybackHeadPosition(audioZ.getPlaybackHeadPosition());
+				            	audioXd= playSound(genArrayX);	//Genero le audiotrack basate sullo stesso
+				            	audioYd= playSound(genArrayY);	//array "sonoro" delle audiotrack "principali"
+				            	audioZd= playSound(genArrayZ);
+				            	audioXd.setPlaybackHeadPosition(audioX.getPlaybackHeadPosition());//Imposto posizione uguale a quella della traccia 
+				            	audioYd.setPlaybackHeadPosition(audioY.getPlaybackHeadPosition());//in riproduzione
+				            	audioZd.setPlaybackHeadPosition(audioZ.getPlaybackHeadPosition()); 
 				            	audioXd.attachAuxEffect(delay.getId());
 								audioXd.setAuxEffectSendLevel(idelay);
 								audioYd.attachAuxEffect(delay.getId());
@@ -604,6 +605,7 @@ public class PlayerService extends Service {
 				            	audioYd.play();
 				            	audioZd.play();
 				            	}
+				            	timer.interrupt();
 				            }
 				            
 				            super.run();
