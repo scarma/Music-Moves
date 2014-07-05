@@ -19,7 +19,7 @@ public class DBMusicMoves extends SQLiteOpenHelper {
 	private static final String TEXT_TYPE = " TEXT";
 	private static final String COMMA_SEP = ",";
 
-	//questa stringa contine la query create table dell'unica tabella del nostro database.
+	//questa stringa contiene la query create table dell'unica tabella del nostro database.
 	private static final String SQL_CREATE_ENTRIES =
 	    "CREATE TABLE " + FeedEntry.TABLE_NAME + " (" +
 	    FeedEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT" + COMMA_SEP +
@@ -37,22 +37,18 @@ public class DBMusicMoves extends SQLiteOpenHelper {
 	
 	private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS " + FeedEntry.TABLE_NAME;
 	
-	//Constructor
+	//Costruttore
 	public DBMusicMoves(Context context){
 		super(context, DB_NAME, null, DB_VERSION);
 	}
 	
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		// TODO Auto-generated method stub
 		db.execSQL(SQL_CREATE_ENTRIES);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// TODO Auto-generated method stub
-		// This database is only a cache for online data, so its upgrade policy is
-        // to simply to discard the data and start over
         db.execSQL(SQL_DELETE_ENTRIES);
         onCreate(db);
 	}

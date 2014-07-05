@@ -10,7 +10,6 @@ import android.provider.BaseColumns;
  * Quindi senza dover modificare altre parti del codice dell'applicazione.
  */
 public class FeedReaderContract {
-	/* Inner class that defines the table contents */
 	public static abstract class FeedEntry implements BaseColumns {
     	public static final String TABLE_NAME = "music";
     	public static final String COLUMN_NAME_TITLE = "title";

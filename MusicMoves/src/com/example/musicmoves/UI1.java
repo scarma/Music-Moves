@@ -343,7 +343,7 @@ public class UI1 extends ListActivity {
 				int x_o = cursor.getInt(7);
 				int y_o = cursor.getInt(8);
 				int z_o = cursor.getInt(9);
-				//Controllo che il nuovo nome non sia giï¿½ presente nel db
+				//Controllo che il nuovo nome non sia gia' presente nel db
 				cursor = databaseHelper.NameSessionAsExist(value);
 				cursor.moveToFirst();
 				int count = cursor.getInt(0);
@@ -589,7 +589,11 @@ public class UI1 extends ListActivity {
 	}
 
 	/*
-	 * crea la thumbnail
+	 * Crea la thumbnail univoca per ogni registrazione.
+	 * Ogni thumbnail sarà sempre diversa (anche se può capitare che lo sia di poco)
+	 * dalle altre poichè generata utilizzando a partire dalla data di registrazione
+	 * (giorno, mese, anno, ora, minuto, secondo). Vengono modificati i colori
+	 * di un' immagine(contenuta in res/raw) che fa da "matrice" per tutte le altre.
 	 */
 	public void creaThumbNail(int da, int m, int y, int h, int mi, int s, String filepath, String filename) {
 			

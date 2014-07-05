@@ -35,16 +35,19 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 	
 	private TextView mStatusText;
 
+	//Costruttore
 	public SeekBarPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		initPreference(context, attrs);
 	}
 
+	//Costruttore
 	public SeekBarPreference(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		initPreference(context, attrs);
 	}
 
+	//Inizializza e imposta il layout della preference
 	private void initPreference(Context context, AttributeSet attrs) {
 		setValuesFromXml(attrs);
 		mSeekBar = new SeekBar(context, attrs);
@@ -54,6 +57,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 		setWidgetLayoutResource(R.layout.seek_bar_preference); //Imposta layout come da file xml
 	}
 	
+	//Imposta valori definiti nell'xml
 	private void setValuesFromXml(AttributeSet attrs) {
 		mMaxValue = attrs.getAttributeIntValue(ANDROID, "max", 100);
 		mMinValue = attrs.getAttributeIntValue(APPLICATIONS, "min", 0);
@@ -73,19 +77,18 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 		
 	}
 	
+	//Ritorna il valore della stringa
 	private String getAttributeStringValue(AttributeSet attrs, String namespace, String name, String defaultValue) {
 		String value = attrs.getAttributeValue(namespace, name);
 		if(value == null)
 			value = defaultValue;
-		
 		return value;
 	}
 	
 	@Override
 	protected View onCreateView(ViewGroup parent) {
 		View view = super.onCreateView(parent);
-		// The basic preference layout puts the widget frame to the right of the title and summary,
-		// so we need to change it a bit - the seekbar should be under them.
+		//Faccio un linear layout e lo oriento verticalmente
 		LinearLayout layout = (LinearLayout) view;
 		layout.setOrientation(LinearLayout.VERTICAL);
 		
@@ -97,16 +100,16 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 	public void onBindView(View view) {
 		super.onBindView(view);
 		try {
-			// move our seekbar to the new view we've been given
+			// mette la seekbar nella nuova view che gli assegniamo
 			ViewParent oldContainer = mSeekBar.getParent();
 			ViewGroup newContainer = (ViewGroup) view.findViewById(R.id.seekBarPrefBarContainer);
 			
 			if (oldContainer != newContainer) {
-				// remove the seekbar from the old view
+				// rimuove la seekbar dalla vecchia view
 				if (oldContainer != null) {
 					((ViewGroup) oldContainer).removeView(mSeekBar);
 				}
-				// remove the existing seekbar (there may not be one) and add ours
+				// rimuove la seekbar esistente (può non essercene una) e aggiunge la nostra
 				newContainer.removeAllViews();
 				newContainer.addView(mSeekBar, ViewGroup.LayoutParams.FILL_PARENT,
 				ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -115,7 +118,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 		catch(Exception ex) {
 			Log.e(TAG, "Error binding view: " + ex.toString());
 		}
-		//if dependency is false from the beginning, disable the seek bar
+		//se la dipendenza è falsa dall'inizio, disabilita la seekbar
 		if (view != null && !view.isEnabled())
 		{
 			mSeekBar.setEnabled(false);
@@ -123,9 +126,8 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 		updateView(view);
 	}
     
-     /**
-	 * Update a SeekBarPreference view with our current state
-	 * @param view
+    /*
+	 * Aggiorna la SeekBarPreference col nostro stato corrente
 	 */
 	protected void updateView(View view) {
 		try {
@@ -147,6 +149,9 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 		}
 	}
 	
+	/* Chiamato ogni qualvolta viene cambiato il valore alla seekbar
+	 * Imposta il valore corretto con setProgress
+	 */
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 		int newValue = progress + mMinValue;
@@ -157,13 +162,13 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 		else if(mInterval != 1 && newValue % mInterval != 0)
 			newValue = Math.round(((float)newValue)/mInterval)*mInterval;  
 		
-		// change rejected, revert to the previous value
+		// torno al valore precedente senza salvare il nuovo
 		if(!callChangeListener(newValue)){
 			seekBar.setProgress(mCurrentValue - mMinValue); 
 			return; 
 		}
 
-		// change accepted, store it
+		// cambio accettato, salvo il valore
 		mCurrentValue = newValue;
 		mStatusText.setText(String.valueOf(newValue));
 		persistInt(newValue);
@@ -178,12 +183,15 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 		notifyChanged();
 	}
 
+	// Imposta valore di default come da xml
 	@Override 
 	protected Object onGetDefaultValue(TypedArray ta, int index){
 		int defaultValue = ta.getInt(index, DEFAULT_VALUE);
 		return defaultValue;		
 	}
 
+	// Ripristina il valore salvato o (se nessun valore valido è salvato)
+	// imposta quello di default (se valido)
 	@Override
 	protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
 		if(restoreValue) {
@@ -202,9 +210,9 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 		}
 	}
 	
-	/**
-	* make sure that the seekbar is disabled if the preference is disabled
-	*/
+	/*
+	 * assicura che la seekbar sia disabilitata se lo è la preference
+	 */
 	@Override
 	public void setEnabled(boolean enabled) {
 		super.setEnabled(enabled);
@@ -214,7 +222,7 @@ public class SeekBarPreference extends Preference implements OnSeekBarChangeList
 	@Override
 	public void onDependencyChanged(Preference dependency, boolean disableDependent) {
 		super.onDependencyChanged(dependency, disableDependent);
-		//Disable movement of seek bar when dependency is false
+		//Disabilita movimenti della seek bar se la dipendenza è false
 		if (mSeekBar != null)
 		{
 			mSeekBar.setEnabled(!disableDependent);

@@ -65,7 +65,6 @@ public class UI4 extends Activity {
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.ui4, menu);
 		return true;
 	}
@@ -170,7 +169,6 @@ public class UI4 extends Activity {
 	 * e manda l'intent al service che mette in pausa le AudioTrack. 
 	 */
 	public void PauseMusic(View view) { 
-		//Pause button
 		ImageButton play = (ImageButton) findViewById(R.id.playB);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseB);
 		pause.setVisibility(View.INVISIBLE);
@@ -187,7 +185,6 @@ public class UI4 extends Activity {
 	 * l'utente alla UI di partenza (UI1 o UI2).
 	 */
 	public void StopMusic(View view) { 
-		// Stop button: stops the music by stopping the service 
 		ImageButton play = (ImageButton) findViewById(R.id.playB);
 		ImageButton pause = (ImageButton) findViewById(R.id.pauseB);
 		ImageButton stopUns = (ImageButton) findViewById(R.id.stop_unselectedB);
@@ -216,6 +213,11 @@ public class UI4 extends Activity {
 	    return t;
 	}
 
+	/*
+	 * onConfigurationChanged() viene chiamato quando si passa da modalità
+	 * portrait a landscape e viceversa. 
+	 * In questo metodo ricreiamo lo stato dell'activity.
+	 */
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 	  super.onConfigurationChanged(newConfig);
@@ -254,7 +256,7 @@ public class UI4 extends Activity {
         }
 	    
 		/*
-		 * Fa qualcosa MENTRE il dito e' premuto sullo schermo 
+		 * Fa qualcosa mentre il dito e' premuto sullo schermo 
 		 * e non rilevo un longpress. 
 		 */
         @Override
@@ -284,31 +286,30 @@ public class UI4 extends Activity {
         	  int quantity = (int)Math.abs(x2-x1)+1000;
         	  if (quantity > 2000) quantity =2000;
         	  
-        	  double volume = Math.abs(y2-y1);
-	
-        	  //fixati i parametri perche' faceva un pelino fatica a riconoscere i movimenti giusti
-	        	  
-    	      // right to left
+        	  double volume = Math.abs(y2-y1); 
+    	      // Verso sinistra
 	          if(x1 - x2 > 20 && Math.abs(y1-y2) < 100 ) {
 	          	  speed(false, quantity);
     	          return true;
     	      }
-    	      // left to right
+    	      // Verso destra
 	          else if (x2-x1 > 20 && Math.abs(y1-y2) < 100) {
     	          speed(true, quantity);
     	          return true; 
 	          }
+	          // Verso l'alto
 	          else if (y1-y2 > 20 && Math.abs(x1-x2) < 100){
 	        	  volume(true, volume);
 	        	  return true;
 	          }
+	          // Verso il basso
 	          else if (y2-y1 > 20 && Math.abs(x1-x2) < 100){
 	        	   volume(false, volume);
 	        	   return true;
 	          }
 	          return true;
 	     }  	
-	}//fine classe
+	}//fine classe MyGestureListener
 
 	/*
 	 * Con il metodo echo() faccio partire l'effetto attraverso il service
