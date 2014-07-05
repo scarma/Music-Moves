@@ -246,24 +246,17 @@ public class UI4 extends Activity {
 	//plus
 	/*
 	 * La classe MyGestureListener serve per riconoscere i gesti dell'utente
-	 * sull'immagine nell'UI4 e applicare al gesto l'effetto corrispondente.
+	 * sull'immagine dell'UI4 e applicare al gesto l'effetto corrispondente.
 	 */
 	class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
-	        
+	    /*  
+		* Riconosce il double tap e fa partire l'effetto echo
+		*/
 		public boolean onDoubleTap(MotionEvent event){
         	delay();
         	return true;
         }
-	    
-		/*
-		 * Fa qualcosa mentre il dito e' premuto sullo schermo 
-		 * e non rilevo un longpress. 
-		 */
-        @Override
-        public boolean onDown(MotionEvent event) { 
-        	return true;
-        }
-	        
+		
         /*
          * onSingleTapConfirmed() con questo metodo riconosco il singolo tocco
          * e faccio partire l'effetto echo.
@@ -276,6 +269,7 @@ public class UI4 extends Activity {
         /*
          * onFling() mi permette di riconoscere i movimenti che corrispondono agli
          * altri effetti e li fa partire quando rileva il gesto corrispondente.
+         * gli effetti volume() e speed() tengono conto dell'ampiezza del gesto (misurata in pixel)
          */
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2, float velocityX, float velocityY) {
